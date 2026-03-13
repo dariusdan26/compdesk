@@ -31,7 +31,7 @@ export default async function AdminRequisitionsPage() {
         <span style={{ color: '#A8C4E0', fontSize: '0.875rem' }}>Manage Requisitions</span>
       </header>
       <div style={{ maxWidth: '56rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <RequisitionAdmin initialRequisitions={requisitions.map((r: typeof requisitions[number]) => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString(), lineItems: r.lineItems.map(li => ({ ...li, estimatedCost: li.estimatedCost ?? '' })) }))} />
+        <RequisitionAdmin initialRequisitions={requisitions.map((r: typeof requisitions[number]) => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString(), lineItems: r.lineItems.map((li: typeof r.lineItems[number]) => ({ ...li, estimatedCost: li.estimatedCost ?? '' })) }))} />
       </div>
     </main>
   )
