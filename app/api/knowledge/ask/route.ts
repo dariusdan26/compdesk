@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     const keywords = question.toLowerCase()
       .replace(/[^a-z0-9\s]/g, '')
       .split(/\s+/)
-      .filter(w => w.length > 2 && !STOPWORDS.has(w))
+      .filter((w: string) => w.length > 2 && !STOPWORDS.has(w))
 
     if (keywords.length > 0) {
       // Build a phrase from the original question (stripped, no stopwords) for bonus matching
@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
         const titleLower = entry.title.toLowerCase()
         const hay = `${entry.category} ${titleLower} ${entry.content}`.toLowerCase()
 
-        let score = keywords.reduce((n, kw) => {
+        let score = keywords.reduce((n: number, kw: string) => {
           // Word-boundary regex prevents "200" matching inside "2000" or "1200"
           const wb = new RegExp(`\\b${kw}\\b`, 'gi')
           const titleHits = (titleLower.match(wb) ?? []).length * 5   // title match = 5×

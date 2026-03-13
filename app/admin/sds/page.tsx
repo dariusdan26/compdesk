@@ -15,5 +15,5 @@ export default async function SDSAdminPage() {
     orderBy: [{ category: 'asc' }, { title: 'asc' }],
   })
 
-  return <SDSAdmin initialDocs={docs} />
+  return <SDSAdmin initialDocs={docs.map((d: typeof docs[number]) => ({ ...d, createdAt: d.createdAt.toISOString() }))} />
 }

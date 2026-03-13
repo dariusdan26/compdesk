@@ -33,7 +33,7 @@ export default async function RequisitionsPage() {
         <span style={{ color: '#A8C4E0', fontSize: '0.875rem' }}>Purchase Requisitions</span>
       </header>
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <RequisitionList initialRequisitions={requisitions} />
+        <RequisitionList initialRequisitions={requisitions.map((r: typeof requisitions[number]) => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString(), lineItems: r.lineItems.map(li => ({ ...li, estimatedCost: li.estimatedCost ?? '' })) }))} />
       </div>
     </main>
   )

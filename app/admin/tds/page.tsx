@@ -15,5 +15,5 @@ export default async function TDSAdminPage() {
     orderBy: [{ category: 'asc' }, { title: 'asc' }],
   })
 
-  return <TDSAdmin initialDocs={docs} />
+  return <TDSAdmin initialDocs={docs.map((d: typeof docs[number]) => ({ ...d, createdAt: d.createdAt.toISOString() }))} />
 }

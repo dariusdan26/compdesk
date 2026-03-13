@@ -12,5 +12,5 @@ export default async function SDSVaultPage() {
     orderBy: [{ category: 'asc' }, { title: 'asc' }],
   })
 
-  return <SDSVault initialDocs={docs} />
+  return <SDSVault initialDocs={docs.map((d: typeof docs[number]) => ({ ...d, createdAt: d.createdAt.toISOString() }))} />
 }

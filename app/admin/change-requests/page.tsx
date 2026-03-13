@@ -33,7 +33,7 @@ export default async function AdminChangeRequestsPage() {
       </header>
 
       <div style={{ maxWidth: '64rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <ChangeRequestAdmin initialRequests={requests} />
+        <ChangeRequestAdmin initialRequests={requests.map((r: typeof requests[number]) => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString() }))} />
       </div>
     </main>
   )

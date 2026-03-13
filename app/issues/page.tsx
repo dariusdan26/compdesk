@@ -33,7 +33,7 @@ export default async function IssuesPage() {
       </header>
 
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <IssueList initialIssues={issues} />
+        <IssueList initialIssues={issues.map((i: typeof issues[number]) => ({ ...i, createdAt: i.createdAt.toISOString(), updatedAt: i.updatedAt.toISOString() }))} />
       </div>
     </main>
   )

@@ -32,7 +32,7 @@ export default async function DispatchPage() {
         <span style={{ color: '#A8C4E0', fontSize: '0.875rem' }}>Dispatch Checklists</span>
       </header>
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <DispatchList initialChecklists={checklists} />
+        <DispatchList initialChecklists={checklists.map((c: typeof checklists[number]) => ({ ...c, createdAt: c.createdAt.toISOString() }))} />
       </div>
     </main>
   )

@@ -33,7 +33,7 @@ export default async function ChangeRequestsPage() {
       </header>
 
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <ChangeRequestList initialRequests={requests} />
+        <ChangeRequestList initialRequests={requests.map((r: typeof requests[number]) => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString() }))} />
       </div>
     </main>
   )

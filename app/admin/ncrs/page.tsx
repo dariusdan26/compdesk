@@ -31,7 +31,7 @@ export default async function AdminNCRsPage() {
         <span style={{ color: '#A8C4E0', fontSize: '0.875rem' }}>Manage NCRs</span>
       </header>
       <div style={{ maxWidth: '56rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <NCRAdmin initialNCRs={ncrs} />
+        <NCRAdmin initialNCRs={ncrs.map((n: typeof ncrs[number]) => ({ ...n, createdAt: n.createdAt.toISOString(), updatedAt: n.updatedAt.toISOString() }))} />
       </div>
     </main>
   )

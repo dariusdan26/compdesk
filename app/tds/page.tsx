@@ -12,5 +12,5 @@ export default async function TDSVaultPage() {
     orderBy: [{ category: 'asc' }, { title: 'asc' }],
   })
 
-  return <TDSVault initialDocs={docs} />
+  return <TDSVault initialDocs={docs.map((d: typeof docs[number]) => ({ ...d, createdAt: d.createdAt.toISOString() }))} />
 }

@@ -32,7 +32,7 @@ export default async function NCRsPage() {
         <span style={{ color: '#A8C4E0', fontSize: '0.875rem' }}>Non-Conformance Reports</span>
       </header>
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <NCRList initialNCRs={ncrs} />
+        <NCRList initialNCRs={ncrs.map((n: typeof ncrs[number]) => ({ ...n, createdAt: n.createdAt.toISOString(), updatedAt: n.updatedAt.toISOString() }))} />
       </div>
     </main>
   )
