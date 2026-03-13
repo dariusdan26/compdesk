@@ -44,7 +44,7 @@ export default async function AdminSOPsPage() {
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-8">
-        <SOPAdmin initialSops={sops.map(s => ({ ...s, createdAt: s.createdAt.toISOString(), updatedAt: s.updatedAt.toISOString() }))} />
+        <SOPAdmin initialSops={sops.map((s: typeof sops[number]) => ({ ...s, createdAt: s.createdAt.toISOString(), updatedAt: s.updatedAt.toISOString() }))} />
       </main>
     </div>
   )
