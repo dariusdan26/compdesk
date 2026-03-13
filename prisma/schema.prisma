@@ -1,0 +1,166 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  username  String   @unique
+  password  String
+  role      String   @default("staff")
+  createdAt DateTime @default(now())
+  questionLogs         QuestionLog[]
+  sopAcknowledgements  SOPAcknowledgement[]
+  changeRequests       ChangeRequest[]
+  issues               Issue[]
+  ncrs                 NCR[]
+  purchaseRequisitions PurchaseRequisition[]
+  dispatchChecklists   DispatchChecklist[]
+}
+
+model KnowledgeEntry {
+  id        Int      @id @default(autoincrement())
+  category  String
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QuestionLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+}
+
+model SOP {
+  id           Int      @id @default(autoincrement())
+  title        String
+  department   String
+  version      String
+  content      String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  acknowledgements SOPAcknowledgement[]
+}
+
+model SOPAcknowledgement {
+  id        Int      @id @default(autoincrement())
+  sopId     Int
+  sop       SOP      @relation(fields: [sopId], references: [id])
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model ChangeRequest {
+  id          Int      @id @default(autoincrement())
+  submittedBy Int
+  user        User     @relation(fields: [submittedBy], references: [id])
+  description String
+  reason      String
+  category    String
+  urgency     String
+  status      String   @default("open")
+  adminNote   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Issue {
+  id          Int      @id @default(autoincrement())
+  submittedBy Int
+  user        User     @relation(fields: [submittedBy], references: [id])
+  description String
+  category    String
+  urgency     String
+  aiResponse  String?
+  status      String   @default("open")
+  resolution  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model NCR {
+  id              Int      @id @default(autoincrement())
+  submittedBy     Int
+  user            User     @relation(fields: [submittedBy], references: [id])
+  bcPoNumber      String
+  itemDescription String
+  department      String
+  defectType      String
+  severity        String
+  description     String
+  disposition     String   @default("pending")
+  status          String   @default("open")
+  adminNote       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model PurchaseRequisition {
+  id            Int      @id @default(autoincrement())
+  submittedBy   Int
+  user          User     @relation(fields: [submittedBy], references: [id])
+  title         String
+  department    String
+  urgency       String
+  justification String
+  status        String   @default("open")
+  adminNote     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lineItems     RequisitionLineItem[]
+}
+
+model RequisitionLineItem {
+  id            Int                 @id @default(autoincrement())
+  requisitionId Int
+  requisition   PurchaseRequisition @relation(fields: [requisitionId], references: [id], onDelete: Cascade)
+  description   String
+  quantity      String
+  unit          String
+  estimatedCost String?
+}
+
+model DispatchChecklist {
+  id            Int      @id @default(autoincrement())
+  submittedBy   Int
+  user          User     @relation(fields: [submittedBy], references: [id])
+  bcSoNumber    String
+  customerName  String
+  department    String
+  items         String
+  overallStatus String   @default("pass")
+  notes         String?
+  createdAt     DateTime @default(now())
+}
+
+model SDSDocument {
+  id           Int      @id @default(autoincrement())
+  title        String
+  manufacturer String?
+  category     String
+  filename     String
+  filePath     String
+  fileSize     Int
+  createdAt    DateTime @default(now())
+}
+
+model TDSDocument {
+  id           Int      @id @default(autoincrement())
+  title        String
+  manufacturer String?
+  category     String
+  filename     String
+  filePath     String
+  fileSize     Int
+  createdAt    DateTime @default(now())
+}
