@@ -20,7 +20,7 @@ export async function notifyNewChangeRequest(data: {
   const urgencyColor = urgencyColors[data.urgency] ?? '#475569'
 
   await resend.emails.send({
-    from: 'CompDesk <onboarding@resend.dev>',
+    from: 'CompDesk <noreply@compositeessentials.com>',
     to: process.env.ADMIN_EMAIL,
     subject: `[${data.urgency}] New Change Request — ${data.category}`,
     html: `
@@ -77,7 +77,7 @@ export async function notifyNewNCR(data: {
   const severityColor = severityColors[data.severity] ?? '#475569'
 
   await resend.emails.send({
-    from: 'CompDesk <onboarding@resend.dev>',
+    from: 'CompDesk <noreply@compositeessentials.com>',
     to: process.env.ADMIN_EMAIL,
     subject: `[${data.severity}] New NCR — ${data.department} / PO ${data.bcPoNumber}`,
     html: `
@@ -120,7 +120,7 @@ export async function notifyNewRequisition(data: {
   const urgencyColor = urgencyColors[data.urgency] ?? '#475569'
 
   await resend.emails.send({
-    from: 'CompDesk <onboarding@resend.dev>',
+    from: 'CompDesk <noreply@compositeessentials.com>',
     to: process.env.ADMIN_EMAIL,
     subject: `[${data.urgency}] New Purchase Requisition — ${data.department}`,
     html: `
@@ -164,7 +164,7 @@ export async function notifyNewIssue(data: {
   const urgencyColor = urgencyColors[data.urgency] ?? '#475569'
 
   await resend.emails.send({
-    from: 'CompDesk <onboarding@resend.dev>',
+    from: 'CompDesk <noreply@compositeessentials.com>',
     to: process.env.ADMIN_EMAIL,
     subject: `[${data.urgency}] New Issue Reported — ${data.category}`,
     html: `
