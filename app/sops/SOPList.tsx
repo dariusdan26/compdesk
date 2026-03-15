@@ -400,7 +400,7 @@ export default function SOPList({
             </div>
 
             {/* Content */}
-            <div style={{ padding: '1.5rem', overflowY: 'auto', flex: 1 }}>
+            <div style={{ padding: '1.5rem', overflowY: 'auto', overscrollBehavior: 'contain', flex: 1 }}>
               <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit', fontSize: '0.875rem', color: '#374151', lineHeight: 1.65 }}>
                 {viewingSop.content}
               </pre>

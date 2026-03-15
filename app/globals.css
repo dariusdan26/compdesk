@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body {
+  /* Prevent iOS/Android rubber-band bounce that snaps the page back to top */
+  overscroll-behavior: none;
+}
