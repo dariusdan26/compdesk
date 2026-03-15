@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { PageHeader } from '@/app/components/PageHeader'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -54,29 +55,11 @@ export default function KnowledgePage() {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#EEF3F9' }}>
-      {/* Header */}
-      <header style={{ flexShrink: 0, background: '#1B3A5C', borderBottom: '1px solid #2E5478' }}>
-        <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '1.125rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link href="/dashboard" style={{ color: '#6B8BA8', flexShrink: 0, display: 'flex', alignItems: 'center' }}
-            onMouseOver={e => (e.currentTarget.style.color = '#fff')}
-            onMouseOut={e => (e.currentTarget.style.color = '#6B8BA8')}
-          >
-            <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <HexIcon style={{ width: '2.25rem', height: '2.25rem', color: '#5B84B1', flexShrink: 0 }} />
-            <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-0.025em' }}>CompDesk</span>
-          </div>
-          <span style={{ color: '#3D6B9B', fontSize: '1.125rem' }}>/</span>
-          <span style={{ color: '#A8C4E0', fontSize: '1rem' }}>Knowledge Base</span>
-        </div>
-      </header>
+      <PageHeader title="Knowledge Base" />
 
       {isEmpty ? (
         /* ── Empty state: prominent centered search ── */
-        <div className="flex-1 flex flex-col items-center justify-center px-4 pb-20">
+        <div className="flex-1 flex flex-col items-center px-4 pt-10 sm:pt-0 sm:justify-center pb-8">
           <div style={{ width: '100%', maxWidth: '46rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '2.5rem' }}>
 
             {/* Hex icon */}
@@ -102,7 +85,6 @@ export default function KnowledgePage() {
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   placeholder="Ask about a product, process, or spec..."
-                  autoFocus
                   className="flex-1 bg-white rounded-xl text-base placeholder-[#8BAFD4] focus:outline-none focus:ring-2 transition-all shadow-sm"
                   style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B', padding: '1.125rem 1.375rem', fontSize: '1rem' } as React.CSSProperties}
                 />

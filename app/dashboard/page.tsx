@@ -35,21 +35,22 @@ export default async function DashboardPage() {
 
       {/* ── Header ── */}
       <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2E5478' }}>
-        <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '1.125rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '0.875rem 1rem' }} className="flex items-center justify-between gap-3">
           {/* Brand */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <HexIcon style={{ width: '2.25rem', height: '2.25rem', color: '#5B84B1', flexShrink: 0 }} />
-            <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-0.025em' }}>CompDesk</span>
+          <div className="flex items-center flex-shrink-0" style={{ gap: '0.625rem' }}>
+            <HexIcon style={{ width: '1.75rem', height: '1.75rem', color: '#5B84B1', flexShrink: 0 }} />
+            <span className="font-bold text-white sm:text-2xl" style={{ fontSize: '1.125rem', letterSpacing: '-0.025em' }}>CompDesk</span>
           </div>
           {/* User info */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <span style={roleBadgeStyle[role] ?? roleBadgeStyle.staff}>
+          <div className="flex items-center min-w-0" style={{ gap: '0.5rem' }}>
+            <span className="hidden sm:inline-flex" style={roleBadgeStyle[role] ?? roleBadgeStyle.staff}>
               {roleLabel[role] ?? role}
             </span>
-            <span style={{ color: '#A8C4E0', fontSize: '0.875rem', whiteSpace: 'nowrap' }}>{user.name}</span>
+            <span className="text-[#A8C4E0] text-sm truncate hidden xs:block" style={{ maxWidth: '8rem' }}>{user.name}</span>
             <Link
               href="/api/auth/signout"
-              style={{ color: '#6B8BA8', fontSize: '0.875rem', textDecoration: 'none', whiteSpace: 'nowrap' }}
+              className="text-[#6B8BA8] hover:text-white transition-colors text-sm flex-shrink-0"
+              style={{ textDecoration: 'none' }}
             >
               Sign out
             </Link>

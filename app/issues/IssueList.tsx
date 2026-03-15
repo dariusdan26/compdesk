@@ -93,9 +93,9 @@ export default function IssueList({ initialIssues }: { initialIssues: Issue[] })
   return (
     <div>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1.75rem', gap: '1rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', gap: '0.75rem', flexWrap: 'wrap' }}>
         <div>
-          <h1 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#1B3A5C', marginBottom: '2px' }}>Issue Reports</h1>
+          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1B3A5C', marginBottom: '2px' }}>Issue Reports</h1>
           <p style={{ color: '#6B7A8D', fontSize: '0.875rem' }}>
             {issues.length === 0 ? 'No issues reported yet' : `${issues.length} issue${issues.length === 1 ? '' : 's'}`}
           </p>
@@ -189,7 +189,7 @@ export default function IssueList({ initialIssues }: { initialIssues: Issue[] })
 
       {/* View modal */}
       {viewing && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', zIndex: 50 }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '0', zIndex: 50 }}>
           <div style={{ background: '#fff', borderRadius: '1rem', boxShadow: '0 20px 60px rgba(0,0,0,0.2)', width: '100%', maxWidth: '40rem', maxHeight: '88vh', display: 'flex', flexDirection: 'column', border: '1px solid #D0DCE8' }}>
             <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #EEF3F9', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexShrink: 0 }}>
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -250,8 +250,8 @@ export default function IssueList({ initialIssues }: { initialIssues: Issue[] })
 
       {/* New issue form modal */}
       {showForm && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', zIndex: 50 }}>
-          <div style={{ background: '#fff', borderRadius: '1rem', boxShadow: '0 20px 60px rgba(0,0,0,0.2)', width: '100%', maxWidth: '38rem', maxHeight: '90vh', display: 'flex', flexDirection: 'column', border: '1px solid #D0DCE8' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '0', zIndex: 50 }}>
+          <div style={{ background: '#fff', borderRadius: '1rem 1rem 0 0', boxShadow: '0 -4px 40px rgba(0,0,0,0.18)', width: '100%', maxWidth: '38rem', maxHeight: '92dvh', display: 'flex', flexDirection: 'column', border: '1px solid #D0DCE8' }}>
             <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #EEF3F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
               <h2 style={{ fontWeight: 700, color: '#1B3A5C', fontSize: '1.0625rem' }}>Report an Issue</h2>
               <button onClick={() => setShowForm(false)} style={{ color: '#8B939E', background: 'none', border: 'none', cursor: 'pointer' }}
