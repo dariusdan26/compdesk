@@ -40,6 +40,17 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({ error: 'You cannot delete your own account' }, { status: 400 })
   }
 
-  await prisma.user.delete({ where: { id: Number(id) } })
+  const uid = Number(id)
+
+  // Delete dependent records first to satisfy foreign key constraints
+  await prisma.questionLog.deleteMany({ where: { userId: uid } })
+  await prisma.sOPAcknowledgement.deleteMany({ where: { userId: uid } })
+  await prisma.changeRequest.deleteMany({ where: { submittedBy: uid } })
+  await prisma.issue.deleteMany({ where: { submittedBy: uid } })
+  await prisma.nCR.deleteMany({ where: { submittedBy: uid } })
+  await prisma.purchaseRequisition.deleteMany({ where: { submittedBy: uid } })
+  await prisma.dispatchChecklist.deleteMany({ where: { submittedBy: uid } })
+
+  await prisma.user.delete({ where: { id: uid } })
   return NextResponse.json({ ok: true })
 }
