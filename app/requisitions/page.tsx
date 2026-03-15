@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db'
+import Link from 'next/link'
 import RequisitionList from './RequisitionList'
 
 export default async function RequisitionsPage() {
@@ -19,18 +20,24 @@ export default async function RequisitionsPage() {
 
   return (
     <main style={{ minHeight: '100vh', background: '#EEF3F9' }}>
-      <header style={{ background: '#1B3A5C', padding: '0 1.5rem', height: '3.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <a href="/dashboard" style={{ color: '#7EB3E8', fontSize: '1.25rem', lineHeight: 1, textDecoration: 'none', fontWeight: 300 }}>‹</a>
-        <div style={{ width: '1.75rem', height: '1.75rem' }}>
-          <svg viewBox="0 0 32 32" fill="none">
-            <polygon points="16,2 30,9 30,23 16,30 2,23 2,9" fill="#2A5080" stroke="#5B84B1" strokeWidth="1.5" />
-            <polygon points="16,7 26,12.5 26,23.5 16,29 6,23.5 6,12.5" fill="#1B3A5C" />
-            <text x="16" y="21" textAnchor="middle" fill="#7EB3E8" fontSize="11" fontWeight="700" fontFamily="system-ui">C</text>
-          </svg>
+      <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2E5478' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '1.125rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <Link href="/dashboard" style={{ color: '#6B8BA8', flexShrink: 0, display: 'flex', alignItems: 'center' }}
+            className="hover:text-white transition-colors"
+          >
+            <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+            <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '2.25rem', height: '2.25rem', color: '#5B84B1', flexShrink: 0 }}>
+              <path d="M12 2L21.39 7.5V16.5L12 22L2.61 16.5V7.5L12 2Z" />
+            </svg>
+            <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-0.025em' }}>CompDesk</span>
+          </div>
+          <span style={{ color: '#3D6B9B', fontSize: '1.125rem' }}>/</span>
+          <span style={{ color: '#A8C4E0', fontSize: '1rem' }}>Purchase Requisitions</span>
         </div>
-        <span style={{ color: '#fff', fontWeight: 700, fontSize: '1.0625rem' }}>CompDesk</span>
-        <span style={{ color: '#5B84B1', fontSize: '0.875rem' }}>/</span>
-        <span style={{ color: '#A8C4E0', fontSize: '0.875rem' }}>Purchase Requisitions</span>
       </header>
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
         <RequisitionList initialRequisitions={requisitions.map((r: typeof requisitions[number]) => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString(), lineItems: r.lineItems.map((li: typeof r.lineItems[number]) => ({ ...li, estimatedCost: li.estimatedCost ?? '' })) }))} />

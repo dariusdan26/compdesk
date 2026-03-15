@@ -73,16 +73,23 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
     <div style={{ minHeight: '100vh', background: '#EEF3F9' }}>
       {/* Header */}
       <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2E5478' }}>
-        <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '1.125rem 1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '1.125rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <Link href="/dashboard" style={{ color: '#6B8BA8', flexShrink: 0, display: 'flex', alignItems: 'center' }}
+            onMouseOver={e => (e.currentTarget.style.color = '#fff')}
+            onMouseOut={e => (e.currentTarget.style.color = '#6B8BA8')}
+          >
+            <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
             <svg viewBox="0 0 24 24" fill="currentColor" style={{ width: '2.25rem', height: '2.25rem', color: '#5B84B1', flexShrink: 0 }}>
               <path d="M12 2L21.39 7.5V16.5L12 22L2.61 16.5V7.5L12 2Z" />
             </svg>
             <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-0.025em' }}>CompDesk</span>
           </div>
-          <Link href="/dashboard" style={{ color: '#6B8BA8', fontSize: '0.875rem', textDecoration: 'none' }}>
-            ← Dashboard
-          </Link>
+          <span style={{ color: '#3D6B9B', fontSize: '1.125rem' }}>/</span>
+          <span style={{ color: '#A8C4E0', fontSize: '1rem' }}>SDS Vault</span>
         </div>
       </header>
 
