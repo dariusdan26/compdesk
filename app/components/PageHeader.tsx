@@ -6,46 +6,65 @@ export function PageHeader({ title }: { title: string }) {
   return (
     <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2E5478', flexShrink: 0 }}>
       <div
-        className="flex items-center"
-        style={{ maxWidth: '72rem', margin: '0 auto', padding: '0.875rem 1rem' }}
+        style={{
+          maxWidth: '72rem',
+          margin: '0 auto',
+          padding: '0.875rem 1rem',
+          display: 'flex',
+          alignItems: 'center',
+        }}
       >
         {/* Back arrow */}
         <Link
           href="/dashboard"
-          className="text-[#6B8BA8] hover:text-white transition-colors flex items-center flex-shrink-0"
-          style={{ marginRight: '0.75rem' }}
+          style={{
+            color: '#6B8BA8',
+            marginRight: '0.625rem',
+            display: 'flex',
+            alignItems: 'center',
+            flexShrink: 0,
+            textDecoration: 'none',
+          }}
         >
-          <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg style={{ width: '1.125rem', height: '1.125rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </Link>
 
-        {/* Logo — hex icon always visible; "CompDesk" text only on sm+ */}
-        <div className="flex items-center flex-shrink-0" style={{ gap: '0.625rem' }}>
+        {/* Logo: hex icon + CompDesk text — always visible */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
           <svg
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="w-7 h-7 sm:w-9 sm:h-9 flex-shrink-0"
-            style={{ color: '#5B84B1' }}
+            style={{ width: '1.75rem', height: '1.75rem', flexShrink: 0, color: '#5B84B1' }}
           >
             <path d="M12 2L21.39 7.5V16.5L12 22L2.61 16.5V7.5L12 2Z" />
           </svg>
           <span
-            className="hidden sm:inline font-bold text-white"
-            style={{ fontSize: '1.5rem', letterSpacing: '-0.025em' }}
+            style={{
+              fontWeight: 700,
+              color: '#ffffff',
+              fontSize: '1.125rem',
+              letterSpacing: '-0.025em',
+              whiteSpace: 'nowrap',
+            }}
           >
             CompDesk
           </span>
         </div>
 
-        {/* Separator — hidden on mobile */}
-        <span className="hidden sm:inline" style={{ color: '#3D6B9B', fontSize: '1.125rem', margin: '0 0.875rem' }}>/</span>
+        {/* Separator */}
+        <span style={{ color: '#3D6B9B', fontSize: '1rem', margin: '0 0.625rem', flexShrink: 0 }}>/</span>
 
         {/* Page title */}
         <span
-          className="truncate text-sm sm:text-base"
-          style={{ color: '#A8C4E0', marginLeft: '0.625rem' }}
-          // on sm+ the margin is overridden visually by the separator's own margin
+          style={{
+            color: '#A8C4E0',
+            fontSize: '0.9375rem',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
         >
           {title}
         </span>

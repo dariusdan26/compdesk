@@ -39,7 +39,7 @@ export default async function DashboardPage() {
           {/* Brand */}
           <div className="flex items-center flex-shrink-0" style={{ gap: '0.625rem' }}>
             <HexIcon style={{ width: '1.75rem', height: '1.75rem', color: '#5B84B1', flexShrink: 0 }} />
-            <span className="font-bold text-white sm:text-2xl" style={{ fontSize: '1.125rem', letterSpacing: '-0.025em' }}>CompDesk</span>
+            <span style={{ fontWeight: 700, color: '#ffffff', fontSize: '1.125rem', letterSpacing: '-0.025em', whiteSpace: 'nowrap' }}>CompDesk</span>
           </div>
           {/* User info */}
           <div className="flex items-center min-w-0" style={{ gap: '0.5rem' }}>
@@ -183,7 +183,7 @@ export default async function DashboardPage() {
           {role === 'admin' && (
             <div style={{ textAlign: 'left' }}>
               <h2 style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8B939E', marginBottom: '0.875rem' }}>Admin</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.25rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '1.25rem' }}>
                 <Link href="/admin/knowledge" style={{ textDecoration: 'none', display: 'block', background: '#1B3A5C', borderRadius: '0.75rem', padding: '1.5rem', border: '1px solid #2E5478' }}
                   className="hover:border-[#5B84B1] hover:shadow-md transition-all"
                 >
