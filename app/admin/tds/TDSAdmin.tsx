@@ -77,6 +77,8 @@ export default function TDSAdmin({ initialDocs }: { initialDocs: TDSDocument[] }
     return matchCat && matchSearch
   })
 
+  const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null)
+
   async function handleUpload() {
     if (!uploadFiles || uploadFiles.length === 0) {
       setUploadError('Please select at least one PDF file.')
@@ -86,29 +88,42 @@ export default function TDSAdmin({ initialDocs }: { initialDocs: TDSDocument[] }
     setUploadResult(null)
     setUploading(true)
 
+    const files = Array.from(uploadFiles)
+    const results: { title: string; ok: boolean; error?: string }[] = []
+    let succeeded = 0
+    let failed = 0
+
     try {
-      const formData = new FormData()
-      for (let i = 0; i < uploadFiles.length; i++) {
-        formData.append('files', uploadFiles[i])
+      for (let i = 0; i < files.length; i++) {
+        setUploadProgress({ current: i + 1, total: files.length })
+
+        const formData = new FormData()
+        formData.append('files', files[i])
+        formData.append('category', uploadCategory)
+        formData.append('manufacturer', uploadManufacturer)
+
+        try {
+          const res = await fetch('/api/admin/tds/upload', { method: 'POST', body: formData })
+          const data = await res.json()
+
+          if (!res.ok) {
+            results.push({ title: files[i].name, ok: false, error: data.error ?? 'Upload failed' })
+            failed++
+          } else {
+            results.push(...data.results)
+            succeeded += data.succeeded
+            failed += data.failed
+          }
+        } catch {
+          results.push({ title: files[i].name, ok: false, error: 'Network error' })
+          failed++
+        }
       }
-      formData.append('category', uploadCategory)
-      formData.append('manufacturer', uploadManufacturer)
 
-      const res = await fetch('/api/admin/tds/upload', { method: 'POST', body: formData })
-      const data = await res.json()
-
-      if (!res.ok) {
-        setUploadError(data.error ?? 'Upload failed.')
-        return
-      }
-
-      setUploadResult(data)
+      setUploadResult({ succeeded, failed, results })
 
       const listRes = await fetch('/api/tds')
-      if (listRes.ok) {
-        const fresh = await listRes.json()
-        setDocs(fresh)
-      }
+      if (listRes.ok) setDocs(await listRes.json())
 
       if (fileInputRef.current) fileInputRef.current.value = ''
       if (folderInputRef.current) folderInputRef.current.value = ''
@@ -116,6 +131,7 @@ export default function TDSAdmin({ initialDocs }: { initialDocs: TDSDocument[] }
       setUploadManufacturer('')
     } finally {
       setUploading(false)
+      setUploadProgress(null)
     }
   }
 
@@ -296,7 +312,11 @@ export default function TDSAdmin({ initialDocs }: { initialDocs: TDSDocument[] }
                 onMouseEnter={e => { if (!uploading) (e.currentTarget as HTMLButtonElement).style.background = '#2A5080' }}
                 onMouseLeave={e => (e.currentTarget.style.background = '#3D6B9B')}
               >
-                {uploading ? 'Uploading…' : `Upload ${uploadFiles ? uploadFiles.length : 0} File${uploadFiles && uploadFiles.length === 1 ? '' : 's'}`}
+                {uploading && uploadProgress
+                  ? `Uploading ${uploadProgress.current} of ${uploadProgress.total}…`
+                  : uploading
+                    ? 'Uploading…'
+                    : `Upload ${uploadFiles ? uploadFiles.length : 0} File${uploadFiles && uploadFiles.length === 1 ? '' : 's'}`}
               </button>
             </div>
           </div>

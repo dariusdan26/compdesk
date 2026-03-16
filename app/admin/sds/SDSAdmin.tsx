@@ -77,6 +77,8 @@ export default function SDSAdmin({ initialDocs }: { initialDocs: SDSDocument[] }
     return matchCat && matchSearch
   })
 
+  const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null)
+
   async function handleUpload() {
     if (!uploadFiles || uploadFiles.length === 0) {
       setUploadError('Please select at least one PDF file.')
@@ -86,38 +88,52 @@ export default function SDSAdmin({ initialDocs }: { initialDocs: SDSDocument[] }
     setUploadResult(null)
     setUploading(true)
 
+    const files = Array.from(uploadFiles)
+    const results: { title: string; ok: boolean; error?: string }[] = []
+    let succeeded = 0
+    let failed = 0
+
     try {
-      const formData = new FormData()
-      for (let i = 0; i < uploadFiles.length; i++) {
-        formData.append('files', uploadFiles[i])
+      for (let i = 0; i < files.length; i++) {
+        setUploadProgress({ current: i + 1, total: files.length })
+
+        const formData = new FormData()
+        formData.append('files', files[i])
+        formData.append('category', uploadCategory)
+        formData.append('manufacturer', uploadManufacturer)
+
+        try {
+          const res = await fetch('/api/admin/sds/upload', { method: 'POST', body: formData })
+          const data = await res.json()
+
+          if (!res.ok) {
+            results.push({ title: files[i].name, ok: false, error: data.error ?? 'Upload failed' })
+            failed++
+          } else {
+            results.push(...data.results)
+            succeeded += data.succeeded
+            failed += data.failed
+          }
+        } catch {
+          results.push({ title: files[i].name, ok: false, error: 'Network error' })
+          failed++
+        }
       }
-      formData.append('category', uploadCategory)
-      formData.append('manufacturer', uploadManufacturer)
 
-      const res = await fetch('/api/admin/sds/upload', { method: 'POST', body: formData })
-      const data = await res.json()
+      setUploadResult({ succeeded, failed, results })
 
-      if (!res.ok) {
-        setUploadError(data.error ?? 'Upload failed.')
-        return
-      }
-
-      setUploadResult(data)
-
-      // Refresh doc list from server
+      // Refresh doc list
       const listRes = await fetch('/api/sds')
-      if (listRes.ok) {
-        const fresh = await listRes.json()
-        setDocs(fresh)
-      }
+      if (listRes.ok) setDocs(await listRes.json())
 
-      // Reset file inputs
+      // Reset inputs
       if (fileInputRef.current) fileInputRef.current.value = ''
       if (folderInputRef.current) folderInputRef.current.value = ''
       setUploadFiles(null)
       setUploadManufacturer('')
     } finally {
       setUploading(false)
+      setUploadProgress(null)
     }
   }
 
@@ -338,7 +354,11 @@ export default function SDSAdmin({ initialDocs }: { initialDocs: SDSDocument[] }
                 onMouseEnter={e => { if (!uploading) (e.currentTarget as HTMLButtonElement).style.background = '#B91C1C' }}
                 onMouseLeave={e => (e.currentTarget.style.background = '#DC2626')}
               >
-                {uploading ? 'Uploading…' : `Upload ${uploadFiles ? uploadFiles.length : 0} File${uploadFiles && uploadFiles.length === 1 ? '' : 's'}`}
+                {uploading && uploadProgress
+                  ? `Uploading ${uploadProgress.current} of ${uploadProgress.total}…`
+                  : uploading
+                    ? 'Uploading…'
+                    : `Upload ${uploadFiles ? uploadFiles.length : 0} File${uploadFiles && uploadFiles.length === 1 ? '' : 's'}`}
               </button>
             </div>
           </div>
