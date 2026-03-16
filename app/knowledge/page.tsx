@@ -157,15 +157,30 @@ export default function KnowledgePage() {
 
             {loading && (
               <div className="flex justify-start">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center mr-2 mt-0.5 shrink-0" style={{ background: '#3D6B9B' }}>
+                <style>{`
+                  @keyframes cd-spin { to { transform: rotate(360deg); } }
+                  @keyframes cd-arc {
+                    0%   { stroke-dashoffset: 110; }
+                    50%  { stroke-dashoffset: 20; }
+                    100% { stroke-dashoffset: 110; }
+                  }
+                `}</style>
+                <div style={{ width: '1.75rem', height: '1.75rem', borderRadius: '0.5rem', background: '#3D6B9B', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '0.5rem', marginTop: '0.125rem', flexShrink: 0 }}>
                   <HexIcon className="w-3.5 h-3.5 text-white" />
                 </div>
-                <div className="rounded-xl px-4 py-3 flex items-center gap-3" style={{ background: '#fff', border: '1px solid #D0DCE8' }}>
-                  <svg className="animate-spin" style={{ width: '1.125rem', height: '1.125rem', color: '#3D6B9B', flexShrink: 0 }} fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                <div style={{ background: '#fff', border: '1px solid #D0DCE8', borderRadius: '4px 12px 12px 12px', padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
+                  <svg width="52" height="52" viewBox="0 0 52 52" fill="none"
+                    style={{ animation: 'cd-spin 1.2s linear infinite', flexShrink: 0 }}>
+                    {/* Track */}
+                    <circle cx="26" cy="26" r="21" stroke="#DCEAF7" strokeWidth="4.5" />
+                    {/* Animated arc */}
+                    <circle cx="26" cy="26" r="21" stroke="#3D6B9B" strokeWidth="4.5"
+                      strokeLinecap="round"
+                      strokeDasharray="132"
+                      style={{ animation: 'cd-arc 1.2s ease-in-out infinite', transformOrigin: 'center' }}
+                    />
                   </svg>
-                  <span style={{ fontSize: '0.9375rem', color: '#6B7A8D' }}>Generating response...</span>
+                  <span style={{ fontSize: '0.875rem', color: '#6B7A8D', letterSpacing: '0.01em' }}>Generating response…</span>
                 </div>
               </div>
             )}
