@@ -16,23 +16,41 @@ export async function POST(req: NextRequest) {
     orderBy: { category: 'asc' },
   })
 
-  // Keyword-based relevance scoring + strict token budget
-  // Rate limit is 30k input tokens/min. Target ~5k tokens per query for knowledge section.
-  // ~4 chars per token → 20k char budget. Hard cap at 5 entries.
-  const CHAR_BUDGET = 20_000
-  const MAX_ENTRIES = 5
-  const MAX_ENTRY_CHARS = 6_000 // truncate any single entry beyond this
-  const STOPWORDS = new Set(['a','an','the','is','it','in','on','of','to','for','and','or','what','how','does','do','can','be','are','was','with','my','i','me','we','our','this','that','at','by','as'])
+  // Detect catalog-style questions (how many, list all, what do you have)
+  // For these, send just titles across all entries so Claude can accurately count/list
+  const isCatalogQuery = /\b(how many|list|all|what .*(do you have|available|access)|which .*(do you have|available|access)|do you have access)\b/i.test(question)
 
-  let entries: Array<typeof allEntries[0] & { content: string }> = allEntries
-  if (allEntries.length > 0) {
+  let knowledgeSection = ''
+
+  if (allEntries.length === 0) {
+    knowledgeSection = 'No company knowledge has been added yet.'
+  } else if (isCatalogQuery) {
+    // For catalog queries, send all titles grouped by category (very compact)
+    const grouped: Record<string, string[]> = {}
+    for (const entry of allEntries) {
+      if (!grouped[entry.category]) grouped[entry.category] = []
+      grouped[entry.category].push(entry.title.replace(/^.*\//, '')) // strip folder prefix
+    }
+    knowledgeSection = '## Knowledge Base Contents (full index)\n\n' +
+      Object.entries(grouped)
+        .map(([cat, titles]) => `### ${cat} (${titles.length} entries)\n` + titles.map(t => `- ${t}`).join('\n'))
+        .join('\n\n')
+  } else {
+    // Keyword-based relevance scoring + strict token budget
+    // Rate limit is 30k input tokens/min. Target ~5k tokens per query for knowledge section.
+    // ~4 chars per token → 20k char budget. Hard cap at 5 entries.
+    const CHAR_BUDGET = 20_000
+    const MAX_ENTRIES = 5
+    const MAX_ENTRY_CHARS = 6_000 // truncate any single entry beyond this
+    const STOPWORDS = new Set(['a','an','the','is','it','in','on','of','to','for','and','or','what','how','does','do','can','be','are','was','with','my','i','me','we','our','this','that','at','by','as'])
+
+    let entries: Array<typeof allEntries[0] & { content: string }> = allEntries
     const keywords = question.toLowerCase()
       .replace(/[^a-z0-9\s]/g, '')
       .split(/\s+/)
       .filter((w: string) => w.length > 2 && !STOPWORDS.has(w))
 
     if (keywords.length > 0) {
-      // Build a phrase from the original question (stripped, no stopwords) for bonus matching
       const cleanQuestion = question.toLowerCase().replace(/[^a-z0-9\s]/g, '').trim()
 
       const scored = allEntries.map(entry => {
@@ -40,21 +58,17 @@ export async function POST(req: NextRequest) {
         const hay = `${entry.category} ${titleLower} ${entry.content}`.toLowerCase()
 
         let score = keywords.reduce((n: number, kw: string) => {
-          // Word-boundary regex prevents "200" matching inside "2000" or "1200"
           const wb = new RegExp(`\\b${kw}\\b`, 'gi')
-          const titleHits = (titleLower.match(wb) ?? []).length * 5   // title match = 5×
+          const titleHits = (titleLower.match(wb) ?? []).length * 5
           const bodyHits  = (hay.match(wb) ?? []).length
           return n + titleHits + bodyHits
         }, 0)
 
-        // Phrase bonus: reward entries whose title contains consecutive keyword pairs
-        // e.g. "cem 200" appearing together in title scores much higher than individual hits
         for (let i = 0; i < keywords.length - 1; i++) {
           const phrase = keywords[i] + ' ' + keywords[i + 1]
           if (titleLower.includes(phrase)) score += 30
           else if (hay.includes(phrase))   score += 10
         }
-        // Also check if the full clean question (or 3-word chunks) appears in title
         if (titleLower.includes(cleanQuestion)) score += 50
 
         return { entry, score }
@@ -63,7 +77,7 @@ export async function POST(req: NextRequest) {
       entries = scored.map(s => s.entry)
     }
 
-    // Apply budget — enforce from first entry, truncate large entries, hard cap at MAX_ENTRIES
+    // Apply budget — hard cap at MAX_ENTRIES
     let total = 0
     const selected: typeof entries = []
     for (const entry of entries) {
@@ -77,23 +91,22 @@ export async function POST(req: NextRequest) {
       total += size
     }
     entries = selected
-  }
 
-  let knowledgeSection = ''
-  if (entries.length === 0) {
-    knowledgeSection = 'No company knowledge has been added yet.'
-  } else {
-    const grouped: Record<string, typeof entries> = {}
-    for (const entry of entries) {
-      if (!grouped[entry.category]) grouped[entry.category] = []
-      grouped[entry.category].push(entry)
+    if (entries.length === 0) {
+      knowledgeSection = 'No company knowledge has been added yet.'
+    } else {
+      const grouped: Record<string, typeof entries> = {}
+      for (const entry of entries) {
+        if (!grouped[entry.category]) grouped[entry.category] = []
+        grouped[entry.category].push(entry)
+      }
+      knowledgeSection = Object.entries(grouped)
+        .map(([cat, items]) =>
+          `## ${cat}\n` +
+          items.map(e => `### ${e.title}\n${e.content}`).join('\n\n')
+        )
+        .join('\n\n')
     }
-    knowledgeSection = Object.entries(grouped)
-      .map(([cat, items]) =>
-        `## ${cat}\n` +
-        items.map(e => `### ${e.title}\n${e.content}`).join('\n\n')
-      )
-      .join('\n\n')
   }
 
   const systemPrompt = `You are a knowledgeable assistant for a composites distribution and manufacturing company. Your job is to answer staff questions accurately using the company knowledge base below.
