@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
+import { notifyStatusUpdate } from '@/lib/email'
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
@@ -16,8 +17,18 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   const updated = await prisma.issue.update({
     where: { id: Number(id) },
     data: { status, resolution: resolution ?? null },
-    include: { user: { select: { name: true } } },
+    include: { user: { select: { name: true, email: true } } },
   })
+
+  if (updated.user.email) {
+    notifyStatusUpdate({
+      submitterEmail: updated.user.email,
+      submitterName: updated.user.name,
+      formType: 'issues',
+      status,
+      adminNote: resolution,
+    }).catch(() => {})
+  }
 
   return NextResponse.json(updated)
 }

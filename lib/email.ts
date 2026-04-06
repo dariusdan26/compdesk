@@ -1,6 +1,26 @@
 import { Resend } from 'resend'
+import { prisma } from '@/lib/db'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
+
+const FROM = 'CompDesk <onboarding@resend.dev>'
+const BASE_URL = process.env.NEXTAUTH_URL ?? 'http://localhost:3000'
+
+async function getNotificationRecipients(formType: string): Promise<string[]> {
+  const users = await prisma.notificationPreference.findMany({
+    where: { formType },
+    include: { user: { select: { email: true } } },
+  })
+  const emails = users
+    .map(p => p.user.email)
+    .filter((e): e is string => !!e)
+
+  // Always include ADMIN_EMAIL as fallback
+  const admin = process.env.ADMIN_EMAIL
+  if (admin && !emails.includes(admin)) emails.push(admin)
+
+  return emails
+}
 
 export async function notifyNewChangeRequest(data: {
   submittedBy: string
@@ -9,7 +29,10 @@ export async function notifyNewChangeRequest(data: {
   description: string
   reason: string
 }) {
-  if (!process.env.RESEND_API_KEY || !process.env.ADMIN_EMAIL) return
+  if (!process.env.RESEND_API_KEY) return
+
+  const recipients = await getNotificationRecipients('change-requests')
+  if (recipients.length === 0) return
 
   const urgencyColors: Record<string, string> = {
     Critical: '#DC2626',
@@ -20,8 +43,8 @@ export async function notifyNewChangeRequest(data: {
   const urgencyColor = urgencyColors[data.urgency] ?? '#475569'
 
   await resend.emails.send({
-    from: 'CompDesk <onboarding@resend.dev>',
-    to: process.env.ADMIN_EMAIL,
+    from: FROM,
+    to: recipients,
     subject: `[${data.urgency}] New Change Request — ${data.category}`,
     html: `
       <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
@@ -54,7 +77,7 @@ export async function notifyNewChangeRequest(data: {
             <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.05em">Reason</p>
             <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;background:#EEF3F9;padding:12px;border-radius:8px">${data.reason}</p>
           </div>
-          <a href="${process.env.NEXTAUTH_URL ?? 'http://localhost:3000'}/admin/change-requests"
+          <a href="${BASE_URL}/admin/change-requests"
             style="display:inline-block;padding:10px 20px;background:#3D6B9B;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
             Review in CompDesk →
           </a>
@@ -71,14 +94,17 @@ export async function notifyNewNCR(data: {
   severity: string
   description: string
 }) {
-  if (!process.env.RESEND_API_KEY || !process.env.ADMIN_EMAIL) return
+  if (!process.env.RESEND_API_KEY) return
+
+  const recipients = await getNotificationRecipients('ncrs')
+  if (recipients.length === 0) return
 
   const severityColors: Record<string, string> = { Critical: '#DC2626', Major: '#EA580C', Minor: '#475569' }
   const severityColor = severityColors[data.severity] ?? '#475569'
 
   await resend.emails.send({
-    from: 'CompDesk <onboarding@resend.dev>',
-    to: process.env.ADMIN_EMAIL,
+    from: FROM,
+    to: recipients,
     subject: `[${data.severity}] New NCR — ${data.department} / PO ${data.bcPoNumber}`,
     html: `
       <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
@@ -97,7 +123,7 @@ export async function notifyNewNCR(data: {
             <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.05em">Description</p>
             <p style="margin:0;font-size:14px;color:#1B3A5C;line-height:1.6;background:#FEF2F2;padding:12px;border-radius:8px;border-left:3px solid #DC2626">${data.description}</p>
           </div>
-          <a href="${process.env.NEXTAUTH_URL ?? 'http://localhost:3000'}/admin/ncrs"
+          <a href="${BASE_URL}/admin/ncrs"
             style="display:inline-block;padding:10px 20px;background:#DC2626;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
             Review in CompDesk →
           </a>
@@ -114,14 +140,17 @@ export async function notifyNewRequisition(data: {
   urgency: string
   lineCount: number
 }) {
-  if (!process.env.RESEND_API_KEY || !process.env.ADMIN_EMAIL) return
+  if (!process.env.RESEND_API_KEY) return
+
+  const recipients = await getNotificationRecipients('requisitions')
+  if (recipients.length === 0) return
 
   const urgencyColors: Record<string, string> = { Critical: '#DC2626', High: '#EA580C', Medium: '#CA8A04', Low: '#475569' }
   const urgencyColor = urgencyColors[data.urgency] ?? '#475569'
 
   await resend.emails.send({
-    from: 'CompDesk <onboarding@resend.dev>',
-    to: process.env.ADMIN_EMAIL,
+    from: FROM,
+    to: recipients,
     subject: `[${data.urgency}] New Purchase Requisition — ${data.department}`,
     html: `
       <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
@@ -137,7 +166,7 @@ export async function notifyNewRequisition(data: {
             <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Urgency</td><td style="padding:6px 0"><span style="font-size:12px;font-weight:700;color:${urgencyColor}">${data.urgency}</span></td></tr>
             <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Line Items</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.lineCount} item${data.lineCount === 1 ? '' : 's'}</td></tr>
           </table>
-          <a href="${process.env.NEXTAUTH_URL ?? 'http://localhost:3000'}/admin/requisitions"
+          <a href="${BASE_URL}/admin/requisitions"
             style="display:inline-block;padding:10px 20px;background:#059669;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
             Review in CompDesk →
           </a>
@@ -153,7 +182,10 @@ export async function notifyNewIssue(data: {
   urgency: string
   description: string
 }) {
-  if (!process.env.RESEND_API_KEY || !process.env.ADMIN_EMAIL) return
+  if (!process.env.RESEND_API_KEY) return
+
+  const recipients = await getNotificationRecipients('issues')
+  if (recipients.length === 0) return
 
   const urgencyColors: Record<string, string> = {
     Critical: '#DC2626',
@@ -164,8 +196,8 @@ export async function notifyNewIssue(data: {
   const urgencyColor = urgencyColors[data.urgency] ?? '#475569'
 
   await resend.emails.send({
-    from: 'CompDesk <onboarding@resend.dev>',
-    to: process.env.ADMIN_EMAIL,
+    from: FROM,
+    to: recipients,
     subject: `[${data.urgency}] New Issue Reported — ${data.category}`,
     html: `
       <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
@@ -194,9 +226,117 @@ export async function notifyNewIssue(data: {
             <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.05em">Issue Description</p>
             <p style="margin:0;font-size:14px;color:#1B3A5C;line-height:1.6;background:#FEF2F2;padding:12px;border-radius:8px;border-left:3px solid #DC2626">${data.description}</p>
           </div>
-          <a href="${process.env.NEXTAUTH_URL ?? 'http://localhost:3000'}/admin/issues"
+          <a href="${BASE_URL}/admin/issues"
             style="display:inline-block;padding:10px 20px;background:#DC2626;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
             Review in CompDesk →
+          </a>
+        </div>
+      </div>
+    `,
+  })
+}
+
+export async function notifyNewDispatch(data: {
+  submittedBy: string
+  bcSoNumber: string
+  customerName: string
+  department: string
+  overallStatus: string
+}) {
+  if (!process.env.RESEND_API_KEY) return
+
+  const recipients = await getNotificationRecipients('dispatch')
+  if (recipients.length === 0) return
+
+  const statusColor = data.overallStatus === 'pass' ? '#059669' : '#DC2626'
+  const statusLabel = data.overallStatus === 'pass' ? 'PASS' : 'FAIL'
+
+  await resend.emails.send({
+    from: FROM,
+    to: recipients,
+    subject: `[${statusLabel}] Dispatch Checklist — SO ${data.bcSoNumber}`,
+    html: `
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
+        <div style="background:#1B3A5C;padding:20px 24px">
+          <p style="margin:0;color:#7EB3E8;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
+          <h1 style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">Dispatch Checklist</h1>
+        </div>
+        <div style="padding:24px">
+          <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
+            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D;width:110px">Submitted by</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.submittedBy}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">SO Number</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.bcSoNumber}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Customer</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.customerName}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Department</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.department}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Status</td><td style="padding:6px 0"><span style="font-size:12px;font-weight:700;color:${statusColor}">${statusLabel}</span></td></tr>
+          </table>
+          <a href="${BASE_URL}/admin/dispatch"
+            style="display:inline-block;padding:10px 20px;background:#3D6B9B;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
+            Review in CompDesk →
+          </a>
+        </div>
+      </div>
+    `,
+  })
+}
+
+const FORM_TYPE_LABELS: Record<string, string> = {
+  'change-requests': 'Change Request',
+  'issues': 'Issue',
+  'ncrs': 'Non-Conformance Report',
+  'requisitions': 'Purchase Requisition',
+  'dispatch': 'Dispatch Checklist',
+}
+
+const STATUS_COLORS: Record<string, string> = {
+  open: '#CA8A04',
+  'in-progress': '#3D6B9B',
+  resolved: '#059669',
+  closed: '#475569',
+  approved: '#059669',
+  rejected: '#DC2626',
+  pending: '#CA8A04',
+}
+
+export async function notifyStatusUpdate(data: {
+  submitterEmail: string
+  submitterName: string
+  formType: string
+  status: string
+  adminNote?: string | null
+}) {
+  if (!process.env.RESEND_API_KEY || !data.submitterEmail) return
+
+  const label = FORM_TYPE_LABELS[data.formType] ?? data.formType
+  const statusColor = STATUS_COLORS[data.status.toLowerCase()] ?? '#475569'
+  const link = `${BASE_URL}/${data.formType}`
+
+  await resend.emails.send({
+    from: FROM,
+    to: data.submitterEmail,
+    subject: `Your ${label} has been updated — ${data.status}`,
+    html: `
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
+        <div style="background:#1B3A5C;padding:20px 24px">
+          <p style="margin:0;color:#7EB3E8;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
+          <h1 style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">${label} Updated</h1>
+        </div>
+        <div style="padding:24px">
+          <p style="margin:0 0 16px;font-size:14px;color:#1B3A5C;line-height:1.6">
+            Hi ${data.submitterName}, your <strong>${label.toLowerCase()}</strong> status has been updated:
+          </p>
+          <div style="margin-bottom:20px;padding:12px 16px;background:#EEF3F9;border-radius:8px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:13px;color:#6B7A8D">New Status:</span>
+            <span style="font-size:13px;font-weight:700;color:${statusColor};text-transform:capitalize">${data.status}</span>
+          </div>
+          ${data.adminNote ? `
+          <div style="margin-bottom:24px">
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.05em">Admin Note</p>
+            <p style="margin:0;font-size:14px;color:#1B3A5C;line-height:1.6;background:#EEF3F9;padding:12px;border-radius:8px">${data.adminNote}</p>
+          </div>
+          ` : ''}
+          <a href="${link}"
+            style="display:inline-block;padding:10px 20px;background:#3D6B9B;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
+            View in CompDesk →
           </a>
         </div>
       </div>

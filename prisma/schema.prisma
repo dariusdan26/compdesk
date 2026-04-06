@@ -10,16 +10,27 @@ model User {
   id        Int      @id @default(autoincrement())
   name      String
   username  String   @unique
+  email     String?
   password  String
   role      String   @default("staff")
   createdAt DateTime @default(now())
-  questionLogs         QuestionLog[]
-  sopAcknowledgements  SOPAcknowledgement[]
-  changeRequests       ChangeRequest[]
-  issues               Issue[]
-  ncrs                 NCR[]
-  purchaseRequisitions PurchaseRequisition[]
-  dispatchChecklists   DispatchChecklist[]
+  questionLogs              QuestionLog[]
+  sopAcknowledgements       SOPAcknowledgement[]
+  changeRequests            ChangeRequest[]
+  issues                    Issue[]
+  ncrs                      NCR[]
+  purchaseRequisitions      PurchaseRequisition[]
+  dispatchChecklists        DispatchChecklist[]
+  notificationPreferences   NotificationPreference[]
+}
+
+model NotificationPreference {
+  id       Int    @id @default(autoincrement())
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  formType String
+
+  @@unique([userId, formType])
 }
 
 model KnowledgeEntry {

@@ -11,7 +11,10 @@ export async function GET() {
   if (user.role !== 'admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const users = await prisma.user.findMany({
-    select: { id: true, name: true, username: true, role: true, createdAt: true },
+    select: {
+      id: true, name: true, username: true, email: true, role: true, createdAt: true,
+      notificationPreferences: { select: { formType: true } },
+    },
     orderBy: { createdAt: 'asc' },
   })
 
@@ -24,7 +27,7 @@ export async function POST(req: NextRequest) {
   const sessionUser = session.user as { role: string }
   if (sessionUser.role !== 'admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
-  const { name, username, password, role } = await req.json()
+  const { name, username, password, role, email, notificationPreferences } = await req.json()
 
   if (!name || !username || !password) {
     return NextResponse.json({ error: 'Name, username and password are required' }, { status: 400 })
@@ -37,8 +40,20 @@ export async function POST(req: NextRequest) {
 
   const hashed = await hashPassword(password)
   const created = await prisma.user.create({
-    data: { name, username, password: hashed, role: role ?? 'staff' },
-    select: { id: true, name: true, username: true, role: true, createdAt: true },
+    data: {
+      name,
+      username,
+      password: hashed,
+      role: role ?? 'staff',
+      email: email || null,
+      notificationPreferences: Array.isArray(notificationPreferences) && notificationPreferences.length > 0
+        ? { create: notificationPreferences.map((ft: string) => ({ formType: ft })) }
+        : undefined,
+    },
+    select: {
+      id: true, name: true, username: true, email: true, role: true, createdAt: true,
+      notificationPreferences: { select: { formType: true } },
+    },
   })
 
   return NextResponse.json(created, { status: 201 })

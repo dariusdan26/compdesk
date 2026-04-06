@@ -11,20 +11,41 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
   if (sessionUser.role !== 'admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const { id } = await params
-  const { name, role, password } = await req.json()
+  const uid = Number(id)
+  const { name, role, password, email, notificationPreferences } = await req.json()
 
-  const data: Record<string, string> = {}
+  const data: Record<string, unknown> = {}
   if (name) data.name = name
   if (role) data.role = role
   if (password) data.password = await hashPassword(password)
+  if (email !== undefined) data.email = email || null
 
   const updated = await prisma.user.update({
-    where: { id: Number(id) },
+    where: { id: uid },
     data,
-    select: { id: true, name: true, username: true, role: true, createdAt: true },
+    select: { id: true, name: true, username: true, email: true, role: true, createdAt: true },
   })
 
-  return NextResponse.json(updated)
+  // Update notification preferences if provided
+  if (Array.isArray(notificationPreferences)) {
+    await prisma.notificationPreference.deleteMany({ where: { userId: uid } })
+    if (notificationPreferences.length > 0) {
+      await prisma.notificationPreference.createMany({
+        data: notificationPreferences.map((ft: string) => ({ userId: uid, formType: ft })),
+      })
+    }
+  }
+
+  // Re-fetch with prefs
+  const result = await prisma.user.findUnique({
+    where: { id: uid },
+    select: {
+      id: true, name: true, username: true, email: true, role: true, createdAt: true,
+      notificationPreferences: { select: { formType: true } },
+    },
+  })
+
+  return NextResponse.json(result)
 }
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -43,6 +64,7 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
   const uid = Number(id)
 
   // Delete dependent records first to satisfy foreign key constraints
+  await prisma.notificationPreference.deleteMany({ where: { userId: uid } })
   await prisma.questionLog.deleteMany({ where: { userId: uid } })
   await prisma.sOPAcknowledgement.deleteMany({ where: { userId: uid } })
   await prisma.changeRequest.deleteMany({ where: { submittedBy: uid } })

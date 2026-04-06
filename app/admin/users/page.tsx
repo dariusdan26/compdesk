@@ -11,7 +11,10 @@ export default async function AdminUsersPage() {
   if (sessionUser.role !== 'admin') redirect('/dashboard')
 
   const users = await prisma.user.findMany({
-    select: { id: true, name: true, username: true, role: true, createdAt: true },
+    select: {
+      id: true, name: true, username: true, email: true, role: true, createdAt: true,
+      notificationPreferences: { select: { formType: true } },
+    },
     orderBy: { createdAt: 'asc' },
   })
 
@@ -32,7 +35,11 @@ export default async function AdminUsersPage() {
       </header>
       <div style={{ maxWidth: '56rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
         <UserAdmin
-          initialUsers={users.map(u => ({ ...u, createdAt: u.createdAt.toISOString() }))}
+          initialUsers={users.map(u => ({
+            ...u,
+            createdAt: u.createdAt.toISOString(),
+            notificationPreferences: u.notificationPreferences.map(p => p.formType),
+          }))}
           currentUserId={sessionUser.id}
         />
       </div>

@@ -6,8 +6,10 @@ interface User {
   id: number
   name: string
   username: string
+  email: string | null
   role: string
   createdAt: string
+  notificationPreferences: string[]
 }
 
 const ROLE_OPTIONS = ['staff', 'lead', 'admin']
@@ -17,6 +19,14 @@ const ROLE_STYLES: Record<string, { bg: string; color: string }> = {
   lead:  { bg: '#DCEAF7', color: '#3D6B9B' },
   staff: { bg: '#F1F5F9', color: '#475569' },
 }
+
+const FORM_TYPES = [
+  { key: 'change-requests', label: 'Change Requests' },
+  { key: 'issues', label: 'Issues' },
+  { key: 'ncrs', label: 'NCRs' },
+  { key: 'requisitions', label: 'Requisitions' },
+  { key: 'dispatch', label: 'Dispatch' },
+]
 
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '0.5rem 0.75rem', borderRadius: '0.5rem',
@@ -40,7 +50,7 @@ function Badge({ role }: { role: string }) {
   )
 }
 
-const emptyForm = { name: '', username: '', password: '', role: 'staff' }
+const emptyForm = { name: '', username: '', password: '', role: 'staff', email: '', notificationPreferences: [] as string[] }
 
 export default function UserAdmin({ initialUsers, currentUserId }: { initialUsers: User[]; currentUserId: string }) {
   const [users, setUsers] = useState<User[]>(initialUsers)
@@ -48,7 +58,7 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
   const [editing, setEditing] = useState<User | null>(null)
   const [deleting, setDeleting] = useState<User | null>(null)
   const [form, setForm] = useState(emptyForm)
-  const [editForm, setEditForm] = useState({ name: '', role: 'staff', password: '' })
+  const [editForm, setEditForm] = useState({ name: '', role: 'staff', password: '', email: '', notificationPreferences: [] as string[] })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -60,13 +70,23 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
 
   function openEdit(u: User) {
     setEditing(u)
-    setEditForm({ name: u.name, role: u.role, password: '' })
+    setEditForm({
+      name: u.name,
+      role: u.role,
+      password: '',
+      email: u.email ?? '',
+      notificationPreferences: u.notificationPreferences ?? [],
+    })
     setError('')
+  }
+
+  function togglePref(prefs: string[], key: string): string[] {
+    return prefs.includes(key) ? prefs.filter(p => p !== key) : [...prefs, key]
   }
 
   async function handleCreate() {
     if (!form.name.trim() || !form.username.trim() || !form.password.trim()) {
-      setError('All fields are required.')
+      setError('Name, username and password are required.')
       return
     }
     setSaving(true)
@@ -75,11 +95,17 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
       const res = await fetch('/api/admin/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          notificationPreferences: form.notificationPreferences,
+        }),
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error ?? 'Failed to create user.'); return }
-      setUsers(prev => [...prev, data])
+      setUsers(prev => [...prev, {
+        ...data,
+        notificationPreferences: data.notificationPreferences?.map((p: { formType: string }) => p.formType) ?? [],
+      }])
       setCreating(false)
     } finally {
       setSaving(false)
@@ -92,7 +118,12 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
     setSaving(true)
     setError('')
     try {
-      const body: Record<string, string> = { name: editForm.name, role: editForm.role }
+      const body: Record<string, unknown> = {
+        name: editForm.name,
+        role: editForm.role,
+        email: editForm.email,
+        notificationPreferences: editForm.notificationPreferences,
+      }
       if (editForm.password.trim()) body.password = editForm.password
       const res = await fetch(`/api/admin/users/${editing.id}`, {
         method: 'PUT',
@@ -101,7 +132,10 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error ?? 'Failed to update user.'); return }
-      setUsers(prev => prev.map(u => u.id === data.id ? data : u))
+      setUsers(prev => prev.map(u => u.id === data.id ? {
+        ...data,
+        notificationPreferences: data.notificationPreferences?.map((p: { formType: string }) => p.formType) ?? [],
+      } : u))
       setEditing(null)
     } finally {
       setSaving(false)
@@ -120,6 +154,42 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
   const btnPrimary: React.CSSProperties = { padding: '0.5rem 1.25rem', fontSize: '0.875rem', fontWeight: 600, background: '#3D6B9B', color: '#fff', border: 'none', borderRadius: '0.5rem', cursor: 'pointer' }
   const btnGhost: React.CSSProperties = { padding: '0.5rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#6B7A8D', background: 'none', border: 'none', cursor: 'pointer' }
   const btnDanger: React.CSSProperties = { padding: '0.5rem 1.125rem', fontSize: '0.875rem', fontWeight: 600, background: '#DC2626', color: '#fff', border: 'none', borderRadius: '0.5rem', cursor: 'pointer' }
+
+  function NotificationToggles({ prefs, onChange }: { prefs: string[]; onChange: (prefs: string[]) => void }) {
+    return (
+      <div>
+        <label style={labelStyle}>Email Notifications</label>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+          {FORM_TYPES.map(ft => {
+            const active = prefs.includes(ft.key)
+            return (
+              <button
+                key={ft.key}
+                type="button"
+                onClick={() => onChange(togglePref(prefs, ft.key))}
+                style={{
+                  padding: '0.375rem 0.75rem',
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  borderRadius: '9999px',
+                  border: active ? '1.5px solid #3D6B9B' : '1.5px solid #D0DCE8',
+                  background: active ? '#DCEAF7' : '#fff',
+                  color: active ? '#1B3A5C' : '#6B7A8D',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                }}
+              >
+                {active ? '\u2713 ' : ''}{ft.label}
+              </button>
+            )
+          })}
+        </div>
+        <p style={{ fontSize: '0.75rem', color: '#8B939E', marginTop: '0.375rem' }}>
+          User will receive email notifications for selected form types.
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -158,7 +228,19 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
                     <span style={{ fontSize: '0.6875rem', color: '#8B939E', fontStyle: 'italic' }}>you</span>
                   )}
                 </div>
-                <span style={{ fontSize: '0.8125rem', color: '#6B7A8D' }}>@{u.username}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '0.8125rem', color: '#6B7A8D' }}>@{u.username}</span>
+                  {u.email && <span style={{ fontSize: '0.75rem', color: '#8B939E' }}>{u.email}</span>}
+                </div>
+                {u.notificationPreferences.length > 0 && (
+                  <div style={{ display: 'flex', gap: '0.25rem', marginTop: '0.25rem', flexWrap: 'wrap' }}>
+                    {u.notificationPreferences.map(ft => (
+                      <span key={ft} style={{ fontSize: '0.625rem', padding: '1px 6px', borderRadius: '4px', background: '#EEF3F9', color: '#3D6B9B', fontWeight: 500 }}>
+                        {FORM_TYPES.find(f => f.key === ft)?.label ?? ft}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
@@ -184,7 +266,7 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
       {/* Create modal */}
       {creating && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', zIndex: 50 }}>
-          <div style={{ background: '#fff', borderRadius: '1rem', boxShadow: '0 20px 60px rgba(0,0,0,0.2)', width: '100%', maxWidth: '28rem', border: '1px solid #D0DCE8' }}>
+          <div style={{ background: '#fff', borderRadius: '1rem', boxShadow: '0 20px 60px rgba(0,0,0,0.2)', width: '100%', maxWidth: '28rem', border: '1px solid #D0DCE8', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #EEF3F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <h2 style={{ fontWeight: 700, color: '#1B3A5C', fontSize: '1.0625rem' }}>New User</h2>
               <button onClick={() => setCreating(false)} style={{ color: '#8B939E', background: 'none', border: 'none', cursor: 'pointer' }}>
@@ -202,6 +284,10 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
                 <input value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value.toLowerCase().replace(/\s/g, '') }))} placeholder="e.g. jsmith" style={inputStyle} />
               </div>
               <div>
+                <label style={labelStyle}>Email <span style={{ fontWeight: 400, color: '#8B939E' }}>(optional)</span></label>
+                <input type="email" value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} placeholder="e.g. jane@company.com" style={inputStyle} />
+              </div>
+              <div>
                 <label style={labelStyle}>Temporary Password</label>
                 <input type="password" value={form.password} onChange={e => setForm(f => ({ ...f, password: e.target.value }))} placeholder="They can change this later" style={inputStyle} />
               </div>
@@ -211,6 +297,10 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
                   {ROLE_OPTIONS.map(r => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
                 </select>
               </div>
+              <NotificationToggles
+                prefs={form.notificationPreferences}
+                onChange={prefs => setForm(f => ({ ...f, notificationPreferences: prefs }))}
+              />
             </div>
             <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #EEF3F9', display: 'flex', justifyContent: 'flex-end', gap: '0.625rem' }}>
               <button onClick={() => setCreating(false)} style={btnGhost}
@@ -229,7 +319,7 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
       {/* Edit modal */}
       {editing && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem', zIndex: 50 }}>
-          <div style={{ background: '#fff', borderRadius: '1rem', boxShadow: '0 20px 60px rgba(0,0,0,0.2)', width: '100%', maxWidth: '28rem', border: '1px solid #D0DCE8' }}>
+          <div style={{ background: '#fff', borderRadius: '1rem', boxShadow: '0 20px 60px rgba(0,0,0,0.2)', width: '100%', maxWidth: '28rem', border: '1px solid #D0DCE8', maxHeight: '90vh', overflowY: 'auto' }}>
             <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #EEF3F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <h2 style={{ fontWeight: 700, color: '#1B3A5C', fontSize: '1.0625rem' }}>Edit User — @{editing.username}</h2>
               <button onClick={() => setEditing(null)} style={{ color: '#8B939E', background: 'none', border: 'none', cursor: 'pointer' }}>
@@ -243,6 +333,10 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
                 <input value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} style={inputStyle} />
               </div>
               <div>
+                <label style={labelStyle}>Email <span style={{ fontWeight: 400, color: '#8B939E' }}>(optional)</span></label>
+                <input type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} placeholder="e.g. jane@company.com" style={inputStyle} />
+              </div>
+              <div>
                 <label style={labelStyle}>Role</label>
                 <select value={editForm.role} onChange={e => setEditForm(f => ({ ...f, role: e.target.value }))} style={selectStyle}>
                   {ROLE_OPTIONS.map(r => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
@@ -252,6 +346,10 @@ export default function UserAdmin({ initialUsers, currentUserId }: { initialUser
                 <label style={labelStyle}>New Password <span style={{ fontWeight: 400, color: '#8B939E' }}>(leave blank to keep current)</span></label>
                 <input type="password" value={editForm.password} onChange={e => setEditForm(f => ({ ...f, password: e.target.value }))} placeholder="Enter new password to reset" style={inputStyle} />
               </div>
+              <NotificationToggles
+                prefs={editForm.notificationPreferences}
+                onChange={prefs => setEditForm(f => ({ ...f, notificationPreferences: prefs }))}
+              />
             </div>
             <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #EEF3F9', display: 'flex', justifyContent: 'flex-end', gap: '0.625rem' }}>
               <button onClick={() => setEditing(null)} style={btnGhost}
