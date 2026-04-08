@@ -65,7 +65,13 @@ export function PushNotificationManager() {
         return
       }
       const sub = await reg.pushManager.getSubscription()
-      setState(sub ? 'subscribed' : 'idle')
+      if (sub) {
+        // Already subscribed from a previous visit — hide the banner silently
+        setState('subscribed')
+        setDismissed(true)
+      } else {
+        setState('idle')
+      }
     })
   }, [status])
 
@@ -106,6 +112,8 @@ export function PushNotificationManager() {
         throw new Error(`Server rejected subscription: ${text}`)
       }
       setState('subscribed')
+      // Auto-dismiss the banner shortly after the success state is shown
+      setTimeout(() => setDismissed(true), 2500)
     } catch (e) {
       console.error('[push] enable failed:', e)
       setError(e instanceof Error ? e.message : 'Failed to enable notifications')
@@ -196,8 +204,7 @@ export function PushNotificationManager() {
   if (state === 'subscribed') {
     return (
       <div style={containerStyle}>
-        <span>🔔 Notifications on</span>
-        <button style={linkButtonStyle} onClick={disable}>Turn off</button>
+        <span>✅ Notifications enabled</span>
       </div>
     )
   }
