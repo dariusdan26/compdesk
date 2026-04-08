@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
-import { notifyNewDispatch } from '@/lib/email'
+import { pushNewDispatch } from '@/lib/push'
 
 export async function GET() {
   const session = await getServerSession(authOptions)
@@ -49,13 +49,13 @@ export async function POST(req: NextRequest) {
     include: { user: { select: { name: true } } },
   })
 
-  notifyNewDispatch({
+  pushNewDispatch({
     submittedBy: checklist.user.name,
     bcSoNumber,
     customerName,
     department,
     overallStatus,
-  }).catch(() => {})
+  }).catch(err => console.error('[push] pushNewDispatch failed:', err))
 
   return NextResponse.json(checklist, { status: 201 })
 }

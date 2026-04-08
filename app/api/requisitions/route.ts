@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
-import { notifyNewRequisition } from '@/lib/email'
+import { pushNewRequisition } from '@/lib/push'
 
 export async function GET() {
   const session = await getServerSession(authOptions)
@@ -55,7 +55,8 @@ export async function POST(req: NextRequest) {
     include: { user: { select: { name: true } }, lineItems: true },
   })
 
-  notifyNewRequisition({ submittedBy: user.name, title, department, urgency, lineCount: lineItems.length }).catch(() => {})
+  pushNewRequisition({ submittedBy: user.name, title, department, urgency, lineCount: lineItems.length })
+    .catch(err => console.error('[push] pushNewRequisition failed:', err))
 
   return NextResponse.json(requisition, { status: 201 })
 }

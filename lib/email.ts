@@ -19,7 +19,34 @@ async function getNotificationRecipients(formType: string): Promise<string[]> {
   const admin = process.env.ADMIN_EMAIL
   if (admin && !emails.includes(admin)) emails.push(admin)
 
+  console.log(`[email] recipients for "${formType}":`, {
+    fromPreferences: users.map(u => u.user.email),
+    finalList: emails,
+  })
+
   return emails
+}
+
+type SendArgs = {
+  to: string[] | string
+  subject: string
+  html: string
+}
+
+async function sendEmail(label: string, args: SendArgs) {
+  console.log(`[email] sending "${label}" → ${Array.isArray(args.to) ? args.to.join(', ') : args.to}`)
+  try {
+    const result = await resend.emails.send({ from: FROM, ...args })
+    if (result.error) {
+      console.error(`[email] Resend rejected "${label}":`, result.error)
+    } else {
+      console.log(`[email] Resend accepted "${label}" id=${result.data?.id}`)
+    }
+    return result
+  } catch (err) {
+    console.error(`[email] threw while sending "${label}":`, err)
+    throw err
+  }
 }
 
 export async function notifyNewChangeRequest(data: {
@@ -29,10 +56,16 @@ export async function notifyNewChangeRequest(data: {
   description: string
   reason: string
 }) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[email] notifyNewChangeRequest skipped: RESEND_API_KEY not set')
+    return
+  }
 
   const recipients = await getNotificationRecipients('change-requests')
-  if (recipients.length === 0) return
+  if (recipients.length === 0) {
+    console.warn('[email] notifyNewChangeRequest skipped: no recipients')
+    return
+  }
 
   const urgencyColors: Record<string, string> = {
     Critical: '#DC2626',
@@ -42,8 +75,7 @@ export async function notifyNewChangeRequest(data: {
   }
   const urgencyColor = urgencyColors[data.urgency] ?? '#475569'
 
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail('change-request', {
     to: recipients,
     subject: `[${data.urgency}] New Change Request — ${data.category}`,
     html: `
@@ -94,16 +126,21 @@ export async function notifyNewNCR(data: {
   severity: string
   description: string
 }) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[email] notifyNewNCR skipped: RESEND_API_KEY not set')
+    return
+  }
 
   const recipients = await getNotificationRecipients('ncrs')
-  if (recipients.length === 0) return
+  if (recipients.length === 0) {
+    console.warn('[email] notifyNewNCR skipped: no recipients')
+    return
+  }
 
   const severityColors: Record<string, string> = { Critical: '#DC2626', Major: '#EA580C', Minor: '#475569' }
   const severityColor = severityColors[data.severity] ?? '#475569'
 
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail('ncr', {
     to: recipients,
     subject: `[${data.severity}] New NCR — ${data.department} / PO ${data.bcPoNumber}`,
     html: `
@@ -140,16 +177,21 @@ export async function notifyNewRequisition(data: {
   urgency: string
   lineCount: number
 }) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[email] notifyNewRequisition skipped: RESEND_API_KEY not set')
+    return
+  }
 
   const recipients = await getNotificationRecipients('requisitions')
-  if (recipients.length === 0) return
+  if (recipients.length === 0) {
+    console.warn('[email] notifyNewRequisition skipped: no recipients')
+    return
+  }
 
   const urgencyColors: Record<string, string> = { Critical: '#DC2626', High: '#EA580C', Medium: '#CA8A04', Low: '#475569' }
   const urgencyColor = urgencyColors[data.urgency] ?? '#475569'
 
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail('requisition', {
     to: recipients,
     subject: `[${data.urgency}] New Purchase Requisition — ${data.department}`,
     html: `
@@ -182,10 +224,16 @@ export async function notifyNewIssue(data: {
   urgency: string
   description: string
 }) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[email] notifyNewIssue skipped: RESEND_API_KEY not set')
+    return
+  }
 
   const recipients = await getNotificationRecipients('issues')
-  if (recipients.length === 0) return
+  if (recipients.length === 0) {
+    console.warn('[email] notifyNewIssue skipped: no recipients')
+    return
+  }
 
   const urgencyColors: Record<string, string> = {
     Critical: '#DC2626',
@@ -195,8 +243,7 @@ export async function notifyNewIssue(data: {
   }
   const urgencyColor = urgencyColors[data.urgency] ?? '#475569'
 
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail('issue', {
     to: recipients,
     subject: `[${data.urgency}] New Issue Reported — ${data.category}`,
     html: `
@@ -243,16 +290,21 @@ export async function notifyNewDispatch(data: {
   department: string
   overallStatus: string
 }) {
-  if (!process.env.RESEND_API_KEY) return
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[email] notifyNewDispatch skipped: RESEND_API_KEY not set')
+    return
+  }
 
   const recipients = await getNotificationRecipients('dispatch')
-  if (recipients.length === 0) return
+  if (recipients.length === 0) {
+    console.warn('[email] notifyNewDispatch skipped: no recipients')
+    return
+  }
 
   const statusColor = data.overallStatus === 'pass' ? '#059669' : '#DC2626'
   const statusLabel = data.overallStatus === 'pass' ? 'PASS' : 'FAIL'
 
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail('dispatch', {
     to: recipients,
     subject: `[${statusLabel}] Dispatch Checklist — SO ${data.bcSoNumber}`,
     html: `
@@ -304,14 +356,20 @@ export async function notifyStatusUpdate(data: {
   status: string
   adminNote?: string | null
 }) {
-  if (!process.env.RESEND_API_KEY || !data.submitterEmail) return
+  if (!process.env.RESEND_API_KEY) {
+    console.warn('[email] notifyStatusUpdate skipped: RESEND_API_KEY not set')
+    return
+  }
+  if (!data.submitterEmail) {
+    console.warn(`[email] notifyStatusUpdate skipped: no submitter email (formType=${data.formType})`)
+    return
+  }
 
   const label = FORM_TYPE_LABELS[data.formType] ?? data.formType
   const statusColor = STATUS_COLORS[data.status.toLowerCase()] ?? '#475569'
   const link = `${BASE_URL}/${data.formType}`
 
-  await resend.emails.send({
-    from: FROM,
+  await sendEmail('status-update', {
     to: data.submitterEmail,
     subject: `Your ${label} has been updated — ${data.status}`,
     html: `

@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
 import { anthropic } from '@/lib/claude'
-import { notifyNewIssue } from '@/lib/email'
+import { pushNewIssue } from '@/lib/push'
 
 async function triageWithClaude(description: string, category: string, urgency: string): Promise<string> {
   const response = await anthropic.messages.create({
@@ -70,13 +70,13 @@ export async function POST(req: NextRequest) {
     include: { user: { select: { name: true } } },
   })
 
-  // Fire-and-forget email notification
-  notifyNewIssue({
+  // Fire-and-forget push notification
+  pushNewIssue({
     submittedBy: issue.user.name,
     category: issue.category,
     urgency: issue.urgency,
     description: issue.description,
-  }).catch(() => {})
+  }).catch(err => console.error('[push] pushNewIssue failed:', err))
 
   return NextResponse.json(issue, { status: 201 })
 }

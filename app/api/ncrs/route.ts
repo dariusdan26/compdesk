@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
-import { notifyNewNCR } from '@/lib/email'
+import { pushNewNCR } from '@/lib/push'
 
 export async function GET() {
   const session = await getServerSession(authOptions)
@@ -38,7 +38,8 @@ export async function POST(req: NextRequest) {
     include: { user: { select: { name: true } } },
   })
 
-  notifyNewNCR({ submittedBy: user.name, bcPoNumber, department, severity, description }).catch(() => {})
+  pushNewNCR({ submittedBy: user.name, bcPoNumber, department, severity, description })
+    .catch(err => console.error('[push] pushNewNCR failed:', err))
 
   return NextResponse.json(ncr, { status: 201 })
 }
