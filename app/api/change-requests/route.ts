@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { after } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
@@ -38,13 +39,18 @@ export async function POST(req: NextRequest) {
     include: { user: { select: { name: true } } },
   })
 
-  // Fire-and-forget — push failure never blocks the response
-  pushNewChangeRequest({
-    submittedBy: request.user.name,
-    category: request.category,
-    urgency: request.urgency,
-    description: request.description,
-  }).catch(err => console.error('[push] pushNewChangeRequest failed:', err))
+  after(async () => {
+    try {
+      await pushNewChangeRequest({
+        submittedBy: request.user.name,
+        category: request.category,
+        urgency: request.urgency,
+        description: request.description,
+      })
+    } catch (err) {
+      console.error('[push] pushNewChangeRequest failed:', err)
+    }
+  })
 
   return NextResponse.json(request, { status: 201 })
 }

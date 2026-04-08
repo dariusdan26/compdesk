@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { after } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
@@ -70,13 +71,20 @@ export async function POST(req: NextRequest) {
     include: { user: { select: { name: true } } },
   })
 
-  // Fire-and-forget push notification
-  pushNewIssue({
-    submittedBy: issue.user.name,
-    category: issue.category,
-    urgency: issue.urgency,
-    description: issue.description,
-  }).catch(err => console.error('[push] pushNewIssue failed:', err))
+  // Send push after response — `after()` keeps the serverless function
+  // alive long enough for the push to complete without blocking the user.
+  after(async () => {
+    try {
+      await pushNewIssue({
+        submittedBy: issue.user.name,
+        category: issue.category,
+        urgency: issue.urgency,
+        description: issue.description,
+      })
+    } catch (err) {
+      console.error('[push] pushNewIssue failed:', err)
+    }
+  })
 
   return NextResponse.json(issue, { status: 201 })
 }

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { after } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
@@ -55,8 +56,13 @@ export async function POST(req: NextRequest) {
     include: { user: { select: { name: true } }, lineItems: true },
   })
 
-  pushNewRequisition({ submittedBy: user.name, title, department, urgency, lineCount: lineItems.length })
-    .catch(err => console.error('[push] pushNewRequisition failed:', err))
+  after(async () => {
+    try {
+      await pushNewRequisition({ submittedBy: user.name, title, department, urgency, lineCount: lineItems.length })
+    } catch (err) {
+      console.error('[push] pushNewRequisition failed:', err)
+    }
+  })
 
   return NextResponse.json(requisition, { status: 201 })
 }

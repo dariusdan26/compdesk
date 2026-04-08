@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { after } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
@@ -19,12 +20,18 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     include: { user: { select: { name: true } } },
   })
 
-  pushStatusUpdate({
-    submitterUserId: updated.submittedBy,
-    formType: 'ncrs',
-    status,
-    adminNote,
-  }).catch(err => console.error('[push] pushStatusUpdate failed:', err))
+  after(async () => {
+    try {
+      await pushStatusUpdate({
+        submitterUserId: updated.submittedBy,
+        formType: 'ncrs',
+        status,
+        adminNote,
+      })
+    } catch (err) {
+      console.error('[push] pushStatusUpdate failed:', err)
+    }
+  })
 
   return NextResponse.json(updated)
 }
