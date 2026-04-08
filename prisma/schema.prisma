@@ -163,6 +163,7 @@ model DispatchChecklist {
   items         String
   overallStatus String   @default("pass")
   notes         String?
+  photoUrls     String?  // JSON array of Vercel Blob URLs
   createdAt     DateTime @default(now())
 }
 

@@ -11,6 +11,7 @@ interface Checklist {
   items: string
   overallStatus: string
   notes: string | null
+  photoUrls: string | null
   createdAt: string
   user: { name: string }
 }
@@ -136,6 +137,24 @@ export default function DispatchAdmin({ initialChecklists }: { initialChecklists
                     <span style={{ fontSize: '0.875rem', color: item.checked ? '#059669' : '#DC2626' }}>{item.label}</span>
                   </div>
                 ))}
+                {viewing.photoUrls && (() => {
+                  let urls: string[] = []
+                  try { urls = JSON.parse(viewing.photoUrls) } catch { urls = [] }
+                  if (urls.length === 0) return null
+                  return (
+                    <div style={{ marginTop: '0.75rem' }}>
+                      <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7A8D', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Photos ({urls.length})</p>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '0.5rem' }}>
+                        {urls.map((url, i) => (
+                          <a key={i} href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'block', aspectRatio: '1', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid #D0DCE8', background: '#F1F5F9' }}>
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={url} alt={`Dispatch photo ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                })()}
                 {viewing.notes && (
                   <div style={{ marginTop: '0.5rem', padding: '0.875rem 1rem', borderRadius: '0.625rem', background: '#F1F5F9', border: '1px solid #D0DCE8' }}>
                     <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7A8D', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.375rem' }}>Notes</p>
