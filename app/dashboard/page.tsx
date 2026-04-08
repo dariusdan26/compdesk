@@ -34,7 +34,7 @@ export default async function DashboardPage() {
     <div style={{ minHeight: '100vh', background: '#EEF3F9' }}>
 
       {/* ── Header ── */}
-      <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2E5478' }}>
+      <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2E5478', position: 'sticky', top: 0, zIndex: 50 }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '0.875rem 1rem' }} className="flex items-center justify-between gap-3">
           {/* Brand */}
           <div className="flex items-center flex-shrink-0" style={{ gap: '0.625rem' }}>

@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export function PageHeader({ title }: { title: string }) {
   return (
-    <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2E5478', flexShrink: 0 }}>
+    <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2E5478', flexShrink: 0, position: 'sticky', top: 0, zIndex: 50 }}>
       <div
         style={{
           maxWidth: '72rem',
