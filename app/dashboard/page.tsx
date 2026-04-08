@@ -184,6 +184,17 @@ export default async function DashboardPage() {
             <div style={{ textAlign: 'left' }}>
               <h2 style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#8B939E', marginBottom: '0.875rem' }}>Admin</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '1.25rem' }}>
+                <Link href="/admin/reports" style={{ textDecoration: 'none', display: 'block', background: '#1B3A5C', borderRadius: '0.75rem', padding: '1.5rem', border: '1px solid #2E5478' }}
+                  className="hover:border-[#5B84B1] hover:shadow-md transition-all"
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', marginBottom: '6px' }}>
+                    <svg style={{ width: '1.25rem', height: '1.25rem', color: '#5B84B1', flexShrink: 0 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                    <h3 style={{ fontWeight: 600, color: '#ffffff', fontSize: '1.0625rem' }}>Reports</h3>
+                  </div>
+                  <p style={{ fontSize: '0.9375rem', color: '#8BAFD4' }}>View system analytics and key metrics across all modules.</p>
+                </Link>
                 <Link href="/admin/knowledge" style={{ textDecoration: 'none', display: 'block', background: '#1B3A5C', borderRadius: '0.75rem', padding: '1.5rem', border: '1px solid #2E5478' }}
                   className="hover:border-[#5B84B1] hover:shadow-md transition-all"
                 >
