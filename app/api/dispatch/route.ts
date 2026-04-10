@@ -14,9 +14,7 @@ export async function GET() {
   const user = session.user as { id: string | number; role: string }
   const userId = Number(user.id)
 
-  const where = user.role === 'admin' ? {} : { submittedBy: userId }
   const checklists = await prisma.dispatchChecklist.findMany({
-    where,
     include: { user: { select: { name: true } } },
     orderBy: { createdAt: 'desc' },
   })

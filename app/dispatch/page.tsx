@@ -10,11 +10,8 @@ export default async function DispatchPage() {
   const session = await getServerSession(authOptions)
   if (!session) redirect('/login')
 
-  const user = session.user as { id: string | number }
-  const userId = Number(user.id)
-
   const checklists = await prisma.dispatchChecklist.findMany({
-    where: { submittedBy: userId },
+    include: { user: { select: { name: true } } },
     orderBy: { createdAt: 'desc' },
   })
 
@@ -22,7 +19,7 @@ export default async function DispatchPage() {
     <main style={{ minHeight: '100vh', background: '#EEF3F9' }}>
       <PageHeader title="Dispatch Checklists" />
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <DispatchList initialChecklists={checklists.map((c: typeof checklists[number]) => ({ ...c, createdAt: c.createdAt.toISOString() }))} />
+        <DispatchList initialChecklists={checklists.map((c) => ({ ...c, createdAt: c.createdAt.toISOString() }))} />
       </div>
     </main>
   )

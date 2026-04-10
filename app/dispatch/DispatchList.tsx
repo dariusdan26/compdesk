@@ -13,6 +13,7 @@ interface Checklist {
   notes: string | null
   photoUrls: string | null
   createdAt: string
+  user: { name: string }
 }
 
 const MAX_PHOTOS = 5
@@ -225,7 +226,7 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
                   <span style={{ fontSize: '0.75rem', color: '#B0BAC5', flexShrink: 0 }}>{new Date(cl.createdAt).toLocaleDateString()}</span>
                 </div>
                 <p style={{ fontSize: '0.9375rem', color: '#1B3A5C', fontWeight: 600, marginBottom: '0.125rem' }}>SO: {cl.bcSoNumber}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#6B7A8D' }}>{cl.customerName} · {done} of {parsed.length} checks passed</p>
+                <p style={{ fontSize: '0.8125rem', color: '#6B7A8D' }}>{cl.customerName} · {done}/{parsed.length} checks · by {cl.user.name}</p>
               </button>
             )
           })}
@@ -282,7 +283,7 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
                     <p style={{ fontSize: '0.875rem', color: '#1B3A5C' }}>{viewing.notes}</p>
                   </div>
                 )}
-                <p style={{ fontSize: '0.75rem', color: '#B0BAC5', marginTop: '0.5rem' }}>Submitted {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <p style={{ fontSize: '0.75rem', color: '#B0BAC5', marginTop: '0.5rem' }}>Submitted by {viewing.user.name} on {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
               </div>
               <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #EEF3F9', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
                 <button onClick={() => setViewing(null)} style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#6B7A8D', background: 'none', border: 'none', cursor: 'pointer' }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#6B7A8D')}>Close</button>

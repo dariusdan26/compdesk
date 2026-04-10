@@ -165,7 +165,7 @@ export async function pushNewDispatch(data: {
   await sendToFormType('dispatch', {
     title: `[${statusLabel}] Dispatch Checklist — SO ${data.bcSoNumber}`,
     body: `${data.submittedBy} • ${data.customerName} • ${data.department}`,
-    url: `${BASE_URL}/admin/dispatch`,
+    url: `${BASE_URL}/dispatch`,
     tag: 'dispatch',
   })
 }
