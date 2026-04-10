@@ -10,11 +10,8 @@ export default async function ChangeRequestsPage() {
   const session = await getServerSession(authOptions)
   if (!session) redirect('/login')
 
-  const user = session.user as { id: string | number; name: string; role: string }
-  const userId = Number(user.id)
-
   const requests = await prisma.changeRequest.findMany({
-    where: { submittedBy: userId },
+    include: { user: { select: { name: true } } },
     orderBy: { createdAt: 'desc' },
   })
 
@@ -23,7 +20,7 @@ export default async function ChangeRequestsPage() {
       <PageHeader title="Change Requests" />
 
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <ChangeRequestList initialRequests={requests.map((r: typeof requests[number]) => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString() }))} />
+        <ChangeRequestList initialRequests={requests.map((r) => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString() }))} />
       </div>
     </main>
   )

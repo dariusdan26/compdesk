@@ -13,6 +13,7 @@ interface Requisition {
   adminNote: string | null
   lineItems: LineItem[]
   createdAt: string
+  user: { name: string }
 }
 
 const DEPARTMENTS = ['General', 'Production', 'Quality', 'Safety', 'Warehouse', 'Maintenance', 'Administration', 'Business Central']
@@ -140,7 +141,7 @@ export default function RequisitionList({ initialRequisitions }: { initialRequis
                   <span style={{ fontSize: '0.75rem', color: '#B0BAC5', flexShrink: 0 }}>{new Date(req.createdAt).toLocaleDateString()}</span>
                 </div>
                 <p style={{ fontSize: '0.9375rem', color: '#1B3A5C', fontWeight: 600, marginBottom: '0.25rem' }}>{req.title}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#6B7A8D' }}>{req.lineItems.length} line item{req.lineItems.length === 1 ? '' : 's'}</p>
+                <p style={{ fontSize: '0.8125rem', color: '#6B7A8D' }}>{req.lineItems.length} line item{req.lineItems.length === 1 ? '' : 's'} · by {req.user.name}</p>
                 {req.adminNote && <p style={{ fontSize: '0.75rem', color: '#6B7A8D', marginTop: '0.375rem' }}>Admin: {req.adminNote}</p>}
               </button>
             )
@@ -201,7 +202,7 @@ export default function RequisitionList({ initialRequisitions }: { initialRequis
                   <p style={{ fontSize: '0.875rem', color: '#1B3A5C', lineHeight: 1.6 }}>{viewing.adminNote}</p>
                 </div>
               )}
-              <p style={{ fontSize: '0.75rem', color: '#B0BAC5' }}>Submitted {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+              <p style={{ fontSize: '0.75rem', color: '#B0BAC5' }}>Submitted by {viewing.user.name} on {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
             </div>
             <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #EEF3F9', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
               <button onClick={() => setViewing(null)} style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#6B7A8D', background: 'none', border: 'none', cursor: 'pointer' }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#6B7A8D')}>Close</button>

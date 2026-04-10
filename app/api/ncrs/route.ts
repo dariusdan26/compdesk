@@ -9,12 +9,7 @@ export async function GET() {
   const session = await getServerSession(authOptions)
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
-  const user = session.user as { id: string | number; role: string }
-  const userId = Number(user.id)
-
-  const where = user.role === 'admin' ? {} : { submittedBy: userId }
   const ncrs = await prisma.nCR.findMany({
-    where,
     include: { user: { select: { name: true } } },
     orderBy: { createdAt: 'desc' },
   })

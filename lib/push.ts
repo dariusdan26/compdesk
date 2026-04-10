@@ -105,7 +105,7 @@ export async function pushNewChangeRequest(data: {
   await sendToFormType('change-requests', {
     title: `[${data.urgency}] New Change Request`,
     body: `${data.submittedBy} • ${data.category}\n${data.description.slice(0, 120)}`,
-    url: `${BASE_URL}/admin/change-requests`,
+    url: `${BASE_URL}/change-requests`,
     tag: 'change-request',
   })
 }
@@ -119,7 +119,7 @@ export async function pushNewIssue(data: {
   await sendToFormType('issues', {
     title: `[${data.urgency}] New Issue`,
     body: `${data.submittedBy} • ${data.category}\n${data.description.slice(0, 120)}`,
-    url: `${BASE_URL}/admin/issues`,
+    url: `${BASE_URL}/issues`,
     tag: 'issue',
   })
 }
@@ -134,7 +134,7 @@ export async function pushNewNCR(data: {
   await sendToFormType('ncrs', {
     title: `[${data.severity}] New NCR — PO ${data.bcPoNumber}`,
     body: `${data.submittedBy} • ${data.department}\n${data.description.slice(0, 120)}`,
-    url: `${BASE_URL}/admin/ncrs`,
+    url: `${BASE_URL}/ncrs`,
     tag: 'ncr',
   })
 }
@@ -149,7 +149,7 @@ export async function pushNewRequisition(data: {
   await sendToFormType('requisitions', {
     title: `[${data.urgency}] New Purchase Requisition`,
     body: `${data.submittedBy} • ${data.department}\n${data.title} (${data.lineCount} item${data.lineCount === 1 ? '' : 's'})`,
-    url: `${BASE_URL}/admin/requisitions`,
+    url: `${BASE_URL}/requisitions`,
     tag: 'requisition',
   })
 }

@@ -10,11 +10,8 @@ export default async function NCRsPage() {
   const session = await getServerSession(authOptions)
   if (!session) redirect('/login')
 
-  const user = session.user as { id: string | number; role: string }
-  const userId = Number(user.id)
-
   const ncrs = await prisma.nCR.findMany({
-    where: { submittedBy: userId },
+    include: { user: { select: { name: true } } },
     orderBy: { createdAt: 'desc' },
   })
 
@@ -22,7 +19,7 @@ export default async function NCRsPage() {
     <main style={{ minHeight: '100vh', background: '#EEF3F9' }}>
       <PageHeader title="Non-Conformance Reports" />
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <NCRList initialNCRs={ncrs.map((n: typeof ncrs[number]) => ({ ...n, createdAt: n.createdAt.toISOString(), updatedAt: n.updatedAt.toISOString() }))} />
+        <NCRList initialNCRs={ncrs.map((n) => ({ ...n, createdAt: n.createdAt.toISOString(), updatedAt: n.updatedAt.toISOString() }))} />
       </div>
     </main>
   )

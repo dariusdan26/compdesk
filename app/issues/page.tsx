@@ -10,11 +10,8 @@ export default async function IssuesPage() {
   const session = await getServerSession(authOptions)
   if (!session) redirect('/login')
 
-  const user = session.user as { id: string | number; role: string }
-  const userId = Number(user.id)
-
   const issues = await prisma.issue.findMany({
-    where: { submittedBy: userId },
+    include: { user: { select: { name: true } } },
     orderBy: { createdAt: 'desc' },
   })
 
@@ -23,7 +20,7 @@ export default async function IssuesPage() {
       <PageHeader title="Issue Reports" />
 
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
-        <IssueList initialIssues={issues.map((i: typeof issues[number]) => ({ ...i, createdAt: i.createdAt.toISOString(), updatedAt: i.updatedAt.toISOString() }))} />
+        <IssueList initialIssues={issues.map((i) => ({ ...i, createdAt: i.createdAt.toISOString(), updatedAt: i.updatedAt.toISOString() }))} />
       </div>
     </main>
   )

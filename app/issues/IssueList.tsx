@@ -11,6 +11,7 @@ interface Issue {
   aiResponse: string | null
   resolution: string | null
   createdAt: string
+  user: { name: string }
 }
 
 const CATEGORIES = [
@@ -176,6 +177,7 @@ export default function IssueList({ initialIssues }: { initialIssues: Issue[] })
                 } as React.CSSProperties}>
                   {issue.description}
                 </p>
+                <p style={{ fontSize: '0.75rem', color: '#B0BAC5', marginTop: '0.25rem' }}>by {issue.user.name}</p>
                 {issue.resolution && (
                   <p style={{ fontSize: '0.75rem', color: '#059669', marginTop: '0.375rem' }}>
                     ✓ {issue.resolution}
@@ -232,7 +234,7 @@ export default function IssueList({ initialIssues }: { initialIssues: Issue[] })
               )}
 
               <p style={{ fontSize: '0.75rem', color: '#B0BAC5' }}>
-                Reported {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}
+                Reported by {viewing.user.name} on {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}
               </p>
             </div>
             <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #EEF3F9', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>

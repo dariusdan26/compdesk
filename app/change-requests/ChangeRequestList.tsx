@@ -11,6 +11,7 @@ interface ChangeRequest {
   status: string
   adminNote: string | null
   createdAt: string
+  user: { name: string }
 }
 
 const CATEGORIES = [
@@ -167,6 +168,8 @@ export default function ChangeRequestList({ initialRequests }: { initialRequests
                 } as React.CSSProperties}>
                   {req.description}
                 </p>
+                <p style={{ fontSize: '0.75rem', color: '#B0BAC5', marginTop: '0.25rem' }}>by {req.user.name}
+                </p>
                 {req.adminNote && (
                   <p style={{ fontSize: '0.75rem', color: '#6B7A8D', marginTop: '0.375rem' }}>
                     Admin note: {req.adminNote}
@@ -213,7 +216,7 @@ export default function ChangeRequestList({ initialRequests }: { initialRequests
                 </div>
               )}
               <p style={{ fontSize: '0.75rem', color: '#B0BAC5' }}>
-                Submitted {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}
+                Submitted by {viewing.user.name} on {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}
               </p>
             </div>
             <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #EEF3F9', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
