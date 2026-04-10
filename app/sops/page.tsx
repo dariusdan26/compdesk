@@ -20,7 +20,7 @@ export default async function SOPsPage() {
   const acknowledgedIds = new Set(acknowledgements.map(a => a.sopId))
 
   return (
-    <div style={{ minHeight: '100vh', background: '#EEF3F9' }}>
+    <div style={{ minHeight: '100vh', background: '#F0F2F5' }}>
       <PageHeader title="SOP Library" />
 
       <main style={{ maxWidth: '72rem', margin: '0 auto', padding: '2rem 1rem' }}>

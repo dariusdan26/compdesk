@@ -54,7 +54,7 @@ export default function KnowledgePage() {
   const isEmpty = messages.length === 0
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#EEF3F9' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: '#F0F2F5' }}>
       <PageHeader title="Knowledge Base" />
 
       {isEmpty ? (
@@ -63,8 +63,8 @@ export default function KnowledgePage() {
           <div style={{ width: '100%', maxWidth: '46rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '2.5rem' }}>
 
             {/* Hex icon */}
-            <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm" style={{ background: '#DCEAF7' }}>
-              <svg className="w-8 h-8" style={{ color: '#3D6B9B' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm" style={{ background: '#E0E4E9' }}>
+              <svg className="w-8 h-8" style={{ color: '#4E7FB5' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -72,7 +72,7 @@ export default function KnowledgePage() {
             {/* Title + subtitle */}
             <div>
               <h1 className="text-3xl font-bold mb-2" style={{ color: '#1B3A5C' }}>Ask a question</h1>
-              <p className="text-base max-w-md mx-auto leading-relaxed" style={{ color: '#6B7A8D' }}>
+              <p className="text-base max-w-md mx-auto leading-relaxed" style={{ color: '#717680' }}>
                 Ask about resin types, mix ratios, fiberglass specs, foam grades, panel types, or any process or product question.
               </p>
             </div>
@@ -85,16 +85,16 @@ export default function KnowledgePage() {
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   placeholder="Ask about a product, process, or spec..."
-                  className="flex-1 bg-white rounded-xl text-base placeholder-[#8BAFD4] focus:outline-none focus:ring-2 transition-all shadow-sm"
-                  style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B', padding: '1.125rem 1.375rem', fontSize: '1rem' } as React.CSSProperties}
+                  className="flex-1 bg-white rounded-xl text-base placeholder-[#8AA0B8] focus:outline-none focus:ring-2 transition-all shadow-sm"
+                  style={{ border: '1px solid #C8CDD3', color: '#1B3A5C', '--tw-ring-color': '#4E7FB5', padding: '1.125rem 1.375rem', fontSize: '1rem' } as React.CSSProperties}
                 />
                 <button
                   type="submit"
                   disabled={!input.trim()}
                   className="font-semibold rounded-xl text-base transition-all shrink-0 shadow-sm text-white disabled:opacity-40"
-                  style={{ background: '#3D6B9B', padding: '1.125rem 2rem' }}
-                  onMouseEnter={e => { if (input.trim()) (e.currentTarget as HTMLButtonElement).style.background = '#2A5080' }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#3D6B9B' }}
+                  style={{ background: '#4E7FB5', padding: '1.125rem 2rem' }}
+                  onMouseEnter={e => { if (input.trim()) (e.currentTarget as HTMLButtonElement).style.background = '#3A6A9A' }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#4E7FB5' }}
                 >
                   Ask
                 </button>
@@ -114,14 +114,14 @@ export default function KnowledgePage() {
                   type="button"
                   onClick={() => setInput(q)}
                   className="px-3.5 py-1.5 bg-white rounded-full text-sm transition-all shadow-sm"
-                  style={{ border: '1px solid #C5D8EF', color: '#3D6B9B' }}
+                  style={{ border: '1px solid #C8CDD3', color: '#4E7FB5' }}
                   onMouseEnter={e => {
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = '#3D6B9B'
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = '#4E7FB5'
                     ;(e.currentTarget as HTMLButtonElement).style.color = '#1B3A5C'
                   }}
                   onMouseLeave={e => {
-                    (e.currentTarget as HTMLButtonElement).style.borderColor = '#C5D8EF'
-                    ;(e.currentTarget as HTMLButtonElement).style.color = '#3D6B9B'
+                    (e.currentTarget as HTMLButtonElement).style.borderColor = '#C8CDD3'
+                    ;(e.currentTarget as HTMLButtonElement).style.color = '#4E7FB5'
                   }}
                 >
                   {q}
@@ -138,7 +138,7 @@ export default function KnowledgePage() {
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.role === 'assistant' && (
-                  <div className="w-7 h-7 rounded-lg flex items-center justify-center mr-2 mt-0.5 shrink-0" style={{ background: '#3D6B9B' }}>
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center mr-2 mt-0.5 shrink-0" style={{ background: '#4E7FB5' }}>
                     <HexIcon className="w-3.5 h-3.5 text-white" />
                   </div>
                 )}
@@ -147,7 +147,7 @@ export default function KnowledgePage() {
                   style={
                     msg.role === 'user'
                       ? { background: '#1B3A5C', color: '#fff', borderRadius: '12px 4px 12px 12px', padding: '0.75rem 1.25rem', fontSize: '1rem' }
-                      : { background: '#fff', color: '#1B3A5C', border: '1px solid #D0DCE8', borderRadius: '4px 12px 12px 12px', padding: '0.75rem 1rem', fontSize: '0.9375rem' }
+                      : { background: '#fff', color: '#1B3A5C', border: '1px solid #D4D7DC', borderRadius: '4px 12px 12px 12px', padding: '0.75rem 1rem', fontSize: '0.9375rem' }
                   }
                 >
                   {msg.text}
@@ -165,22 +165,22 @@ export default function KnowledgePage() {
                     100% { stroke-dashoffset: 110; }
                   }
                 `}</style>
-                <div style={{ width: '1.75rem', height: '1.75rem', borderRadius: '0.5rem', background: '#3D6B9B', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '0.5rem', marginTop: '0.125rem', flexShrink: 0 }}>
+                <div style={{ width: '1.75rem', height: '1.75rem', borderRadius: '0.5rem', background: '#4E7FB5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginRight: '0.5rem', marginTop: '0.125rem', flexShrink: 0 }}>
                   <HexIcon className="w-3.5 h-3.5 text-white" />
                 </div>
-                <div style={{ background: '#fff', border: '1px solid #D0DCE8', borderRadius: '4px 12px 12px 12px', padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={{ background: '#fff', border: '1px solid #D4D7DC', borderRadius: '4px 12px 12px 12px', padding: '1rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem' }}>
                   <svg width="52" height="52" viewBox="0 0 52 52" fill="none"
                     style={{ animation: 'cd-spin 1.2s linear infinite', flexShrink: 0 }}>
                     {/* Track */}
-                    <circle cx="26" cy="26" r="21" stroke="#DCEAF7" strokeWidth="4.5" />
+                    <circle cx="26" cy="26" r="21" stroke="#E0E4E9" strokeWidth="4.5" />
                     {/* Animated arc */}
-                    <circle cx="26" cy="26" r="21" stroke="#3D6B9B" strokeWidth="4.5"
+                    <circle cx="26" cy="26" r="21" stroke="#4E7FB5" strokeWidth="4.5"
                       strokeLinecap="round"
                       strokeDasharray="132"
                       style={{ animation: 'cd-arc 1.2s ease-in-out infinite', transformOrigin: 'center' }}
                     />
                   </svg>
-                  <span style={{ fontSize: '0.875rem', color: '#6B7A8D', letterSpacing: '0.01em' }}>Generating response…</span>
+                  <span style={{ fontSize: '0.875rem', color: '#717680', letterSpacing: '0.01em' }}>Generating response…</span>
                 </div>
               </div>
             )}
@@ -196,15 +196,15 @@ export default function KnowledgePage() {
                 placeholder="Ask a follow-up question..."
                 disabled={loading}
                 className="flex-1 rounded-xl focus:outline-none focus:ring-2 transition-all disabled:opacity-50"
-                style={{ background: '#fff', border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B', padding: '1rem 1.25rem', fontSize: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' } as React.CSSProperties}
+                style={{ background: '#fff', border: '1px solid #C8CDD3', color: '#1B3A5C', '--tw-ring-color': '#4E7FB5', padding: '1rem 1.25rem', fontSize: '1rem', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' } as React.CSSProperties}
               />
               <button
                 type="submit"
                 disabled={loading || !input.trim()}
                 className="font-semibold rounded-xl transition-all shrink-0 text-white disabled:opacity-40"
-                style={{ background: '#3D6B9B', padding: '1rem 1.75rem', fontSize: '1rem' }}
-                onMouseEnter={e => { if (!loading && input.trim()) (e.currentTarget as HTMLButtonElement).style.background = '#2A5080' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#3D6B9B' }}
+                style={{ background: '#4E7FB5', padding: '1rem 1.75rem', fontSize: '1rem' }}
+                onMouseEnter={e => { if (!loading && input.trim()) (e.currentTarget as HTMLButtonElement).style.background = '#3A6A9A' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#4E7FB5' }}
               >
                 Ask
               </button>

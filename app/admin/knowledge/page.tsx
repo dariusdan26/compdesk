@@ -24,10 +24,10 @@ export default async function AdminKnowledgePage() {
   })
 
   return (
-    <div style={{ minHeight: '100vh', background: '#EEF3F9' }}>
-      <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2E5478' }}>
+    <div style={{ minHeight: '100vh', background: '#F0F2F5' }}>
+      <header style={{ background: '#1B3A5C', borderBottom: '1px solid #2A4A6E' }}>
         <div style={{ maxWidth: '72rem', margin: '0 auto', padding: '1.125rem 1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link href="/dashboard" style={{ color: '#6B8BA8', flexShrink: 0, display: 'flex', alignItems: 'center' }}
+          <Link href="/dashboard" style={{ color: '#7A8FA0', flexShrink: 0, display: 'flex', alignItems: 'center' }}
             className="hover:text-white transition-colors"
           >
             <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,11 +35,11 @@ export default async function AdminKnowledgePage() {
             </svg>
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <HexIcon style={{ width: '2.25rem', height: '2.25rem', color: '#5B84B1', flexShrink: 0 }} />
+            <HexIcon style={{ width: '2.25rem', height: '2.25rem', color: '#6B94C0', flexShrink: 0 }} />
             <span style={{ color: '#ffffff', fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-0.025em' }}>CompDesk</span>
           </div>
-          <span style={{ color: '#3D6B9B', fontSize: '1.125rem' }}>/</span>
-          <span style={{ color: '#A8C4E0', fontSize: '1rem' }}>Manage Knowledge Base</span>
+          <span style={{ color: '#4E7FB5', fontSize: '1.125rem' }}>/</span>
+          <span style={{ color: '#A8B8CC', fontSize: '1rem' }}>Manage Knowledge Base</span>
         </div>
       </header>
 

@@ -16,7 +16,7 @@ export default async function IssuesPage() {
   })
 
   return (
-    <main style={{ minHeight: '100vh', background: '#EEF3F9' }}>
+    <main style={{ minHeight: '100vh', background: '#F0F2F5' }}>
       <PageHeader title="Issue Reports" />
 
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>

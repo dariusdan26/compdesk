@@ -13,14 +13,14 @@ interface SOP {
 }
 
 const DEPT_COLORS: Record<string, { bg: string; icon: string; text: string }> = {
-  Production:        { bg: '#DCEAF7', icon: '#3D6B9B', text: '#1B3A5C' },
+  Production:        { bg: '#E0E4E9', icon: '#4E7FB5', text: '#1B3A5C' },
   Quality:           { bg: '#FEF9C3', icon: '#CA8A04', text: '#713F12' },
   Safety:            { bg: '#FEE2E2', icon: '#DC2626', text: '#7F1D1D' },
   Warehouse:         { bg: '#D1FAE5', icon: '#059669', text: '#064E3B' },
   Maintenance:       { bg: '#EDE9FE', icon: '#7C3AED', text: '#3B0764' },
   'Business Central': { bg: '#FFF7ED', icon: '#EA580C', text: '#7C2D12' },
   Administration: { bg: '#FFE4E6', icon: '#E11D48', text: '#881337' },
-  General:        { bg: '#F1F5F9', icon: '#475569', text: '#0F172A' },
+  General:        { bg: '#F2F3F5', icon: '#475569', text: '#0F172A' },
 }
 
 const PINNED_DEPTS = [
@@ -114,7 +114,7 @@ export default function SOPList({
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '0.625rem' }}>
             <div>
               <h1 style={{ fontSize: '1.375rem', fontWeight: 700, color: '#1B3A5C', marginBottom: '2px' }}>SOP Library</h1>
-              <p style={{ color: '#6B7A8D', fontSize: '0.875rem' }}>
+              <p style={{ color: '#717680', fontSize: '0.875rem' }}>
                 {total === 0 ? 'No procedures published yet' : `${acknowledged} of ${total} acknowledged`}
               </p>
             </div>
@@ -123,9 +123,9 @@ export default function SOPList({
             )}
           </div>
           {total > 0 && (
-            <div style={{ height: '6px', borderRadius: '9999px', background: '#D0DCE8', overflow: 'hidden' }}>
+            <div style={{ height: '6px', borderRadius: '9999px', background: '#D4D7DC', overflow: 'hidden' }}>
               <div style={{
-                height: '100%', borderRadius: '9999px', background: pct === 100 ? '#22C55E' : '#3D6B9B',
+                height: '100%', borderRadius: '9999px', background: pct === 100 ? '#22C55E' : '#4E7FB5',
                 width: `${pct}%`, transition: 'width 0.4s ease',
               }} />
             </div>
@@ -152,7 +152,7 @@ export default function SOPList({
                   background: '#fff',
                   borderRadius: '1rem',
                   padding: '1.375rem 1rem 1.125rem',
-                  border: `1.5px solid ${allAcked ? '#BBF7D0' : '#D0DCE8'}`,
+                  border: `1.5px solid ${allAcked ? '#BBF7D0' : '#D4D7DC'}`,
                   cursor: 'pointer',
                   textAlign: 'center',
                   display: 'flex',
@@ -189,7 +189,7 @@ export default function SOPList({
 
                 {/* Count / progress */}
                 {dSops.length === 0 ? (
-                  <span style={{ fontSize: '0.6875rem', color: '#B0BAC5' }}>No SOPs yet</span>
+                  <span style={{ fontSize: '0.6875rem', color: '#B0B4B9' }}>No SOPs yet</span>
                 ) : allAcked ? (
                   <span style={{ fontSize: '0.6875rem', color: '#16A34A', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '3px' }}>
                     <svg width="12" height="12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,7 +198,7 @@ export default function SOPList({
                     All done
                   </span>
                 ) : (
-                  <span style={{ fontSize: '0.6875rem', color: '#8B939E' }}>
+                  <span style={{ fontSize: '0.6875rem', color: '#8A8F96' }}>
                     {dAcked} of {dSops.length} done
                   </span>
                 )}
@@ -221,18 +221,18 @@ export default function SOPList({
           onClick={goBack}
           style={{
             display: 'flex', alignItems: 'center', gap: '0.375rem',
-            color: '#3D6B9B', background: 'none', border: 'none', cursor: 'pointer',
+            color: '#4E7FB5', background: 'none', border: 'none', cursor: 'pointer',
             fontSize: '0.875rem', fontWeight: 500, padding: 0,
           }}
           onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-          onMouseLeave={e => (e.currentTarget.style.color = '#3D6B9B')}
+          onMouseLeave={e => (e.currentTarget.style.color = '#4E7FB5')}
         >
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           SOP Library
         </button>
-        <span style={{ color: '#B0BAC5', fontSize: '0.875rem' }}>/</span>
+        <span style={{ color: '#B0B4B9', fontSize: '0.875rem' }}>/</span>
         <span style={{ fontSize: '0.875rem', color: '#1B3A5C', fontWeight: 600 }}>{selectedDept}</span>
       </div>
 
@@ -247,7 +247,7 @@ export default function SOPList({
           </div>
           <div>
             <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1B3A5C', marginBottom: '2px' }}>{selectedDept}</h1>
-            <p style={{ color: '#6B7A8D', fontSize: '0.875rem' }}>
+            <p style={{ color: '#717680', fontSize: '0.875rem' }}>
               {deptTotal === 0 ? 'No procedures yet' : `${deptAcked} of ${deptTotal} acknowledged`}
             </p>
           </div>
@@ -258,9 +258,9 @@ export default function SOPList({
           )}
         </div>
         {deptTotal > 0 && (
-          <div style={{ height: '6px', borderRadius: '9999px', background: '#D0DCE8', overflow: 'hidden' }}>
+          <div style={{ height: '6px', borderRadius: '9999px', background: '#D4D7DC', overflow: 'hidden' }}>
             <div style={{
-              height: '100%', borderRadius: '9999px', background: deptPct === 100 ? '#22C55E' : '#3D6B9B',
+              height: '100%', borderRadius: '9999px', background: deptPct === 100 ? '#22C55E' : '#4E7FB5',
               width: `${deptPct}%`, transition: 'width 0.4s ease',
             }} />
           </div>
@@ -276,7 +276,7 @@ export default function SOPList({
           }}>
             <FolderIcon dept={selectedDept!} size={32} />
           </div>
-          <p style={{ color: '#6B7A8D', fontSize: '0.9375rem' }}>No SOPs in this department yet.</p>
+          <p style={{ color: '#717680', fontSize: '0.9375rem' }}>No SOPs in this department yet.</p>
         </div>
       ) : (
         // SOP card grid
@@ -297,7 +297,7 @@ export default function SOPList({
                   background: '#fff',
                   borderRadius: '1rem',
                   padding: '1.25rem 1rem 1rem',
-                  border: `1.5px solid ${isAcked ? '#BBF7D0' : '#D0DCE8'}`,
+                  border: `1.5px solid ${isAcked ? '#BBF7D0' : '#D4D7DC'}`,
                   cursor: 'pointer',
                   textAlign: 'center',
                   display: 'flex',
@@ -347,7 +347,7 @@ export default function SOPList({
                 </p>
 
                 {/* Version */}
-                <span style={{ fontSize: '0.6875rem', color: '#8B939E' }}>v{sop.version}</span>
+                <span style={{ fontSize: '0.6875rem', color: '#8A8F96' }}>v{sop.version}</span>
               </button>
             )
           })}
@@ -363,10 +363,10 @@ export default function SOPList({
           <div style={{
             background: '#fff', borderRadius: '1rem', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
             width: '100%', maxWidth: '42rem', maxHeight: '85vh', display: 'flex', flexDirection: 'column',
-            border: '1px solid #D0DCE8',
+            border: '1px solid #D4D7DC',
           }}>
             {/* Modal header */}
-            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #EEF3F9', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexShrink: 0 }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #F0F2F5', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
                 <div style={{
                   width: '2.75rem', height: '2.75rem', borderRadius: '0.625rem',
@@ -380,7 +380,7 @@ export default function SOPList({
                     <span style={{ fontSize: '0.75rem', fontWeight: 500, padding: '1px 7px', borderRadius: '9999px', background: getDeptStyle(viewingSop.department).bg, color: getDeptStyle(viewingSop.department).icon }}>
                       {viewingSop.department}
                     </span>
-                    <span style={{ fontSize: '0.75rem', color: '#8B939E' }}>v{viewingSop.version}</span>
+                    <span style={{ fontSize: '0.75rem', color: '#8A8F96' }}>v{viewingSop.version}</span>
                     {acknowledgedIds.has(viewingSop.id) && (
                       <span style={{ fontSize: '0.75rem', color: '#16A34A', fontWeight: 500 }}>✓ Acknowledged</span>
                     )}
@@ -389,9 +389,9 @@ export default function SOPList({
                 </div>
               </div>
               <button onClick={() => setViewingSop(null)}
-                style={{ color: '#8B939E', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0, marginTop: '2px' }}
+                style={{ color: '#8A8F96', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0, marginTop: '2px' }}
                 onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#8B939E')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#8A8F96')}
               >
                 <svg style={{ width: '1.25rem', height: '1.25rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -407,11 +407,11 @@ export default function SOPList({
             </div>
 
             {/* Footer */}
-            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #EEF3F9', display: 'flex', justifyContent: 'flex-end', gap: '0.625rem', flexShrink: 0 }}>
+            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #F0F2F5', display: 'flex', justifyContent: 'flex-end', gap: '0.625rem', flexShrink: 0 }}>
               <button onClick={() => setViewingSop(null)}
-                style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#6B7A8D', background: 'none', border: 'none', cursor: 'pointer' }}
+                style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#717680', background: 'none', border: 'none', cursor: 'pointer' }}
                 onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#6B7A8D')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#717680')}
               >
                 Close
               </button>
@@ -423,7 +423,7 @@ export default function SOPList({
                     padding: '0.5rem 1.25rem', fontSize: '0.875rem', fontWeight: 600,
                     background: '#1B3A5C', color: '#fff', border: 'none', borderRadius: '0.5rem', cursor: 'pointer',
                   }}
-                  onMouseEnter={e => (e.currentTarget.style.background = '#2A5080')}
+                  onMouseEnter={e => (e.currentTarget.style.background = '#3A6A9A')}
                   onMouseLeave={e => (e.currentTarget.style.background = '#1B3A5C')}
                 >
                   {acknowledging === viewingSop.id ? 'Saving...' : 'Acknowledge'}

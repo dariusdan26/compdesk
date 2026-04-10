@@ -16,7 +16,7 @@ export default async function DispatchPage() {
   })
 
   return (
-    <main style={{ minHeight: '100vh', background: '#EEF3F9' }}>
+    <main style={{ minHeight: '100vh', background: '#F0F2F5' }}>
       <PageHeader title="Dispatch Checklists" />
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
         <DispatchList initialChecklists={checklists.map((c) => ({ ...c, createdAt: c.createdAt.toISOString() }))} />

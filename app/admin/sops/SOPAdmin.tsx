@@ -29,14 +29,14 @@ const PINNED_DEPTS = [
 ]
 
 const DEPT_COLORS: Record<string, { bg: string; icon: string }> = {
-  Production:        { bg: '#DCEAF7', icon: '#3D6B9B' },
+  Production:        { bg: '#E0E4E9', icon: '#4E7FB5' },
   Quality:           { bg: '#FEF9C3', icon: '#CA8A04' },
   Safety:            { bg: '#FEE2E2', icon: '#DC2626' },
   Warehouse:         { bg: '#D1FAE5', icon: '#059669' },
   Maintenance:       { bg: '#EDE9FE', icon: '#7C3AED' },
   'Business Central': { bg: '#FFF7ED', icon: '#EA580C' },
   Administration:    { bg: '#FFE4E6', icon: '#E11D48' },
-  General:           { bg: '#F1F5F9', icon: '#475569' },
+  General:           { bg: '#F2F3F5', icon: '#475569' },
 }
 
 function getDeptStyle(dept: string) {
@@ -253,13 +253,13 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
         onClick={() => folderInputRef.current?.click()}
         disabled={isBusy}
         className="px-4 py-2 bg-white font-semibold rounded-lg text-sm transition-all disabled:opacity-50 flex items-center gap-1.5"
-        style={{ border: '1px solid #C5D8EF', color: '#3D6B9B' }}
-        onMouseEnter={e => { if (!isBusy) (e.currentTarget as HTMLButtonElement).style.borderColor = '#3D6B9B' }}
-        onMouseLeave={e => (e.currentTarget.style.borderColor = '#C5D8EF')}
+        style={{ border: '1px solid #C8CDD3', color: '#4E7FB5' }}
+        onMouseEnter={e => { if (!isBusy) (e.currentTarget as HTMLButtonElement).style.borderColor = '#4E7FB5' }}
+        onMouseLeave={e => (e.currentTarget.style.borderColor = '#C8CDD3')}
       >
         {folderProgress ? (
           <>
-            <svg className="w-4 h-4 animate-spin" style={{ color: '#5B84B1' }} fill="none" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 animate-spin" style={{ color: '#6B94C0' }} fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
             </svg>
@@ -279,13 +279,13 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
         onClick={() => fileInputRef.current?.click()}
         disabled={isBusy}
         className="px-4 py-2 bg-white font-semibold rounded-lg text-sm transition-all disabled:opacity-50 flex items-center gap-1.5"
-        style={{ border: '1px solid #C5D8EF', color: '#3D6B9B' }}
-        onMouseEnter={e => { if (!isBusy) (e.currentTarget as HTMLButtonElement).style.borderColor = '#3D6B9B' }}
-        onMouseLeave={e => (e.currentTarget.style.borderColor = '#C5D8EF')}
+        style={{ border: '1px solid #C8CDD3', color: '#4E7FB5' }}
+        onMouseEnter={e => { if (!isBusy) (e.currentTarget as HTMLButtonElement).style.borderColor = '#4E7FB5' }}
+        onMouseLeave={e => (e.currentTarget.style.borderColor = '#C8CDD3')}
       >
         {uploading ? (
           <>
-            <svg className="w-4 h-4 animate-spin" style={{ color: '#5B84B1' }} fill="none" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 animate-spin" style={{ color: '#6B94C0' }} fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
             </svg>
@@ -305,9 +305,9 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
         onClick={openNew}
         disabled={isBusy}
         className="px-4 py-2 font-semibold rounded-lg text-sm transition-all text-white disabled:opacity-50"
-        style={{ background: '#3D6B9B' }}
-        onMouseEnter={e => { if (!isBusy) (e.currentTarget as HTMLButtonElement).style.background = '#2A5080' }}
-        onMouseLeave={e => (e.currentTarget.style.background = '#3D6B9B')}
+        style={{ background: '#4E7FB5' }}
+        onMouseEnter={e => { if (!isBusy) (e.currentTarget as HTMLButtonElement).style.background = '#3A6A9A' }}
+        onMouseLeave={e => (e.currentTarget.style.background = '#4E7FB5')}
       >
         + Add SOP
       </button>
@@ -321,7 +321,7 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-xl font-bold mb-0.5" style={{ color: '#1B3A5C' }}>SOP Library</h1>
-            <p className="text-sm" style={{ color: '#6B7A8D' }}>
+            <p className="text-sm" style={{ color: '#717680' }}>
               {sops.length} {sops.length === 1 ? 'procedure' : 'procedures'}
             </p>
           </div>
@@ -350,7 +350,7 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
                   background: '#fff',
                   borderRadius: '1rem',
                   padding: '1.375rem 1rem 1.125rem',
-                  border: '1.5px solid #D0DCE8',
+                  border: '1.5px solid #D4D7DC',
                   cursor: 'pointer',
                   textAlign: 'center',
                   display: 'flex',
@@ -362,12 +362,12 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
                 onMouseEnter={e => {
                   (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 16px rgba(27,58,92,0.12)'
                   ;(e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)'
-                  ;(e.currentTarget as HTMLButtonElement).style.borderColor = '#A8C4E0'
+                  ;(e.currentTarget as HTMLButtonElement).style.borderColor = '#A8B8CC'
                 }}
                 onMouseLeave={e => {
                   (e.currentTarget as HTMLButtonElement).style.boxShadow = ''
                   ;(e.currentTarget as HTMLButtonElement).style.transform = ''
-                  ;(e.currentTarget as HTMLButtonElement).style.borderColor = '#D0DCE8'
+                  ;(e.currentTarget as HTMLButtonElement).style.borderColor = '#D4D7DC'
                 }}
               >
                 <div style={{
@@ -379,7 +379,7 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
                 <p style={{ fontWeight: 600, fontSize: '0.8125rem', color: '#1B3A5C', lineHeight: 1.35 }}>
                   {dept}
                 </p>
-                <span style={{ fontSize: '0.6875rem', color: count === 0 ? '#B0BAC5' : '#8B939E' }}>
+                <span style={{ fontSize: '0.6875rem', color: count === 0 ? '#B0B4B9' : '#8A8F96' }}>
                   {count === 0 ? 'No SOPs yet' : `${count} SOP${count === 1 ? '' : 's'}`}
                 </span>
               </button>
@@ -408,18 +408,18 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
           onClick={goBack}
           style={{
             display: 'flex', alignItems: 'center', gap: '0.375rem',
-            color: '#3D6B9B', background: 'none', border: 'none', cursor: 'pointer',
+            color: '#4E7FB5', background: 'none', border: 'none', cursor: 'pointer',
             fontSize: '0.875rem', fontWeight: 500, padding: 0,
           }}
           onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-          onMouseLeave={e => (e.currentTarget.style.color = '#3D6B9B')}
+          onMouseLeave={e => (e.currentTarget.style.color = '#4E7FB5')}
         >
           <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           SOP Library
         </button>
-        <span style={{ color: '#B0BAC5', fontSize: '0.875rem' }}>/</span>
+        <span style={{ color: '#B0B4B9', fontSize: '0.875rem' }}>/</span>
         <span style={{ fontSize: '0.875rem', color: '#1B3A5C', fontWeight: 600 }}>{selectedDept}</span>
       </div>
 
@@ -434,7 +434,7 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
           </div>
           <div>
             <h1 className="text-xl font-bold mb-0.5" style={{ color: '#1B3A5C' }}>{selectedDept}</h1>
-            <p className="text-sm" style={{ color: '#6B7A8D' }}>
+            <p className="text-sm" style={{ color: '#717680' }}>
               {deptSops.length} {deptSops.length === 1 ? 'procedure' : 'procedures'}
             </p>
           </div>
@@ -444,14 +444,14 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
 
       {/* Move all bar */}
       {deptSops.length > 0 && (
-        <div className="flex items-center gap-2 mb-4 px-4 py-2.5 rounded-lg" style={{ background: '#F1F5F9', border: '1px solid #D0DCE8' }}>
-          <span className="text-xs font-medium" style={{ color: '#6B7A8D' }}>Move all {deptSops.length} SOPs to:</span>
+        <div className="flex items-center gap-2 mb-4 px-4 py-2.5 rounded-lg" style={{ background: '#F2F3F5', border: '1px solid #D4D7DC' }}>
+          <span className="text-xs font-medium" style={{ color: '#717680' }}>Move all {deptSops.length} SOPs to:</span>
           <select
             value={moveAllTarget}
             onChange={e => setMoveAllTarget(e.target.value)}
             disabled={movingAll}
             className="px-2 py-1 rounded text-xs focus:outline-none"
-            style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', background: '#fff' }}
+            style={{ border: '1px solid #C8CDD3', color: '#1B3A5C', background: '#fff' }}
           >
             <option value="">Select department...</option>
             {DEPARTMENTS.filter(d => d !== selectedDept).map(d => <option key={d} value={d}>{d}</option>)}
@@ -464,9 +464,9 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
             }}
             disabled={!moveAllTarget || movingAll}
             className="px-3 py-1 rounded text-xs font-semibold transition-all disabled:opacity-40 text-white"
-            style={{ background: '#3D6B9B' }}
-            onMouseEnter={e => { if (moveAllTarget && !movingAll) (e.currentTarget as HTMLButtonElement).style.background = '#2A5080' }}
-            onMouseLeave={e => (e.currentTarget.style.background = '#3D6B9B')}
+            style={{ background: '#4E7FB5' }}
+            onMouseEnter={e => { if (moveAllTarget && !movingAll) (e.currentTarget as HTMLButtonElement).style.background = '#3A6A9A' }}
+            onMouseLeave={e => (e.currentTarget.style.background = '#4E7FB5')}
           >
             {movingAll ? 'Moving...' : 'Move all'}
           </button>
@@ -481,32 +481,32 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
 
       {/* SOP list */}
       {deptSops.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl" style={{ border: '1px solid #D0DCE8' }}>
+        <div className="text-center py-16 bg-white rounded-xl" style={{ border: '1px solid #D4D7DC' }}>
           <div style={{
             width: '3.5rem', height: '3.5rem', borderRadius: '0.875rem', background: ds.bg,
             display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 0.75rem',
           }}>
             <FolderIcon dept={selectedDept!} size={26} />
           </div>
-          <p className="text-sm mb-3" style={{ color: '#6B7A8D' }}>No SOPs in this department yet.</p>
-          <button onClick={openNew} className="font-medium text-sm hover:underline" style={{ color: '#3D6B9B' }}>
+          <p className="text-sm mb-3" style={{ color: '#717680' }}>No SOPs in this department yet.</p>
+          <button onClick={openNew} className="font-medium text-sm hover:underline" style={{ color: '#4E7FB5' }}>
             Add the first SOP
           </button>
         </div>
       ) : (
         <div className="flex flex-col gap-2">
           {deptSops.map(sop => (
-            <div key={sop.id} className="bg-white rounded-lg px-4 py-3 flex items-start justify-between gap-4" style={{ border: '1px solid #D0DCE8' }}>
+            <div key={sop.id} className="bg-white rounded-lg px-4 py-3 flex items-start justify-between gap-4" style={{ border: '1px solid #D4D7DC' }}>
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-xs" style={{ color: '#8B939E' }}>v{sop.version}</span>
+                  <span className="text-xs" style={{ color: '#8A8F96' }}>v{sop.version}</span>
                   <span className="font-semibold text-sm truncate" style={{ color: '#1B3A5C' }}>{sop.title}</span>
                 </div>
-                <p className="text-xs line-clamp-2" style={{ color: '#6B7A8D' }}>{sop.content.replace(/#+\s/g, '')}</p>
+                <p className="text-xs line-clamp-2" style={{ color: '#717680' }}>{sop.content.replace(/#+\s/g, '')}</p>
               </div>
               <div className="flex items-center gap-3 shrink-0">
                 {movingIds.has(sop.id) ? (
-                  <svg className="w-3.5 h-3.5 animate-spin" style={{ color: '#5B84B1' }} fill="none" viewBox="0 0 24 24">
+                  <svg className="w-3.5 h-3.5 animate-spin" style={{ color: '#6B94C0' }} fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                   </svg>
@@ -516,7 +516,7 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
                     onChange={e => { if (e.target.value) handleMoveSop(sop.id, e.target.value) }}
                     disabled={movingIds.has(sop.id) || movingAll}
                     className="text-xs rounded px-1.5 py-0.5 focus:outline-none"
-                    style={{ border: '1px solid #C5D8EF', color: '#6B7A8D', background: '#fff', maxWidth: '110px' }}
+                    style={{ border: '1px solid #C8CDD3', color: '#717680', background: '#fff', maxWidth: '110px' }}
                   >
                     <option value="">Move to...</option>
                     {DEPARTMENTS.filter(d => d !== sop.department).map(d => <option key={d} value={d}>{d}</option>)}
@@ -524,9 +524,9 @@ export default function SOPAdmin({ initialSops }: { initialSops: SOP[] }) {
                 )}
                 <button onClick={() => openEdit(sop)}
                   className="text-xs font-medium transition-colors"
-                  style={{ color: '#3D6B9B' }}
+                  style={{ color: '#4E7FB5' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#3D6B9B')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#4E7FB5')}
                 >
                   Edit
                 </button>
@@ -567,14 +567,14 @@ function SOPFormModal({
 }) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh]" style={{ border: '1px solid #D0DCE8' }}>
-        <div className="px-6 py-4 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid #EEF3F9' }}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh]" style={{ border: '1px solid #D4D7DC' }}>
+        <div className="px-6 py-4 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid #F0F2F5' }}>
           <h2 className="font-semibold" style={{ color: '#1B3A5C' }}>
             {editing ? 'Edit SOP' : 'New SOP'}
           </h2>
-          <button onClick={onClose} className="transition-colors" style={{ color: '#8B939E' }}
+          <button onClick={onClose} className="transition-colors" style={{ color: '#8A8F96' }}
             onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#8B939E')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#8A8F96')}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -584,7 +584,7 @@ function SOPFormModal({
 
         {!editing && form.content && (
           <div className="px-6 pt-3 shrink-0">
-            <div className="px-3 py-2 rounded-lg text-xs font-medium" style={{ background: '#DCEAF7', border: '1px solid #C5D8EF', color: '#1B3A5C' }}>
+            <div className="px-3 py-2 rounded-lg text-xs font-medium" style={{ background: '#E0E4E9', border: '1px solid #C8CDD3', color: '#1B3A5C' }}>
               File content loaded — review below and click <strong>Add SOP</strong> to save.
             </div>
           </div>
@@ -593,50 +593,50 @@ function SOPFormModal({
         <div className="px-6 py-4 flex flex-col gap-4 overflow-y-auto">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: '#3D6B9B' }}>Department</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: '#4E7FB5' }}>Department</label>
               <select
                 value={form.department}
                 onChange={e => setForm(f => ({ ...f, department: e.target.value }))}
                 className="w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B' } as React.CSSProperties}
+                style={{ border: '1px solid #C8CDD3', color: '#1B3A5C', '--tw-ring-color': '#4E7FB5' } as React.CSSProperties}
               >
                 {DEPARTMENTS.map(d => <option key={d}>{d}</option>)}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1" style={{ color: '#3D6B9B' }}>Version</label>
+              <label className="block text-sm font-medium mb-1" style={{ color: '#4E7FB5' }}>Version</label>
               <input
                 type="text"
                 value={form.version}
                 onChange={e => setForm(f => ({ ...f, version: e.target.value }))}
                 placeholder="e.g. 1.0"
                 className="w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B' } as React.CSSProperties}
+                style={{ border: '1px solid #C8CDD3', color: '#1B3A5C', '--tw-ring-color': '#4E7FB5' } as React.CSSProperties}
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#3D6B9B' }}>Title</label>
+            <label className="block text-sm font-medium mb-1" style={{ color: '#4E7FB5' }}>Title</label>
             <input
               type="text"
               value={form.title}
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
               placeholder="e.g. Resin Mixing Procedure"
               className="w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-              style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B' } as React.CSSProperties}
+              style={{ border: '1px solid #C8CDD3', color: '#1B3A5C', '--tw-ring-color': '#4E7FB5' } as React.CSSProperties}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1" style={{ color: '#3D6B9B' }}>Content</label>
+            <label className="block text-sm font-medium mb-1" style={{ color: '#4E7FB5' }}>Content</label>
             <textarea
               value={form.content}
               onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
               placeholder="Enter the procedure steps, safety notes, and references..."
               rows={10}
               className="w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 resize-y transition-all"
-              style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B' } as React.CSSProperties}
+              style={{ border: '1px solid #C8CDD3', color: '#1B3A5C', '--tw-ring-color': '#4E7FB5' } as React.CSSProperties}
             />
           </div>
 
@@ -645,10 +645,10 @@ function SOPFormModal({
           )}
         </div>
 
-        <div className="px-6 py-4 flex justify-end gap-2 shrink-0" style={{ borderTop: '1px solid #EEF3F9' }}>
-          <button onClick={onClose} className="px-4 py-2 text-sm font-medium transition-colors" style={{ color: '#6B7A8D' }}
+        <div className="px-6 py-4 flex justify-end gap-2 shrink-0" style={{ borderTop: '1px solid #F0F2F5' }}>
+          <button onClick={onClose} className="px-4 py-2 text-sm font-medium transition-colors" style={{ color: '#717680' }}
             onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-            onMouseLeave={e => (e.currentTarget.style.color = '#6B7A8D')}
+            onMouseLeave={e => (e.currentTarget.style.color = '#717680')}
           >
             Cancel
           </button>
@@ -656,9 +656,9 @@ function SOPFormModal({
             onClick={onSave}
             disabled={saving || !form.title.trim()}
             className="px-4 py-2 font-semibold rounded-lg text-sm transition-all text-white disabled:opacity-40"
-            style={{ background: '#3D6B9B' }}
-            onMouseEnter={e => { if (!saving) (e.currentTarget as HTMLButtonElement).style.background = '#2A5080' }}
-            onMouseLeave={e => (e.currentTarget.style.background = '#3D6B9B')}
+            style={{ background: '#4E7FB5' }}
+            onMouseEnter={e => { if (!saving) (e.currentTarget as HTMLButtonElement).style.background = '#3A6A9A' }}
+            onMouseLeave={e => (e.currentTarget.style.background = '#4E7FB5')}
           >
             {saving ? 'Saving...' : editing ? 'Save Changes' : 'Add SOP'}
           </button>

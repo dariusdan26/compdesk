@@ -40,7 +40,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'linear-gradient(135deg, #0F2440 0%, #1B3A5C 50%, #2A5080 100%)' }}>
+    <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'linear-gradient(135deg, #0F2440 0%, #1B3A5C 50%, #3A6A9A 100%)' }}>
       {/* Subtle hex background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-5">
         {[...Array(12)].map((_, i) => (
@@ -61,10 +61,10 @@ export default function LoginPage() {
         {/* Logo / Brand */}
         <div className="mb-10 text-center">
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '14px', marginBottom: '18px' }}>
-            <HexIcon style={{ width: '3.5rem', height: '3.5rem', color: '#5B84B1' }} />
+            <HexIcon style={{ width: '3.5rem', height: '3.5rem', color: '#6B94C0' }} />
             <span style={{ fontSize: '2.25rem', fontWeight: 700, color: '#ffffff', letterSpacing: '-0.025em' }}>CompDesk</span>
           </div>
-          <p style={{ fontSize: '1rem', color: '#8BAFD4' }}>Sign in to your account</p>
+          <p style={{ fontSize: '1rem', color: '#8AA0B8' }}>Sign in to your account</p>
         </div>
 
         {/* Form card */}
@@ -74,7 +74,7 @@ export default function LoginPage() {
           style={{ background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(91,132,177,0.3)', backdropFilter: 'blur(12px)', padding: '2.25rem' }}
         >
           <div style={{ marginBottom: '1.25rem' }}>
-            <label htmlFor="username" style={{ display: 'block', fontSize: '1rem', fontWeight: 500, marginBottom: '8px', color: '#C5D8EF' }}>
+            <label htmlFor="username" style={{ display: 'block', fontSize: '1rem', fontWeight: 500, marginBottom: '8px', color: '#C8CDD3' }}>
               Username
             </label>
             <input
@@ -84,14 +84,14 @@ export default function LoginPage() {
               onChange={(e) => setUsername(e.target.value)}
               required
               autoComplete="username"
-              className="w-full rounded-lg placeholder-[#6B8BA8] text-white focus:outline-none focus:ring-2 transition-all"
-              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(91,132,177,0.4)', '--tw-ring-color': '#3D6B9B', padding: '0.8125rem 1rem', fontSize: '1rem' } as React.CSSProperties}
+              className="w-full rounded-lg placeholder-[#7A8FA0] text-white focus:outline-none focus:ring-2 transition-all"
+              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(91,132,177,0.4)', '--tw-ring-color': '#4E7FB5', padding: '0.8125rem 1rem', fontSize: '1rem' } as React.CSSProperties}
               placeholder="Enter your username"
             />
           </div>
 
           <div style={{ marginBottom: '1.75rem' }}>
-            <label htmlFor="password" style={{ display: 'block', fontSize: '1rem', fontWeight: 500, marginBottom: '8px', color: '#C5D8EF' }}>
+            <label htmlFor="password" style={{ display: 'block', fontSize: '1rem', fontWeight: 500, marginBottom: '8px', color: '#C8CDD3' }}>
               Password
             </label>
             <input
@@ -101,8 +101,8 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
-              className="w-full rounded-lg placeholder-[#6B8BA8] text-white focus:outline-none focus:ring-2 transition-all"
-              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(91,132,177,0.4)', '--tw-ring-color': '#3D6B9B', padding: '0.8125rem 1rem', fontSize: '1rem' } as React.CSSProperties}
+              className="w-full rounded-lg placeholder-[#7A8FA0] text-white focus:outline-none focus:ring-2 transition-all"
+              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(91,132,177,0.4)', '--tw-ring-color': '#4E7FB5', padding: '0.8125rem 1rem', fontSize: '1rem' } as React.CSSProperties}
               placeholder="Enter your password"
             />
           </div>
@@ -117,9 +117,9 @@ export default function LoginPage() {
             type="submit"
             disabled={loading}
             className="w-full font-semibold rounded-lg transition-all text-white disabled:opacity-50"
-            style={{ background: loading ? '#2A5080' : '#3D6B9B', padding: '0.9375rem 1rem', fontSize: '1.0625rem' }}
-            onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.background = '#2A5080' }}
-            onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.background = '#3D6B9B' }}
+            style={{ background: loading ? '#3A6A9A' : '#4E7FB5', padding: '0.9375rem 1rem', fontSize: '1.0625rem' }}
+            onMouseEnter={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.background = '#3A6A9A' }}
+            onMouseLeave={e => { if (!loading) (e.currentTarget as HTMLButtonElement).style.background = '#4E7FB5' }}
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>

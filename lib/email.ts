@@ -79,38 +79,38 @@ export async function notifyNewChangeRequest(data: {
     to: recipients,
     subject: `[${data.urgency}] New Change Request — ${data.category}`,
     html: `
-      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D4D7DC;border-radius:12px;overflow:hidden">
         <div style="background:#1B3A5C;padding:20px 24px">
-          <p style="margin:0;color:#7EB3E8;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
+          <p style="margin:0;color:#7EA8CC;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
           <h1 style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">New Change Request</h1>
         </div>
         <div style="padding:24px">
           <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
             <tr>
-              <td style="padding:6px 0;font-size:13px;color:#6B7A8D;width:110px">Submitted by</td>
+              <td style="padding:6px 0;font-size:13px;color:#717680;width:110px">Submitted by</td>
               <td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.submittedBy}</td>
             </tr>
             <tr>
-              <td style="padding:6px 0;font-size:13px;color:#6B7A8D">Category</td>
+              <td style="padding:6px 0;font-size:13px;color:#717680">Category</td>
               <td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.category}</td>
             </tr>
             <tr>
-              <td style="padding:6px 0;font-size:13px;color:#6B7A8D">Urgency</td>
+              <td style="padding:6px 0;font-size:13px;color:#717680">Urgency</td>
               <td style="padding:6px 0">
                 <span style="font-size:12px;font-weight:700;color:${urgencyColor}">${data.urgency}</span>
               </td>
             </tr>
           </table>
           <div style="margin-bottom:16px">
-            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.05em">Proposed Change</p>
-            <p style="margin:0;font-size:14px;color:#1B3A5C;line-height:1.6;background:#EEF3F9;padding:12px;border-radius:8px">${data.description}</p>
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#717680;text-transform:uppercase;letter-spacing:0.05em">Proposed Change</p>
+            <p style="margin:0;font-size:14px;color:#1B3A5C;line-height:1.6;background:#F0F2F5;padding:12px;border-radius:8px">${data.description}</p>
           </div>
           <div style="margin-bottom:24px">
-            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.05em">Reason</p>
-            <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;background:#EEF3F9;padding:12px;border-radius:8px">${data.reason}</p>
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#717680;text-transform:uppercase;letter-spacing:0.05em">Reason</p>
+            <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;background:#F0F2F5;padding:12px;border-radius:8px">${data.reason}</p>
           </div>
           <a href="${BASE_URL}/admin/change-requests"
-            style="display:inline-block;padding:10px 20px;background:#3D6B9B;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
+            style="display:inline-block;padding:10px 20px;background:#4E7FB5;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
             Review in CompDesk →
           </a>
         </div>
@@ -144,20 +144,20 @@ export async function notifyNewNCR(data: {
     to: recipients,
     subject: `[${data.severity}] New NCR — ${data.department} / PO ${data.bcPoNumber}`,
     html: `
-      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D4D7DC;border-radius:12px;overflow:hidden">
         <div style="background:#7F1D1D;padding:20px 24px">
           <p style="margin:0;color:#FCA5A5;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
           <h1 style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">Non-Conformance Report</h1>
         </div>
         <div style="padding:24px">
           <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D;width:110px">Submitted by</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.submittedBy}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">BC PO Number</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.bcPoNumber}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Department</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.department}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Severity</td><td style="padding:6px 0"><span style="font-size:12px;font-weight:700;color:${severityColor}">${data.severity}</span></td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680;width:110px">Submitted by</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.submittedBy}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">BC PO Number</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.bcPoNumber}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">Department</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.department}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">Severity</td><td style="padding:6px 0"><span style="font-size:12px;font-weight:700;color:${severityColor}">${data.severity}</span></td></tr>
           </table>
           <div style="margin-bottom:24px">
-            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.05em">Description</p>
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#717680;text-transform:uppercase;letter-spacing:0.05em">Description</p>
             <p style="margin:0;font-size:14px;color:#1B3A5C;line-height:1.6;background:#FEF2F2;padding:12px;border-radius:8px;border-left:3px solid #DC2626">${data.description}</p>
           </div>
           <a href="${BASE_URL}/admin/ncrs"
@@ -195,18 +195,18 @@ export async function notifyNewRequisition(data: {
     to: recipients,
     subject: `[${data.urgency}] New Purchase Requisition — ${data.department}`,
     html: `
-      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D4D7DC;border-radius:12px;overflow:hidden">
         <div style="background:#064E3B;padding:20px 24px">
           <p style="margin:0;color:#6EE7B7;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
           <h1 style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">Purchase Requisition</h1>
         </div>
         <div style="padding:24px">
           <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D;width:110px">Submitted by</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.submittedBy}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Title</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.title}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Department</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.department}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Urgency</td><td style="padding:6px 0"><span style="font-size:12px;font-weight:700;color:${urgencyColor}">${data.urgency}</span></td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Line Items</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.lineCount} item${data.lineCount === 1 ? '' : 's'}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680;width:110px">Submitted by</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.submittedBy}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">Title</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.title}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">Department</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.department}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">Urgency</td><td style="padding:6px 0"><span style="font-size:12px;font-weight:700;color:${urgencyColor}">${data.urgency}</span></td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">Line Items</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.lineCount} item${data.lineCount === 1 ? '' : 's'}</td></tr>
           </table>
           <a href="${BASE_URL}/admin/requisitions"
             style="display:inline-block;padding:10px 20px;background:#059669;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
@@ -247,7 +247,7 @@ export async function notifyNewIssue(data: {
     to: recipients,
     subject: `[${data.urgency}] New Issue Reported — ${data.category}`,
     html: `
-      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D4D7DC;border-radius:12px;overflow:hidden">
         <div style="background:#7F1D1D;padding:20px 24px">
           <p style="margin:0;color:#FCA5A5;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
           <h1 style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">Issue Reported</h1>
@@ -255,22 +255,22 @@ export async function notifyNewIssue(data: {
         <div style="padding:24px">
           <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
             <tr>
-              <td style="padding:6px 0;font-size:13px;color:#6B7A8D;width:110px">Reported by</td>
+              <td style="padding:6px 0;font-size:13px;color:#717680;width:110px">Reported by</td>
               <td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.submittedBy}</td>
             </tr>
             <tr>
-              <td style="padding:6px 0;font-size:13px;color:#6B7A8D">Category</td>
+              <td style="padding:6px 0;font-size:13px;color:#717680">Category</td>
               <td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.category}</td>
             </tr>
             <tr>
-              <td style="padding:6px 0;font-size:13px;color:#6B7A8D">Urgency</td>
+              <td style="padding:6px 0;font-size:13px;color:#717680">Urgency</td>
               <td style="padding:6px 0">
                 <span style="font-size:12px;font-weight:700;color:${urgencyColor}">${data.urgency}</span>
               </td>
             </tr>
           </table>
           <div style="margin-bottom:24px">
-            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.05em">Issue Description</p>
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#717680;text-transform:uppercase;letter-spacing:0.05em">Issue Description</p>
             <p style="margin:0;font-size:14px;color:#1B3A5C;line-height:1.6;background:#FEF2F2;padding:12px;border-radius:8px;border-left:3px solid #DC2626">${data.description}</p>
           </div>
           <a href="${BASE_URL}/admin/issues"
@@ -308,21 +308,21 @@ export async function notifyNewDispatch(data: {
     to: recipients,
     subject: `[${statusLabel}] Dispatch Checklist — SO ${data.bcSoNumber}`,
     html: `
-      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D4D7DC;border-radius:12px;overflow:hidden">
         <div style="background:#1B3A5C;padding:20px 24px">
-          <p style="margin:0;color:#7EB3E8;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
+          <p style="margin:0;color:#7EA8CC;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
           <h1 style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">Dispatch Checklist</h1>
         </div>
         <div style="padding:24px">
           <table style="width:100%;border-collapse:collapse;margin-bottom:20px">
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D;width:110px">Submitted by</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.submittedBy}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">SO Number</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.bcSoNumber}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Customer</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.customerName}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Department</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.department}</td></tr>
-            <tr><td style="padding:6px 0;font-size:13px;color:#6B7A8D">Status</td><td style="padding:6px 0"><span style="font-size:12px;font-weight:700;color:${statusColor}">${statusLabel}</span></td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680;width:110px">Submitted by</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.submittedBy}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">SO Number</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C;font-weight:600">${data.bcSoNumber}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">Customer</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.customerName}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">Department</td><td style="padding:6px 0;font-size:13px;color:#1B3A5C">${data.department}</td></tr>
+            <tr><td style="padding:6px 0;font-size:13px;color:#717680">Status</td><td style="padding:6px 0"><span style="font-size:12px;font-weight:700;color:${statusColor}">${statusLabel}</span></td></tr>
           </table>
           <a href="${BASE_URL}/admin/dispatch"
-            style="display:inline-block;padding:10px 20px;background:#3D6B9B;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
+            style="display:inline-block;padding:10px 20px;background:#4E7FB5;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
             Review in CompDesk →
           </a>
         </div>
@@ -341,7 +341,7 @@ const FORM_TYPE_LABELS: Record<string, string> = {
 
 const STATUS_COLORS: Record<string, string> = {
   open: '#CA8A04',
-  'in-progress': '#3D6B9B',
+  'in-progress': '#4E7FB5',
   resolved: '#059669',
   closed: '#475569',
   approved: '#059669',
@@ -373,27 +373,27 @@ export async function notifyStatusUpdate(data: {
     to: data.submitterEmail,
     subject: `Your ${label} has been updated — ${data.status}`,
     html: `
-      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D0DCE8;border-radius:12px;overflow:hidden">
+      <div style="font-family:system-ui,sans-serif;max-width:520px;margin:0 auto;background:#fff;border:1px solid #D4D7DC;border-radius:12px;overflow:hidden">
         <div style="background:#1B3A5C;padding:20px 24px">
-          <p style="margin:0;color:#7EB3E8;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
+          <p style="margin:0;color:#7EA8CC;font-size:13px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase">CompDesk</p>
           <h1 style="margin:4px 0 0;color:#fff;font-size:18px;font-weight:700">${label} Updated</h1>
         </div>
         <div style="padding:24px">
           <p style="margin:0 0 16px;font-size:14px;color:#1B3A5C;line-height:1.6">
             Hi ${data.submitterName}, your <strong>${label.toLowerCase()}</strong> status has been updated:
           </p>
-          <div style="margin-bottom:20px;padding:12px 16px;background:#EEF3F9;border-radius:8px;display:flex;align-items:center;gap:8px">
-            <span style="font-size:13px;color:#6B7A8D">New Status:</span>
+          <div style="margin-bottom:20px;padding:12px 16px;background:#F0F2F5;border-radius:8px;display:flex;align-items:center;gap:8px">
+            <span style="font-size:13px;color:#717680">New Status:</span>
             <span style="font-size:13px;font-weight:700;color:${statusColor};text-transform:capitalize">${data.status}</span>
           </div>
           ${data.adminNote ? `
           <div style="margin-bottom:24px">
-            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#6B7A8D;text-transform:uppercase;letter-spacing:0.05em">Admin Note</p>
-            <p style="margin:0;font-size:14px;color:#1B3A5C;line-height:1.6;background:#EEF3F9;padding:12px;border-radius:8px">${data.adminNote}</p>
+            <p style="margin:0 0 6px;font-size:12px;font-weight:700;color:#717680;text-transform:uppercase;letter-spacing:0.05em">Admin Note</p>
+            <p style="margin:0;font-size:14px;color:#1B3A5C;line-height:1.6;background:#F0F2F5;padding:12px;border-radius:8px">${data.adminNote}</p>
           </div>
           ` : ''}
           <a href="${link}"
-            style="display:inline-block;padding:10px 20px;background:#3D6B9B;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
+            style="display:inline-block;padding:10px 20px;background:#4E7FB5;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">
             View in CompDesk →
           </a>
         </div>

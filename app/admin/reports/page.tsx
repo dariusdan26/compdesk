@@ -255,7 +255,7 @@ export default async function AdminReportsPage() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#EEF3F9', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: '#F0F2F5', display: 'flex', flexDirection: 'column' }}>
       <PageHeader title="Reports" />
       <main style={{ maxWidth: '72rem', margin: '0 auto', padding: '1.75rem 1rem', width: '100%' }}>
         <ReportsDashboard data={data} />

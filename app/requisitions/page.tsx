@@ -16,7 +16,7 @@ export default async function RequisitionsPage() {
   })
 
   return (
-    <main style={{ minHeight: '100vh', background: '#EEF3F9' }}>
+    <main style={{ minHeight: '100vh', background: '#F0F2F5' }}>
       <PageHeader title="Purchase Requisitions" />
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
         <RequisitionList initialRequisitions={requisitions.map((r) => ({ ...r, createdAt: r.createdAt.toISOString(), updatedAt: r.updatedAt.toISOString(), lineItems: r.lineItems.map((li) => ({ ...li, estimatedCost: li.estimatedCost ?? '' })) }))} />

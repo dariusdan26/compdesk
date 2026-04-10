@@ -21,9 +21,9 @@ const CATEGORY_COLORS: Record<string, { bg: string; icon: string; border: string
   'Resins':            { bg: '#FFF7ED', icon: '#D97706', border: '#FDE68A' },
   'Adhesives':         { bg: '#FEF9C3', icon: '#CA8A04', border: '#FEF08A' },
   'Coatings':          { bg: '#EDE9FE', icon: '#7C3AED', border: '#DDD6FE' },
-  'Composites':        { bg: '#DCEAF7', icon: '#3D6B9B', border: '#BFDBFE' },
+  'Composites':        { bg: '#E0E4E9', icon: '#4E7FB5', border: '#C8D0D8' },
   'Safety Equipment':  { bg: '#D1FAE5', icon: '#059669', border: '#A7F3D0' },
-  'General':           { bg: '#F1F5F9', icon: '#475569', border: '#E2E8F0' },
+  'General':           { bg: '#F2F3F5', icon: '#475569', border: '#E2E8F0' },
 }
 
 function categoryStyle(cat: string) {
@@ -71,7 +71,7 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#EEF3F9' }}>
+    <div style={{ minHeight: '100vh', background: '#F0F2F5' }}>
       {/* Header */}
       <PageHeader title="SDS Vault" />
 
@@ -84,7 +84,7 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
             </div>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#1B3A5C' }}>SDS Vault</h1>
           </div>
-          <p style={{ color: '#6B7A8D', fontSize: '0.875rem', marginLeft: '3.25rem' }}>
+          <p style={{ color: '#717680', fontSize: '0.875rem', marginLeft: '3.25rem' }}>
             {initialDocs.length === 0
               ? 'No safety data sheets uploaded yet.'
               : `${initialDocs.length} document${initialDocs.length === 1 ? '' : 's'} · Click any sheet to open as PDF`}
@@ -95,7 +95,7 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
         {initialDocs.length > 0 && (
           <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
             <div style={{ position: 'relative', flex: '1 1 220px', minWidth: '180px' }}>
-              <svg style={{ position: 'absolute', left: '0.625rem', top: '50%', transform: 'translateY(-50%)', width: '1rem', height: '1rem', color: '#8B939E', pointerEvents: 'none' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg style={{ position: 'absolute', left: '0.625rem', top: '50%', transform: 'translateY(-50%)', width: '1rem', height: '1rem', color: '#8A8F96', pointerEvents: 'none' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               <input
@@ -103,20 +103,20 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
                 placeholder="Search by name or manufacturer…"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                style={{ width: '100%', paddingLeft: '2.25rem', paddingRight: '0.75rem', paddingTop: '0.4375rem', paddingBottom: '0.4375rem', borderRadius: '0.5rem', border: '1px solid #C5D8EF', color: '#1B3A5C', fontSize: '0.875rem', background: '#fff', boxSizing: 'border-box' }}
+                style={{ width: '100%', paddingLeft: '2.25rem', paddingRight: '0.75rem', paddingTop: '0.4375rem', paddingBottom: '0.4375rem', borderRadius: '0.5rem', border: '1px solid #C8CDD3', color: '#1B3A5C', fontSize: '0.875rem', background: '#fff', boxSizing: 'border-box' }}
               />
             </div>
             <select
               value={filterCategory}
               onChange={e => setFilterCategory(e.target.value)}
-              style={{ padding: '0.4375rem 0.75rem', borderRadius: '0.5rem', border: '1px solid #C5D8EF', color: '#1B3A5C', fontSize: '0.875rem', background: '#fff' }}
+              style={{ padding: '0.4375rem 0.75rem', borderRadius: '0.5rem', border: '1px solid #C8CDD3', color: '#1B3A5C', fontSize: '0.875rem', background: '#fff' }}
             >
               {categories.map(c => <option key={c}>{c}</option>)}
             </select>
             {(search || filterCategory !== 'All') && (
               <button
                 onClick={() => { setSearch(''); setFilterCategory('All') }}
-                style={{ padding: '0.4375rem 0.75rem', borderRadius: '0.5rem', border: '1px solid #C5D8EF', color: '#6B7A8D', fontSize: '0.875rem', background: '#fff', cursor: 'pointer' }}
+                style={{ padding: '0.4375rem 0.75rem', borderRadius: '0.5rem', border: '1px solid #C8CDD3', color: '#717680', fontSize: '0.875rem', background: '#fff', cursor: 'pointer' }}
               >
                 Clear
               </button>
@@ -126,19 +126,19 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
 
         {/* Empty state */}
         {initialDocs.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '5rem 1rem', background: '#fff', borderRadius: '1rem', border: '1px solid #D0DCE8' }}>
+          <div style={{ textAlign: 'center', padding: '5rem 1rem', background: '#fff', borderRadius: '1rem', border: '1px solid #D4D7DC' }}>
             <div style={{ width: '4rem', height: '4rem', borderRadius: '1rem', background: '#FEE2E2', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
               <PDFIcon color="#DC2626" />
             </div>
-            <p style={{ color: '#6B7A8D', fontSize: '0.9375rem', marginBottom: '0.5rem', fontWeight: 500 }}>No SDS documents yet</p>
+            <p style={{ color: '#717680', fontSize: '0.9375rem', marginBottom: '0.5rem', fontWeight: 500 }}>No SDS documents yet</p>
             <p style={{ color: '#9CA3AF', fontSize: '0.8125rem' }}>Ask an admin to upload safety data sheets.</p>
           </div>
         )}
 
         {/* No results */}
         {initialDocs.length > 0 && filtered.length === 0 && (
-          <div style={{ textAlign: 'center', padding: '3rem 1rem', background: '#fff', borderRadius: '1rem', border: '1px solid #D0DCE8' }}>
-            <p style={{ color: '#6B7A8D', fontSize: '0.9375rem' }}>No documents match your search.</p>
+          <div style={{ textAlign: 'center', padding: '3rem 1rem', background: '#fff', borderRadius: '1rem', border: '1px solid #D4D7DC' }}>
+            <p style={{ color: '#717680', fontSize: '0.9375rem' }}>No documents match your search.</p>
           </div>
         )}
 
@@ -156,7 +156,7 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
                     </svg>
                   </div>
                   <h2 style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#1B3A5C' }}>{category}</h2>
-                  <span style={{ fontSize: '0.75rem', color: '#8B939E', fontWeight: 500 }}>({docs.length})</span>
+                  <span style={{ fontSize: '0.75rem', color: '#8A8F96', fontWeight: 500 }}>({docs.length})</span>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -169,16 +169,16 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
                       style={{
                         display: 'flex', alignItems: 'center', gap: '1rem',
                         background: '#fff', borderRadius: '0.75rem', padding: '0.875rem 1.125rem',
-                        border: '1px solid #D0DCE8', textDecoration: 'none',
+                        border: '1px solid #D4D7DC', textDecoration: 'none',
                         transition: 'box-shadow 0.15s, border-color 0.15s',
                       }}
                       onMouseEnter={e => {
                         (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 16px rgba(27,58,92,0.1)'
-                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = '#A8C4E0'
+                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = '#A8B8CC'
                       }}
                       onMouseLeave={e => {
                         (e.currentTarget as HTMLAnchorElement).style.boxShadow = ''
-                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = '#D0DCE8'
+                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = '#D4D7DC'
                       }}
                     >
                       {/* PDF icon badge */}
@@ -199,15 +199,15 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
                           {doc.title}
                         </p>
                         {doc.manufacturer && (
-                          <p style={{ fontSize: '0.75rem', color: '#6B7A8D' }}>{doc.manufacturer}</p>
+                          <p style={{ fontSize: '0.75rem', color: '#717680' }}>{doc.manufacturer}</p>
                         )}
                       </div>
 
                       {/* Size + open indicator */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
-                        <span style={{ fontSize: '0.75rem', color: '#B0BAC5' }}>{formatFileSize(doc.fileSize)}</span>
+                        <span style={{ fontSize: '0.75rem', color: '#B0B4B9' }}>{formatFileSize(doc.fileSize)}</span>
                         <span style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '2px 8px', borderRadius: '9999px', background: '#FEE2E2', color: '#DC2626' }}>PDF</span>
-                        <svg width="14" height="14" fill="none" stroke="#B0BAC5" viewBox="0 0 24 24">
+                        <svg width="14" height="14" fill="none" stroke="#B0B4B9" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
                       </div>

@@ -16,7 +16,7 @@ export default async function NCRsPage() {
   })
 
   return (
-    <main style={{ minHeight: '100vh', background: '#EEF3F9' }}>
+    <main style={{ minHeight: '100vh', background: '#F0F2F5' }}>
       <PageHeader title="Non-Conformance Reports" />
       <div style={{ maxWidth: '52rem', margin: '0 auto', padding: '2rem 1.5rem' }}>
         <NCRList initialNCRs={ncrs.map((n) => ({ ...n, createdAt: n.createdAt.toISOString(), updatedAt: n.updatedAt.toISOString() }))} />

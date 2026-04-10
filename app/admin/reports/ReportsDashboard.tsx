@@ -49,11 +49,11 @@ export type ReportsData = {
 // ─── Palette ────────────────────────────────────────────────────────────────
 const COLOR = {
   navy: '#1B3A5C',
-  blue: '#3D6B9B',
-  lightBlue: '#5B84B1',
-  border: '#D0DCE8',
-  muted: '#6B7A8D',
-  bg: '#EEF3F9',
+  blue: '#4E7FB5',
+  lightBlue: '#6B94C0',
+  border: '#D4D7DC',
+  muted: '#717680',
+  bg: '#F0F2F5',
   green: '#059669',
   amber: '#CA8A04',
   red: '#DC2626',
@@ -402,7 +402,7 @@ export default function ReportsDashboard({ data }: { data: ReportsData }) {
                 <div style={{
                   height: 8,
                   borderRadius: 999,
-                  background: '#F1F5F9',
+                  background: '#F2F3F5',
                   overflow: 'hidden',
                 }}>
                   <div style={{

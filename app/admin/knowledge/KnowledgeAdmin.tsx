@@ -206,7 +206,7 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-xl font-bold mb-0.5" style={{ color: '#1B3A5C' }}>Knowledge Base</h1>
-          <p className="text-sm" style={{ color: '#6B7A8D' }}>
+          <p className="text-sm" style={{ color: '#717680' }}>
             {entries.length} {entries.length === 1 ? 'entry' : 'entries'} — used to answer staff questions
           </p>
         </div>
@@ -220,13 +220,13 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
             onClick={() => fileInputRef.current?.click()}
             disabled={uploading || !!batchProgress}
             className="px-4 py-2 bg-white font-semibold rounded-lg text-sm transition-all disabled:opacity-50 flex items-center gap-1.5"
-            style={{ border: '1px solid #C5D8EF', color: '#3D6B9B' }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = '#3D6B9B')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = '#C5D8EF')}
+            style={{ border: '1px solid #C8CDD3', color: '#4E7FB5' }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = '#4E7FB5')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = '#C8CDD3')}
           >
             {uploading ? (
               <>
-                <svg className="w-4 h-4 animate-spin" style={{ color: '#5B84B1' }} fill="none" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 animate-spin" style={{ color: '#6B94C0' }} fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                 </svg>
@@ -246,13 +246,13 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
             onClick={() => folderInputRef.current?.click()}
             disabled={uploading || !!batchProgress}
             className="px-4 py-2 bg-white font-semibold rounded-lg text-sm transition-all disabled:opacity-50 flex items-center gap-1.5"
-            style={{ border: '1px solid #C5D8EF', color: '#3D6B9B' }}
-            onMouseEnter={e => (e.currentTarget.style.borderColor = '#3D6B9B')}
-            onMouseLeave={e => (e.currentTarget.style.borderColor = '#C5D8EF')}
+            style={{ border: '1px solid #C8CDD3', color: '#4E7FB5' }}
+            onMouseEnter={e => (e.currentTarget.style.borderColor = '#4E7FB5')}
+            onMouseLeave={e => (e.currentTarget.style.borderColor = '#C8CDD3')}
           >
             {batchProgress ? (
               <>
-                <svg className="w-4 h-4 animate-spin" style={{ color: '#5B84B1' }} fill="none" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 animate-spin" style={{ color: '#6B94C0' }} fill="none" viewBox="0 0 24 24">
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                 </svg>
@@ -271,9 +271,9 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
           <button
             onClick={openNew}
             className="px-4 py-2 font-semibold rounded-lg text-sm transition-all text-white"
-            style={{ background: '#3D6B9B' }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#2A5080')}
-            onMouseLeave={e => (e.currentTarget.style.background = '#3D6B9B')}
+            style={{ background: '#4E7FB5' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#3A6A9A')}
+            onMouseLeave={e => (e.currentTarget.style.background = '#4E7FB5')}
           >
             + Add Entry
           </button>
@@ -287,34 +287,34 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
       )}
 
       {batchProgress && (
-        <div className="mb-4 px-4 py-3 rounded-lg" style={{ background: '#fff', border: '1px solid #C5D8EF' }}>
+        <div className="mb-4 px-4 py-3 rounded-lg" style={{ background: '#fff', border: '1px solid #C8CDD3' }}>
           <div className="flex items-center justify-between text-sm mb-2">
             <span className="font-medium" style={{ color: '#1B3A5C' }}>Importing files...</span>
-            <span style={{ color: '#6B7A8D' }}>{batchProgress.current} of {batchProgress.total}</span>
+            <span style={{ color: '#717680' }}>{batchProgress.current} of {batchProgress.total}</span>
           </div>
-          <div className="w-full rounded-full h-1.5" style={{ background: '#D0DCE8' }}>
+          <div className="w-full rounded-full h-1.5" style={{ background: '#D4D7DC' }}>
             <div
               className="h-1.5 rounded-full transition-all"
-              style={{ width: `${(batchProgress.current / batchProgress.total) * 100}%`, background: '#3D6B9B' }}
+              style={{ width: `${(batchProgress.current / batchProgress.total) * 100}%`, background: '#4E7FB5' }}
             />
           </div>
         </div>
       )}
 
       {batchResults && (
-        <div className="mb-4 rounded-lg overflow-hidden" style={{ border: '1px solid #C5D8EF' }}>
-          <div className="px-4 py-3 flex items-center justify-between" style={{ background: '#DCEAF7', borderBottom: '1px solid #C5D8EF' }}>
+        <div className="mb-4 rounded-lg overflow-hidden" style={{ border: '1px solid #C8CDD3' }}>
+          <div className="px-4 py-3 flex items-center justify-between" style={{ background: '#E0E4E9', borderBottom: '1px solid #C8CDD3' }}>
             <span className="text-sm font-semibold" style={{ color: '#1B3A5C' }}>
               Import complete — {batchResults.filter(r => r.ok).length} of {batchResults.length} files added
             </span>
-            <button onClick={() => setBatchResults(null)} className="text-xs transition-colors" style={{ color: '#6B7A8D' }}
+            <button onClick={() => setBatchResults(null)} className="text-xs transition-colors" style={{ color: '#717680' }}
               onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-              onMouseLeave={e => (e.currentTarget.style.color = '#6B7A8D')}
+              onMouseLeave={e => (e.currentTarget.style.color = '#717680')}
             >
               Dismiss
             </button>
           </div>
-          <div className="divide-y max-h-48 overflow-y-auto bg-white" style={{ '--tw-divide-opacity': 1, borderColor: '#EEF3F9' } as React.CSSProperties}>
+          <div className="divide-y max-h-48 overflow-y-auto bg-white" style={{ '--tw-divide-opacity': 1, borderColor: '#F0F2F5' } as React.CSSProperties}>
             {batchResults.map((r, i) => (
               <div key={i} className="px-4 py-2 flex items-center gap-2 text-sm">
                 {r.ok
@@ -322,7 +322,7 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
                   : <span className="w-4 h-4 rounded-full flex items-center justify-center shrink-0 text-xs" style={{ background: '#FEE2E2', color: '#DC2626' }}>✗</span>
                 }
                 <span className="truncate" style={{ color: '#1B3A5C' }}>{r.name}</span>
-                {r.error && <span className="text-xs ml-auto shrink-0" style={{ color: '#6B7A8D' }}>{r.error}</span>}
+                {r.error && <span className="text-xs ml-auto shrink-0" style={{ color: '#717680' }}>{r.error}</span>}
               </div>
             ))}
           </div>
@@ -340,16 +340,16 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
               style={
                 filterCategory === cat
                   ? { background: '#1B3A5C', color: '#fff', border: '1px solid #1B3A5C' }
-                  : { background: '#fff', color: '#3D6B9B', border: '1px solid #C5D8EF' }
+                  : { background: '#fff', color: '#4E7FB5', border: '1px solid #C8CDD3' }
               }
               onMouseEnter={e => {
                 if (filterCategory !== cat) {
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = '#3D6B9B'
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = '#4E7FB5'
                 }
               }}
               onMouseLeave={e => {
                 if (filterCategory !== cat) {
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = '#C5D8EF'
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = '#C8CDD3'
                 }
               }}
             >
@@ -361,32 +361,32 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
 
       {/* Entry list */}
       {filtered.length === 0 ? (
-        <div className="text-center py-16 bg-white rounded-xl" style={{ border: '1px solid #D0DCE8' }}>
-          <p className="text-sm mb-3" style={{ color: '#6B7A8D' }}>No knowledge entries yet.</p>
-          <button onClick={openNew} className="font-medium text-sm hover:underline" style={{ color: '#3D6B9B' }}>
+        <div className="text-center py-16 bg-white rounded-xl" style={{ border: '1px solid #D4D7DC' }}>
+          <p className="text-sm mb-3" style={{ color: '#717680' }}>No knowledge entries yet.</p>
+          <button onClick={openNew} className="font-medium text-sm hover:underline" style={{ color: '#4E7FB5' }}>
             Add your first entry
           </button>
         </div>
       ) : (
         <div className="flex flex-col gap-2">
           {filtered.map(entry => (
-            <div key={entry.id} className="bg-white rounded-lg px-4 py-3 flex items-start justify-between gap-4" style={{ border: '1px solid #D0DCE8' }}>
+            <div key={entry.id} className="bg-white rounded-lg px-4 py-3 flex items-start justify-between gap-4" style={{ border: '1px solid #D4D7DC' }}>
               <div className="min-w-0">
                 <div className="flex items-center gap-2 mb-0.5">
-                  <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: '#DCEAF7', color: '#3D6B9B' }}>
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full" style={{ background: '#E0E4E9', color: '#4E7FB5' }}>
                     {entry.category}
                   </span>
                   <span className="font-semibold text-sm truncate" style={{ color: '#1B3A5C' }}>{entry.title}</span>
                 </div>
-                <p className="text-xs line-clamp-2" style={{ color: '#6B7A8D' }}>{entry.content}</p>
+                <p className="text-xs line-clamp-2" style={{ color: '#717680' }}>{entry.content}</p>
               </div>
               <div className="flex items-center gap-3 shrink-0">
                 <button
                   onClick={() => openEdit(entry)}
                   className="text-xs font-medium transition-colors"
-                  style={{ color: '#3D6B9B' }}
+                  style={{ color: '#4E7FB5' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-                  onMouseLeave={e => (e.currentTarget.style.color = '#3D6B9B')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#4E7FB5')}
                 >
                   Edit
                 </button>
@@ -406,15 +406,15 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
       {/* Modal form */}
       {showForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh]" style={{ border: '1px solid #D0DCE8' }}>
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[90vh]" style={{ border: '1px solid #D4D7DC' }}>
             {/* Modal header */}
-            <div className="px-6 py-4 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid #EEF3F9' }}>
+            <div className="px-6 py-4 flex items-center justify-between shrink-0" style={{ borderBottom: '1px solid #F0F2F5' }}>
               <h2 className="font-semibold" style={{ color: '#1B3A5C' }}>
                 {editing ? 'Edit Entry' : 'New Knowledge Entry'}
               </h2>
-              <button onClick={closeForm} className="transition-colors" style={{ color: '#8B939E' }}
+              <button onClick={closeForm} className="transition-colors" style={{ color: '#8A8F96' }}
                 onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#8B939E')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#8A8F96')}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -425,7 +425,7 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
             {/* File loaded banner */}
             {!editing && form.content && (
               <div className="px-6 pt-3 shrink-0">
-                <div className="px-3 py-2 rounded-lg text-xs font-medium" style={{ background: '#DCEAF7', border: '1px solid #C5D8EF', color: '#1B3A5C' }}>
+                <div className="px-3 py-2 rounded-lg text-xs font-medium" style={{ background: '#E0E4E9', border: '1px solid #C8CDD3', color: '#1B3A5C' }}>
                   File content loaded — review below and click <strong>Add Entry</strong> to save to the knowledge base.
                 </div>
               </div>
@@ -434,47 +434,47 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
             {/* Form fields */}
             <div className="px-6 py-4 flex flex-col gap-4 overflow-y-auto">
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: '#3D6B9B' }}>Category</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: '#4E7FB5' }}>Category</label>
                 <select
                   value={form.category}
                   onChange={e => setForm(f => ({ ...f, category: e.target.value }))}
                   className="w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                  style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B' } as React.CSSProperties}
+                  style={{ border: '1px solid #C8CDD3', color: '#1B3A5C', '--tw-ring-color': '#4E7FB5' } as React.CSSProperties}
                 >
                   {CATEGORIES.map(c => <option key={c}>{c}</option>)}
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: '#3D6B9B' }}>Title</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: '#4E7FB5' }}>Title</label>
                 <input
                   type="text"
                   value={form.title}
                   onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
                   placeholder="e.g. West System 105 Epoxy Resin"
                   className="w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 transition-all"
-                  style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B' } as React.CSSProperties}
+                  style={{ border: '1px solid #C8CDD3', color: '#1B3A5C', '--tw-ring-color': '#4E7FB5' } as React.CSSProperties}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1" style={{ color: '#3D6B9B' }}>Content</label>
+                <label className="block text-sm font-medium mb-1" style={{ color: '#4E7FB5' }}>Content</label>
                 <textarea
                   value={form.content}
                   onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
                   placeholder="Paste in product specs, mix ratios, cure times, usage notes, supplier info, or process steps..."
                   rows={8}
                   className="w-full px-3 py-2 rounded-lg text-sm focus:outline-none focus:ring-2 resize-y transition-all"
-                  style={{ border: '1px solid #C5D8EF', color: '#1B3A5C', '--tw-ring-color': '#3D6B9B' } as React.CSSProperties}
+                  style={{ border: '1px solid #C8CDD3', color: '#1B3A5C', '--tw-ring-color': '#4E7FB5' } as React.CSSProperties}
                 />
               </div>
             </div>
 
             {/* Modal footer */}
-            <div className="px-6 py-4 flex justify-end gap-2 shrink-0" style={{ borderTop: '1px solid #EEF3F9' }}>
-              <button onClick={closeForm} className="px-4 py-2 text-sm font-medium transition-colors" style={{ color: '#6B7A8D' }}
+            <div className="px-6 py-4 flex justify-end gap-2 shrink-0" style={{ borderTop: '1px solid #F0F2F5' }}>
+              <button onClick={closeForm} className="px-4 py-2 text-sm font-medium transition-colors" style={{ color: '#717680' }}
                 onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#6B7A8D')}
+                onMouseLeave={e => (e.currentTarget.style.color = '#717680')}
               >
                 Cancel
               </button>
@@ -482,9 +482,9 @@ export default function KnowledgeAdmin({ initialEntries }: { initialEntries: Ent
                 onClick={handleSave}
                 disabled={saving || !form.title.trim()}
                 className="px-4 py-2 font-semibold rounded-lg text-sm transition-all text-white disabled:opacity-40"
-                style={{ background: '#3D6B9B' }}
-                onMouseEnter={e => { if (!saving) (e.currentTarget as HTMLButtonElement).style.background = '#2A5080' }}
-                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#3D6B9B' }}
+                style={{ background: '#4E7FB5' }}
+                onMouseEnter={e => { if (!saving) (e.currentTarget as HTMLButtonElement).style.background = '#3A6A9A' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#4E7FB5' }}
               >
                 {saving ? 'Saving...' : editing ? 'Save Changes' : 'Add Entry'}
               </button>

@@ -153,7 +153,7 @@ export function PushNotificationManager() {
     right: 16,
     zIndex: 9999,
     background: '#FFFFFF',
-    border: '1px solid #D0DCE8',
+    border: '1px solid #D4D7DC',
     borderRadius: 12,
     padding: '10px 14px',
     boxShadow: '0 8px 24px rgba(27, 58, 92, 0.12)',
@@ -176,7 +176,7 @@ export function PushNotificationManager() {
   }
   const linkButtonStyle: React.CSSProperties = {
     background: 'transparent',
-    color: '#6B7A8D',
+    color: '#717680',
     border: 'none',
     fontSize: 12,
     cursor: 'pointer',

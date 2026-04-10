@@ -50,14 +50,14 @@ async function compressImage(file: File): Promise<File> {
 const DEPARTMENTS = ['General', 'Production', 'Quality', 'Safety', 'Warehouse', 'Maintenance', 'Administration', 'Business Central']
 
 const DEPT_COLORS: Record<string, { bg: string; color: string }> = {
-  Production:         { bg: '#DCEAF7', color: '#3D6B9B' },
+  Production:         { bg: '#E0E4E9', color: '#4E7FB5' },
   Quality:            { bg: '#FEF9C3', color: '#CA8A04' },
   Safety:             { bg: '#FEE2E2', color: '#DC2626' },
   Warehouse:          { bg: '#D1FAE5', color: '#059669' },
   Maintenance:        { bg: '#EDE9FE', color: '#7C3AED' },
   'Business Central': { bg: '#FFF7ED', color: '#EA580C' },
   Administration:     { bg: '#FFE4E6', color: '#E11D48' },
-  General:            { bg: '#F1F5F9', color: '#475569' },
+  General:            { bg: '#F2F3F5', color: '#475569' },
 }
 
 const DEFAULT_ITEMS: ChecklistItem[] = [
@@ -180,30 +180,30 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
     }
   }
 
-  const inputStyle = { width: '100%', padding: '0.5rem 0.75rem', borderRadius: '0.5rem', border: '1px solid #C5D8EF', color: '#1B3A5C', fontSize: '0.875rem', background: '#fff', boxSizing: 'border-box' as const }
-  const labelStyle = { display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#3D6B9B', marginBottom: '0.375rem' } as React.CSSProperties
+  const inputStyle = { width: '100%', padding: '0.5rem 0.75rem', borderRadius: '0.5rem', border: '1px solid #C8CDD3', color: '#1B3A5C', fontSize: '0.875rem', background: '#fff', boxSizing: 'border-box' as const }
+  const labelStyle = { display: 'block', fontSize: '0.875rem', fontWeight: 600, color: '#4E7FB5', marginBottom: '0.375rem' } as React.CSSProperties
 
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.75rem', gap: '0.75rem', flexWrap: 'wrap' }}>
         <div>
           <h1 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1B3A5C', marginBottom: '2px' }}>Dispatch Checklists</h1>
-          <p style={{ color: '#6B7A8D', fontSize: '0.875rem' }}>{checklists.length === 0 ? 'No checklists submitted yet' : `${checklists.length} checklist${checklists.length === 1 ? '' : 's'}`}</p>
+          <p style={{ color: '#717680', fontSize: '0.875rem' }}>{checklists.length === 0 ? 'No checklists submitted yet' : `${checklists.length} checklist${checklists.length === 1 ? '' : 's'}`}</p>
         </div>
         <button onClick={() => { setShowForm(true); setFormError(''); resetForm() }}
-          style={{ padding: '0.5rem 1.125rem', background: '#3D6B9B', color: '#fff', border: 'none', borderRadius: '0.625rem', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 }}
-          onMouseEnter={e => (e.currentTarget.style.background = '#2A5080')}
-          onMouseLeave={e => (e.currentTarget.style.background = '#3D6B9B')}
+          style={{ padding: '0.5rem 1.125rem', background: '#4E7FB5', color: '#fff', border: 'none', borderRadius: '0.625rem', fontWeight: 600, fontSize: '0.875rem', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#3A6A9A')}
+          onMouseLeave={e => (e.currentTarget.style.background = '#4E7FB5')}
         >+ New Checklist</button>
       </div>
 
       {checklists.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '4rem 1rem', background: '#fff', borderRadius: '1rem', border: '1px solid #D0DCE8' }}>
-          <div style={{ width: '3.5rem', height: '3.5rem', borderRadius: '0.875rem', background: '#DCEAF7', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
-            <svg width="24" height="24" fill="none" stroke="#3D6B9B" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <div style={{ textAlign: 'center', padding: '4rem 1rem', background: '#fff', borderRadius: '1rem', border: '1px solid #D4D7DC' }}>
+          <div style={{ width: '3.5rem', height: '3.5rem', borderRadius: '0.875rem', background: '#E0E4E9', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem' }}>
+            <svg width="24" height="24" fill="none" stroke="#4E7FB5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.75} d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
           </div>
-          <p style={{ color: '#6B7A8D', fontSize: '0.9375rem', marginBottom: '0.75rem' }}>No dispatch checklists yet.</p>
-          <button onClick={() => setShowForm(true)} style={{ color: '#3D6B9B', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem' }}>Start your first checklist</button>
+          <p style={{ color: '#717680', fontSize: '0.9375rem', marginBottom: '0.75rem' }}>No dispatch checklists yet.</p>
+          <button onClick={() => setShowForm(true)} style={{ color: '#4E7FB5', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500, fontSize: '0.875rem' }}>Start your first checklist</button>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -223,10 +223,10 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
                     <Badge label={cl.department} style={ds} />
                     <Badge label={isPass ? '✓ Pass' : '✗ Fail'} style={{ bg: isPass ? '#D1FAE5' : '#FEE2E2', color: isPass ? '#059669' : '#DC2626' }} />
                   </div>
-                  <span style={{ fontSize: '0.75rem', color: '#B0BAC5', flexShrink: 0 }}>{new Date(cl.createdAt).toLocaleDateString()}</span>
+                  <span style={{ fontSize: '0.75rem', color: '#B0B4B9', flexShrink: 0 }}>{new Date(cl.createdAt).toLocaleDateString()}</span>
                 </div>
                 <p style={{ fontSize: '0.9375rem', color: '#1B3A5C', fontWeight: 600, marginBottom: '0.125rem' }}>SO: {cl.bcSoNumber}</p>
-                <p style={{ fontSize: '0.8125rem', color: '#6B7A8D' }}>{cl.customerName} · {done}/{parsed.length} checks · by {cl.user.name}</p>
+                <p style={{ fontSize: '0.8125rem', color: '#717680' }}>{cl.customerName} · {done}/{parsed.length} checks · by {cl.user.name}</p>
               </button>
             )
           })}
@@ -239,8 +239,8 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
         const isPass = viewing.overallStatus === 'pass'
         return (
           <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '0', zIndex: 50 }}>
-            <div style={{ background: '#fff', borderRadius: '1rem 1rem 0 0', boxShadow: '0 -4px 40px rgba(0,0,0,0.18)', width: '100%', maxWidth: '38rem', maxHeight: '92dvh', display: 'flex', flexDirection: 'column', border: '1px solid #D0DCE8' }}>
-              <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #EEF3F9', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexShrink: 0 }}>
+            <div style={{ background: '#fff', borderRadius: '1rem 1rem 0 0', boxShadow: '0 -4px 40px rgba(0,0,0,0.18)', width: '100%', maxWidth: '38rem', maxHeight: '92dvh', display: 'flex', flexDirection: 'column', border: '1px solid #D4D7DC' }}>
+              <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #F0F2F5', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '1rem', flexShrink: 0 }}>
                 <div>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.375rem' }}>
                     <Badge label={viewing.department} style={DEPT_COLORS[viewing.department] ?? DEPT_COLORS.General} />
@@ -248,7 +248,7 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
                   </div>
                   <p style={{ fontSize: '0.875rem', color: '#1B3A5C', fontWeight: 600 }}>SO: {viewing.bcSoNumber} — {viewing.customerName}</p>
                 </div>
-                <button onClick={() => setViewing(null)} style={{ color: '#8B939E', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#8B939E')}>
+                <button onClick={() => setViewing(null)} style={{ color: '#8A8F96', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#8A8F96')}>
                   <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
@@ -265,10 +265,10 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
                   if (urls.length === 0) return null
                   return (
                     <div style={{ marginTop: '0.5rem' }}>
-                      <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7A8D', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Photos ({urls.length})</p>
+                      <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#717680', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>Photos ({urls.length})</p>
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: '0.5rem' }}>
                         {urls.map((url, i) => (
-                          <a key={i} href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'block', aspectRatio: '1', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid #D0DCE8', background: '#F1F5F9' }}>
+                          <a key={i} href={url} target="_blank" rel="noopener noreferrer" style={{ display: 'block', aspectRatio: '1', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid #D4D7DC', background: '#F2F3F5' }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img src={url} alt={`Dispatch photo ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                           </a>
@@ -278,15 +278,15 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
                   )
                 })()}
                 {viewing.notes && (
-                  <div style={{ marginTop: '0.5rem', padding: '0.875rem 1rem', borderRadius: '0.625rem', background: '#F1F5F9', border: '1px solid #D0DCE8' }}>
-                    <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6B7A8D', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.375rem' }}>Notes</p>
+                  <div style={{ marginTop: '0.5rem', padding: '0.875rem 1rem', borderRadius: '0.625rem', background: '#F2F3F5', border: '1px solid #D4D7DC' }}>
+                    <p style={{ fontSize: '0.75rem', fontWeight: 600, color: '#717680', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.375rem' }}>Notes</p>
                     <p style={{ fontSize: '0.875rem', color: '#1B3A5C' }}>{viewing.notes}</p>
                   </div>
                 )}
-                <p style={{ fontSize: '0.75rem', color: '#B0BAC5', marginTop: '0.5rem' }}>Submitted by {viewing.user.name} on {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                <p style={{ fontSize: '0.75rem', color: '#B0B4B9', marginTop: '0.5rem' }}>Submitted by {viewing.user.name} on {new Date(viewing.createdAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
               </div>
-              <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #EEF3F9', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
-                <button onClick={() => setViewing(null)} style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#6B7A8D', background: 'none', border: 'none', cursor: 'pointer' }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#6B7A8D')}>Close</button>
+              <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #F0F2F5', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
+                <button onClick={() => setViewing(null)} style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#717680', background: 'none', border: 'none', cursor: 'pointer' }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#717680')}>Close</button>
               </div>
             </div>
           </div>
@@ -296,10 +296,10 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
       {/* New checklist form modal */}
       {showForm && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', padding: '0', zIndex: 50 }}>
-          <div style={{ background: '#fff', borderRadius: '1rem', boxShadow: '0 20px 60px rgba(0,0,0,0.2)', width: '100%', maxWidth: '38rem', maxHeight: '92vh', display: 'flex', flexDirection: 'column', border: '1px solid #D0DCE8' }}>
-            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #EEF3F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+          <div style={{ background: '#fff', borderRadius: '1rem', boxShadow: '0 20px 60px rgba(0,0,0,0.2)', width: '100%', maxWidth: '38rem', maxHeight: '92vh', display: 'flex', flexDirection: 'column', border: '1px solid #D4D7DC' }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #F0F2F5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
               <h2 style={{ fontWeight: 700, color: '#1B3A5C', fontSize: '1.0625rem' }}>New Dispatch Checklist</h2>
-              <button onClick={() => setShowForm(false)} style={{ color: '#8B939E', background: 'none', border: 'none', cursor: 'pointer' }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#8B939E')}>
+              <button onClick={() => setShowForm(false)} style={{ color: '#8A8F96', background: 'none', border: 'none', cursor: 'pointer' }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#8A8F96')}>
                 <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
               </button>
             </div>
@@ -325,13 +325,13 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.625rem' }}>
                   <label style={{ ...labelStyle, marginBottom: 0 }}>Dispatch Checks</label>
-                  <span style={{ fontSize: '0.8125rem', color: allChecked ? '#059669' : '#6B7A8D', fontWeight: 600 }}>{checkedCount} / {items.length}</span>
+                  <span style={{ fontSize: '0.8125rem', color: allChecked ? '#059669' : '#717680', fontWeight: 600 }}>{checkedCount} / {items.length}</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
                   {items.map((item, i) => (
                     <button key={i} onClick={() => toggleItem(i)} type="button"
-                      style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.625rem 0.875rem', borderRadius: '0.5rem', border: `1px solid ${item.checked ? '#BBF7D0' : '#D0DCE8'}`, background: item.checked ? '#F0FDF4' : '#FAFBFC', cursor: 'pointer', textAlign: 'left', transition: 'all 0.1s' }}>
-                      <div style={{ width: '1.125rem', height: '1.125rem', borderRadius: '0.25rem', border: `2px solid ${item.checked ? '#059669' : '#C5D8EF'}`, background: item.checked ? '#059669' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.1s' }}>
+                      style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.625rem 0.875rem', borderRadius: '0.5rem', border: `1px solid ${item.checked ? '#BBF7D0' : '#D4D7DC'}`, background: item.checked ? '#F0FDF4' : '#F8F9FA', cursor: 'pointer', textAlign: 'left', transition: 'all 0.1s' }}>
+                      <div style={{ width: '1.125rem', height: '1.125rem', borderRadius: '0.25rem', border: `2px solid ${item.checked ? '#059669' : '#C8CDD3'}`, background: item.checked ? '#059669' : '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.1s' }}>
                         {item.checked && <svg width="10" height="10" fill="none" stroke="#fff" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
                       </div>
                       <span style={{ fontSize: '0.875rem', color: item.checked ? '#059669' : '#374151' }}>{item.label}</span>
@@ -349,7 +349,7 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                   <label style={{ ...labelStyle, marginBottom: 0 }}>Photos <span style={{ color: '#DC2626' }}>*</span></label>
-                  <span style={{ fontSize: '0.75rem', color: '#6B7A8D' }}>{photos.length} / {MAX_PHOTOS}</span>
+                  <span style={{ fontSize: '0.75rem', color: '#717680' }}>{photos.length} / {MAX_PHOTOS}</span>
                 </div>
 
                 <input
@@ -374,9 +374,9 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
                     width: '100%',
                     padding: '0.75rem',
                     borderRadius: '0.5rem',
-                    border: '1.5px dashed #C5D8EF',
-                    background: photos.length >= MAX_PHOTOS ? '#F1F5F9' : '#F8FAFC',
-                    color: photos.length >= MAX_PHOTOS ? '#B0BAC5' : '#3D6B9B',
+                    border: '1.5px dashed #C8CDD3',
+                    background: photos.length >= MAX_PHOTOS ? '#F2F3F5' : '#F7F8F9',
+                    color: photos.length >= MAX_PHOTOS ? '#B0B4B9' : '#4E7FB5',
                     fontSize: '0.875rem',
                     fontWeight: 600,
                     cursor: compressing || photos.length >= MAX_PHOTOS ? 'not-allowed' : 'pointer',
@@ -384,14 +384,14 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
                   }}
                   onMouseEnter={e => {
                     if (!compressing && photos.length < MAX_PHOTOS) {
-                      (e.currentTarget as HTMLButtonElement).style.background = '#EEF3F9'
-                      ;(e.currentTarget as HTMLButtonElement).style.borderColor = '#3D6B9B'
+                      (e.currentTarget as HTMLButtonElement).style.background = '#F0F2F5'
+                      ;(e.currentTarget as HTMLButtonElement).style.borderColor = '#4E7FB5'
                     }
                   }}
                   onMouseLeave={e => {
                     if (photos.length < MAX_PHOTOS) {
-                      (e.currentTarget as HTMLButtonElement).style.background = '#F8FAFC'
-                      ;(e.currentTarget as HTMLButtonElement).style.borderColor = '#C5D8EF'
+                      (e.currentTarget as HTMLButtonElement).style.background = '#F7F8F9'
+                      ;(e.currentTarget as HTMLButtonElement).style.borderColor = '#C8CDD3'
                     }
                   }}
                 >
@@ -411,7 +411,7 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
                 {photoPreviews.length > 0 && (
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: '0.5rem', marginTop: '0.625rem' }}>
                     {photoPreviews.map((url, i) => (
-                      <div key={i} style={{ position: 'relative', aspectRatio: '1', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid #D0DCE8', background: '#F1F5F9' }}>
+                      <div key={i} style={{ position: 'relative', aspectRatio: '1', borderRadius: '0.5rem', overflow: 'hidden', border: '1px solid #D4D7DC', background: '#F2F3F5' }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={url} alt={`Photo ${i + 1}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                         <button
@@ -447,16 +447,16 @@ export default function DispatchList({ initialChecklists }: { initialChecklists:
 
               {formError && <p style={{ fontSize: '0.875rem', color: '#B91C1C' }}>{formError}</p>}
             </div>
-            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #EEF3F9', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+            <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid #F0F2F5', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
               <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: allChecked ? '#059669' : '#EA580C' }}>
                 {allChecked ? '✓ All checks passed — ready to dispatch' : `${items.length - checkedCount} check${items.length - checkedCount === 1 ? '' : 's'} remaining`}
               </span>
               <div style={{ display: 'flex', gap: '0.625rem' }}>
-                <button onClick={() => setShowForm(false)} style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#6B7A8D', background: 'none', border: 'none', cursor: 'pointer' }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#6B7A8D')}>Cancel</button>
+                <button onClick={() => setShowForm(false)} style={{ padding: '0.5rem 1rem', fontSize: '0.875rem', fontWeight: 500, color: '#717680', background: 'none', border: 'none', cursor: 'pointer' }} onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')} onMouseLeave={e => (e.currentTarget.style.color = '#717680')}>Cancel</button>
                 <button onClick={handleSubmit} disabled={submitting || compressing || photos.length === 0}
-                  style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', fontWeight: 600, background: '#3D6B9B', color: '#fff', border: 'none', borderRadius: '0.5rem', cursor: (submitting || compressing || photos.length === 0) ? 'not-allowed' : 'pointer', opacity: (submitting || compressing || photos.length === 0) ? 0.6 : 1 }}
-                  onMouseEnter={e => { if (!submitting && !compressing && photos.length > 0) (e.currentTarget as HTMLButtonElement).style.background = '#2A5080' }}
-                  onMouseLeave={e => (e.currentTarget.style.background = '#3D6B9B')}
+                  style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem', fontWeight: 600, background: '#4E7FB5', color: '#fff', border: 'none', borderRadius: '0.5rem', cursor: (submitting || compressing || photos.length === 0) ? 'not-allowed' : 'pointer', opacity: (submitting || compressing || photos.length === 0) ? 0.6 : 1 }}
+                  onMouseEnter={e => { if (!submitting && !compressing && photos.length > 0) (e.currentTarget as HTMLButtonElement).style.background = '#3A6A9A' }}
+                  onMouseLeave={e => (e.currentTarget.style.background = '#4E7FB5')}
                 >{submitting ? 'Submitting...' : 'Submit Checklist'}</button>
               </div>
             </div>
