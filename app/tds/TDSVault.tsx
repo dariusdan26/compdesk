@@ -211,7 +211,7 @@ export default function TDSVault({ initialDocs }: { initialDocs: TDSDocument[] }
                           style={{ width: '1.125rem', height: '1.125rem', cursor: 'pointer', accentColor: '#1B3A5C', flexShrink: 0 }}
                         />
                         <a
-                          href={doc.filePath}
+                          href={`/api/tds/${doc.id}/file`}
                           target="_blank"
                           rel="noopener noreferrer"
                           style={{
