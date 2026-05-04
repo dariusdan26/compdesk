@@ -1,11 +1,32 @@
 import JSZip from 'jszip'
 
-interface ZipFile {
+interface DownloadFile {
   url: string
   name: string
 }
 
-export async function downloadFilesAsZip(files: ZipFile[], zipName: string) {
+function triggerDownload(blob: Blob, name: string) {
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = name
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+export async function downloadFilesAsZip(files: DownloadFile[], zipName: string) {
+  if (files.length === 0) return
+
+  if (files.length === 1) {
+    const only = files[0]
+    const res = await fetch(only.url)
+    if (!res.ok) throw new Error(`Failed to fetch ${only.name}`)
+    triggerDownload(await res.blob(), only.name)
+    return
+  }
+
   const zip = new JSZip()
   const usedNames = new Map<string, number>()
 
@@ -26,13 +47,5 @@ export async function downloadFilesAsZip(files: ZipFile[], zipName: string) {
     zip.file(finalName, f.blob)
   }
 
-  const blob = await zip.generateAsync({ type: 'blob' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = zipName
-  document.body.appendChild(a)
-  a.click()
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+  triggerDownload(await zip.generateAsync({ type: 'blob' }), zipName)
 }
