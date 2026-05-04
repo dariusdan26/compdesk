@@ -100,6 +100,20 @@ export default function TDSVault({ initialDocs }: { initialDocs: TDSDocument[] }
     grouped[doc.category].push(doc)
   }
 
+  const allVisibleSelected = filtered.length > 0 && filtered.every(d => selected.has(d.id))
+
+  function toggleSelectAllVisible() {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (allVisibleSelected) {
+        for (const d of filtered) next.delete(d.id)
+      } else {
+        for (const d of filtered) next.add(d.id)
+      }
+      return next
+    })
+  }
+
   return (
     <div style={{ minHeight: '100vh', background: '#F0F2F5' }}>
       {/* Header */}
@@ -149,6 +163,14 @@ export default function TDSVault({ initialDocs }: { initialDocs: TDSDocument[] }
                 style={{ padding: '0.4375rem 0.75rem', borderRadius: '0.5rem', border: '1px solid #C8CDD3', color: '#717680', fontSize: '0.875rem', background: '#fff', cursor: 'pointer' }}
               >
                 Clear
+              </button>
+            )}
+            {filtered.length > 0 && (
+              <button
+                onClick={toggleSelectAllVisible}
+                style={{ padding: '0.4375rem 0.75rem', borderRadius: '0.5rem', border: '1px solid #C8CDD3', color: '#1B3A5C', fontSize: '0.875rem', background: '#fff', cursor: 'pointer', fontWeight: 500 }}
+              >
+                {allVisibleSelected ? 'Deselect All' : 'Select All'}
               </button>
             )}
           </div>
