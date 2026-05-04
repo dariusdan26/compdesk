@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { PageHeader } from '@/app/components/PageHeader'
+import { downloadFilesAsZip } from '@/app/components/downloadFilesAsZip'
 
 interface SDSDocument {
   id: number
@@ -50,6 +51,36 @@ function PDFIcon({ color = '#DC2626' }: { color?: string }) {
 export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }) {
   const [search, setSearch] = useState('')
   const [filterCategory, setFilterCategory] = useState('All')
+  const [selected, setSelected] = useState<Set<number>>(new Set())
+  const [downloading, setDownloading] = useState(false)
+  const [downloadError, setDownloadError] = useState<string | null>(null)
+
+  function toggleSelect(id: number) {
+    setSelected(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
+  async function handleDownloadSelected() {
+    if (selected.size === 0 || downloading) return
+    setDownloading(true)
+    setDownloadError(null)
+    try {
+      const files = initialDocs
+        .filter(d => selected.has(d.id))
+        .map(d => ({ url: d.filePath, name: `${d.title}.pdf` }))
+      const stamp = new Date().toISOString().slice(0, 10)
+      await downloadFilesAsZip(files, `sds-vault-${stamp}.zip`)
+      setSelected(new Set())
+    } catch (err) {
+      setDownloadError(err instanceof Error ? err.message : 'Download failed')
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   const categories = ['All', ...Array.from(new Set(initialDocs.map(d => d.category))).sort()]
 
@@ -160,65 +191,129 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  {docs.map(doc => (
-                    <a
-                      key={doc.id}
-                      href={doc.filePath}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: '1rem',
-                        background: '#fff', borderRadius: '0.75rem', padding: '0.875rem 1.125rem',
-                        border: '1px solid #D4D7DC', textDecoration: 'none',
-                        transition: 'box-shadow 0.15s, border-color 0.15s',
-                      }}
-                      onMouseEnter={e => {
-                        (e.currentTarget as HTMLAnchorElement).style.boxShadow = '0 4px 16px rgba(27,58,92,0.1)'
-                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = '#A8B8CC'
-                      }}
-                      onMouseLeave={e => {
-                        (e.currentTarget as HTMLAnchorElement).style.boxShadow = ''
-                        ;(e.currentTarget as HTMLAnchorElement).style.borderColor = '#D4D7DC'
-                      }}
-                    >
-                      {/* PDF icon badge */}
-                      <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '0.5rem', background: cs.bg, border: `1px solid ${cs.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={cs.icon} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                          <polyline points="14 2 14 8 20 8" />
-                          <line x1="9" y1="13" x2="15" y2="13" />
-                          <line x1="9" y1="17" x2="13" y2="17" />
-                        </svg>
-                      </div>
+                  {docs.map(doc => {
+                    const isSelected = selected.has(doc.id)
+                    return (
+                      <div
+                        key={doc.id}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: '0.75rem',
+                          background: isSelected ? '#F0F7FF' : '#fff',
+                          borderRadius: '0.75rem', padding: '0.875rem 1.125rem',
+                          border: `1px solid ${isSelected ? '#A8B8CC' : '#D4D7DC'}`,
+                          transition: 'box-shadow 0.15s, border-color 0.15s, background 0.15s',
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelect(doc.id)}
+                          aria-label={`Select ${doc.title}`}
+                          style={{ width: '1.125rem', height: '1.125rem', cursor: 'pointer', accentColor: '#1B3A5C', flexShrink: 0 }}
+                        />
+                        <a
+                          href={doc.filePath}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '1rem',
+                            flex: 1, minWidth: 0, textDecoration: 'none',
+                          }}
+                        >
+                          {/* PDF icon badge */}
+                          <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '0.5rem', background: cs.bg, border: `1px solid ${cs.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={cs.icon} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                              <polyline points="14 2 14 8 20 8" />
+                              <line x1="9" y1="13" x2="15" y2="13" />
+                              <line x1="9" y1="17" x2="13" y2="17" />
+                            </svg>
+                          </div>
 
-                      {/* Title & meta */}
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#1B3A5C', marginBottom: '1px',
-                          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                        }}>
-                          {doc.title}
-                        </p>
-                        {doc.manufacturer && (
-                          <p style={{ fontSize: '0.75rem', color: '#717680' }}>{doc.manufacturer}</p>
-                        )}
-                      </div>
+                          {/* Title & meta */}
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#1B3A5C', marginBottom: '1px',
+                              whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                            }}>
+                              {doc.title}
+                            </p>
+                            {doc.manufacturer && (
+                              <p style={{ fontSize: '0.75rem', color: '#717680' }}>{doc.manufacturer}</p>
+                            )}
+                          </div>
 
-                      {/* Size + open indicator */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
-                        <span style={{ fontSize: '0.75rem', color: '#B0B4B9' }}>{formatFileSize(doc.fileSize)}</span>
-                        <span style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '2px 8px', borderRadius: '9999px', background: '#FEE2E2', color: '#DC2626' }}>PDF</span>
-                        <svg width="14" height="14" fill="none" stroke="#B0B4B9" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                        </svg>
+                          {/* Size + open indicator */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                            <span style={{ fontSize: '0.75rem', color: '#B0B4B9' }}>{formatFileSize(doc.fileSize)}</span>
+                            <span style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '2px 8px', borderRadius: '9999px', background: '#FEE2E2', color: '#DC2626' }}>PDF</span>
+                            <svg width="14" height="14" fill="none" stroke="#B0B4B9" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                          </div>
+                        </a>
                       </div>
-                    </a>
-                  ))}
+                    )
+                  })}
                 </div>
               </section>
             )
           })}
         </div>
       </main>
+
+      {selected.size > 0 && (
+        <div style={{
+          position: 'fixed', bottom: '1.25rem', left: '50%', transform: 'translateX(-50%)',
+          background: '#1B3A5C', color: '#fff', borderRadius: '9999px',
+          padding: '0.625rem 0.75rem 0.625rem 1.25rem',
+          display: 'flex', alignItems: 'center', gap: '0.875rem',
+          boxShadow: '0 8px 24px rgba(27,58,92,0.35)', zIndex: 50,
+          maxWidth: 'calc(100% - 2rem)', flexWrap: 'wrap',
+        }}>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
+            {selected.size} selected
+          </span>
+          {downloadError && (
+            <span style={{ fontSize: '0.75rem', color: '#FCA5A5' }}>{downloadError}</span>
+          )}
+          <button
+            onClick={() => { setSelected(new Set()); setDownloadError(null) }}
+            disabled={downloading}
+            style={{
+              background: 'transparent', color: '#C8D6E5', border: 'none',
+              fontSize: '0.8125rem', cursor: downloading ? 'not-allowed' : 'pointer',
+              padding: '0.25rem 0.5rem',
+            }}
+          >
+            Clear
+          </button>
+          <button
+            onClick={handleDownloadSelected}
+            disabled={downloading}
+            style={{
+              background: '#fff', color: '#1B3A5C', border: 'none',
+              borderRadius: '9999px', padding: '0.5rem 1rem',
+              fontSize: '0.8125rem', fontWeight: 600,
+              cursor: downloading ? 'wait' : 'pointer',
+              display: 'flex', alignItems: 'center', gap: '0.375rem',
+              opacity: downloading ? 0.7 : 1,
+            }}
+          >
+            {downloading ? (
+              <>Preparing…</>
+            ) : (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.25} strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="7 10 12 15 17 10" />
+                  <line x1="12" y1="15" x2="12" y2="3" />
+                </svg>
+                Download ZIP
+              </>
+            )}
+          </button>
+        </div>
+      )}
     </div>
   )
 }
