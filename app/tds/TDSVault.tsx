@@ -17,14 +17,19 @@ interface TDSDocument {
 }
 
 const CATEGORY_COLORS: Record<string, { bg: string; icon: string; border: string }> = {
-  'Resins':            { bg: '#E0E4E9', icon: '#4E7FB5', border: '#C8D0D8' },
-  'Adhesives':         { bg: '#EDE9FE', icon: '#7C3AED', border: '#DDD6FE' },
-  'Coatings':          { bg: '#D1FAE5', icon: '#059669', border: '#A7F3D0' },
-  'Composites':        { bg: '#FEF9C3', icon: '#CA8A04', border: '#FEF08A' },
-  'Reinforcements':    { bg: '#E0E4E9', icon: '#1D4ED8', border: '#C8D0D8' },
-  'Core Materials':    { bg: '#F0FDF4', icon: '#15803D', border: '#BBF7D0' },
-  'Solvents':          { bg: '#FFEDD5', icon: '#EA580C', border: '#FED7AA' },
-  'General':           { bg: '#F2F3F5', icon: '#475569', border: '#E2E8F0' },
+  'Laminating Resins':       { bg: '#DBEAFE', icon: '#1D4ED8', border: '#BFDBFE' },
+  'Gelcoats':                { bg: '#FEF3C7', icon: '#B45309', border: '#FDE68A' },
+  'Tooling Gelcoats':        { bg: '#FCE7F3', icon: '#BE185D', border: '#FBCFE8' },
+  'Tooling Resins & Cores':  { bg: '#EDE9FE', icon: '#6D28D9', border: '#DDD6FE' },
+  'Putties & Fillers':       { bg: '#F3E8D2', icon: '#92400E', border: '#E7D2A6' },
+  'Primers & Topcoats':      { bg: '#CCFBF1', icon: '#0F766E', border: '#99F6E4' },
+  'Adhesives':               { bg: '#F5D0FE', icon: '#A21CAF', border: '#F0ABFC' },
+  'Core Materials':          { bg: '#D1FAE5', icon: '#15803D', border: '#A7F3D0' },
+  'Process Materials':       { bg: '#E2E8F0', icon: '#475569', border: '#CBD5E1' },
+  'Additives & Promoters':   { bg: '#E0E7FF', icon: '#4338CA', border: '#C7D2FE' },
+  'Pigments & Colorants':    { bg: '#FFE4E6', icon: '#BE123C', border: '#FECDD3' },
+  'Solvents & Cleaners':     { bg: '#FFEDD5', icon: '#EA580C', border: '#FED7AA' },
+  'General':                 { bg: '#F2F3F5', icon: '#475569', border: '#E2E8F0' },
 }
 
 function categoryStyle(cat: string) {

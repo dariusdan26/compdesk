@@ -15,19 +15,37 @@ interface SDSDocument {
 }
 
 const SDS_CATEGORIES = [
-  'Chemicals', 'Solvents', 'Resins', 'Adhesives',
-  'Coatings', 'Composites', 'Safety Equipment', 'General',
+  'Laminating Resins',
+  'Gelcoats',
+  'Tooling Gelcoats',
+  'Tooling Resins & Cores',
+  'Putties & Fillers',
+  'Primers & Topcoats',
+  'Adhesives',
+  'Core Materials',
+  'Process Materials',
+  'Additives & Promoters',
+  'Pigments & Colorants',
+  'Solvents & Cleaners',
+  'Safety Equipment',
+  'General',
 ]
 
 const CATEGORY_COLORS: Record<string, { bg: string; icon: string; border: string }> = {
-  'Chemicals':         { bg: '#FEE2E2', icon: '#DC2626', border: '#FECACA' },
-  'Solvents':          { bg: '#FFEDD5', icon: '#EA580C', border: '#FED7AA' },
-  'Resins':            { bg: '#FFF7ED', icon: '#D97706', border: '#FDE68A' },
-  'Adhesives':         { bg: '#FEF9C3', icon: '#CA8A04', border: '#FEF08A' },
-  'Coatings':          { bg: '#EDE9FE', icon: '#7C3AED', border: '#DDD6FE' },
-  'Composites':        { bg: '#E0E4E9', icon: '#4E7FB5', border: '#C8D0D8' },
-  'Safety Equipment':  { bg: '#D1FAE5', icon: '#059669', border: '#A7F3D0' },
-  'General':           { bg: '#F2F3F5', icon: '#475569', border: '#E2E8F0' },
+  'Laminating Resins':       { bg: '#DBEAFE', icon: '#1D4ED8', border: '#BFDBFE' },
+  'Gelcoats':                { bg: '#FEF3C7', icon: '#B45309', border: '#FDE68A' },
+  'Tooling Gelcoats':        { bg: '#FCE7F3', icon: '#BE185D', border: '#FBCFE8' },
+  'Tooling Resins & Cores':  { bg: '#EDE9FE', icon: '#6D28D9', border: '#DDD6FE' },
+  'Putties & Fillers':       { bg: '#F3E8D2', icon: '#92400E', border: '#E7D2A6' },
+  'Primers & Topcoats':      { bg: '#CCFBF1', icon: '#0F766E', border: '#99F6E4' },
+  'Adhesives':               { bg: '#F5D0FE', icon: '#A21CAF', border: '#F0ABFC' },
+  'Core Materials':          { bg: '#D1FAE5', icon: '#15803D', border: '#A7F3D0' },
+  'Process Materials':       { bg: '#E2E8F0', icon: '#475569', border: '#CBD5E1' },
+  'Additives & Promoters':   { bg: '#E0E7FF', icon: '#4338CA', border: '#C7D2FE' },
+  'Pigments & Colorants':    { bg: '#FFE4E6', icon: '#BE123C', border: '#FECDD3' },
+  'Solvents & Cleaners':     { bg: '#FFEDD5', icon: '#EA580C', border: '#FED7AA' },
+  'Safety Equipment':        { bg: '#DCFCE7', icon: '#059669', border: '#BBF7D0' },
+  'General':                 { bg: '#F2F3F5', icon: '#475569', border: '#E2E8F0' },
 }
 
 function categoryStyle(cat: string) {
@@ -66,7 +84,12 @@ export default function SDSAdmin({ initialDocs }: { initialDocs: SDSDocument[] }
   const [filterCategory, setFilterCategory] = useState('All')
   const [deletingId, setDeletingId] = useState<number | null>(null)
 
-  const allCategories = ['All', ...Array.from(new Set(docs.map(d => d.category))).sort()]
+  // Drag-drop state
+  const [dragOverCat, setDragOverCat] = useState<string | null>(null)
+  const [draggingId, setDraggingId] = useState<number | null>(null)
+
+  const legacyCategories = Array.from(new Set(docs.map(d => d.category))).filter(c => !SDS_CATEGORIES.includes(c))
+  const allCategories = ['All', ...SDS_CATEGORIES, ...legacyCategories]
 
   const filtered = docs.filter(doc => {
     const matchCat = filterCategory === 'All' || doc.category === filterCategory
@@ -76,6 +99,26 @@ export default function SDSAdmin({ initialDocs }: { initialDocs: SDSDocument[] }
       (doc.manufacturer ?? '').toLowerCase().includes(q)
     return matchCat && matchSearch
   })
+
+  async function moveDocToCategory(docId: number, newCategory: string) {
+    const doc = docs.find(d => d.id === docId)
+    if (!doc || doc.category === newCategory) return
+    const previous = doc
+    setDocs(prev => prev.map(d => d.id === docId ? { ...d, category: newCategory } : d))
+    try {
+      const res = await fetch(`/api/admin/sds/${docId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: doc.title, manufacturer: doc.manufacturer ?? '', category: newCategory }),
+      })
+      if (!res.ok) throw new Error('Move failed')
+      const updated = await res.json()
+      setDocs(prev => prev.map(d => d.id === docId ? updated : d))
+    } catch {
+      setDocs(prev => prev.map(d => d.id === docId ? previous : d))
+      alert('Failed to move document. Please try again.')
+    }
+  }
 
   const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null)
 
@@ -389,85 +432,129 @@ export default function SDSAdmin({ initialDocs }: { initialDocs: SDSDocument[] }
           </div>
         )}
 
-        {/* Document list */}
+        {/* Document list — grouped sections with drag-and-drop */}
         {docs.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '4rem 1rem', background: '#fff', borderRadius: '1rem', border: '1px solid #D4D7DC' }}>
             <p style={{ color: '#717680', fontSize: '0.9375rem' }}>No SDS documents uploaded yet. Use the upload panel above.</p>
           </div>
-        ) : filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '3rem 1rem', background: '#fff', borderRadius: '1rem', border: '1px solid #D4D7DC' }}>
-            <p style={{ color: '#717680', fontSize: '0.9375rem' }}>No documents match your search.</p>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {filtered.map(doc => {
-              const cs = categoryStyle(doc.category)
-              return (
-                <div
-                  key={doc.id}
-                  style={{ background: '#fff', borderRadius: '0.875rem', padding: '0.875rem 1.125rem', border: '1px solid #D4D7DC', display: 'flex', alignItems: 'center', gap: '1rem' }}
-                >
-                  {/* PDF icon */}
-                  <div style={{ width: '2.5rem', height: '2.5rem', borderRadius: '0.5rem', background: cs.bg, border: `1px solid ${cs.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={cs.icon} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
-                      <polyline points="14 2 14 8 20 8" />
-                      <line x1="9" y1="13" x2="15" y2="13" />
-                      <line x1="9" y1="17" x2="13" y2="17" />
-                    </svg>
-                  </div>
-
-                  {/* Info */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: '0.9375rem', fontWeight: 600, color: '#1B3A5C', marginBottom: '1px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {doc.title}
-                    </p>
-                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '1px 6px', borderRadius: '9999px', background: cs.bg, color: cs.icon, border: `1px solid ${cs.border}` }}>
-                        {doc.category}
+        ) : (() => {
+          const shownCategories = filterCategory === 'All'
+            ? [...SDS_CATEGORIES, ...legacyCategories]
+            : [filterCategory]
+          const sections = shownCategories.map(cat => ({
+            cat,
+            docs: filtered.filter(d => d.category === cat),
+          }))
+          const totalVisible = sections.reduce((s, x) => s + x.docs.length, 0)
+          if (totalVisible === 0 && search) {
+            return (
+              <div style={{ textAlign: 'center', padding: '3rem 1rem', background: '#fff', borderRadius: '1rem', border: '1px solid #D4D7DC' }}>
+                <p style={{ color: '#717680', fontSize: '0.9375rem' }}>No documents match your search.</p>
+              </div>
+            )
+          }
+          return (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+              <p style={{ color: '#717680', fontSize: '0.8125rem', margin: '0 0.25rem' }}>
+                <span aria-hidden style={{ marginRight: '0.375rem' }}>⋮⋮</span>
+                Drag any document and drop it onto a category to move it.
+              </p>
+              {sections.map(({ cat, docs: sectionDocs }) => {
+                const cs = categoryStyle(cat)
+                const isOver = dragOverCat === cat
+                return (
+                  <section
+                    key={cat}
+                    onDragOver={e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; if (dragOverCat !== cat) setDragOverCat(cat) }}
+                    onDragLeave={e => {
+                      if (e.currentTarget.contains(e.relatedTarget as Node)) return
+                      setDragOverCat(prev => prev === cat ? null : prev)
+                    }}
+                    onDrop={e => {
+                      e.preventDefault()
+                      const id = Number(e.dataTransfer.getData('text/plain'))
+                      if (id) moveDocToCategory(id, cat)
+                      setDragOverCat(null)
+                      setDraggingId(null)
+                    }}
+                    style={{
+                      background: isOver ? cs.bg : '#fff',
+                      borderRadius: '1rem',
+                      border: `${isOver ? 2 : 1}px ${isOver ? 'dashed' : 'solid'} ${isOver ? cs.icon : '#D4D7DC'}`,
+                      padding: '0.75rem 0.875rem',
+                      transition: 'background-color 120ms, border-color 120ms',
+                    }}
+                  >
+                    <header style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', padding: '0.25rem 0.25rem 0.625rem', borderBottom: '1px solid #F0F2F5' }}>
+                      <span style={{ width: '0.625rem', height: '0.625rem', borderRadius: '9999px', background: cs.icon, flexShrink: 0 }} />
+                      <h2 style={{ fontSize: '0.9375rem', fontWeight: 700, color: '#1B3A5C' }}>{cat}</h2>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#717680', background: cs.bg, padding: '1px 7px', borderRadius: '9999px', border: `1px solid ${cs.border}` }}>
+                        {sectionDocs.length}
                       </span>
-                      {doc.manufacturer && (
-                        <span style={{ fontSize: '0.75rem', color: '#717680' }}>{doc.manufacturer}</span>
+                      {legacyCategories.includes(cat) && (
+                        <span style={{ fontSize: '0.6875rem', color: '#B45309', fontStyle: 'italic' }}>legacy</span>
                       )}
-                      <span style={{ fontSize: '0.75rem', color: '#B0B4B9' }}>{formatFileSize(doc.fileSize)}</span>
-                    </div>
-                  </div>
-
-                  {/* Actions */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
-                    <a
-                      href={doc.filePath}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#4E7FB5', textDecoration: 'none' }}
-                      onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-                      onMouseLeave={e => (e.currentTarget.style.color = '#4E7FB5')}
-                    >
-                      View
-                    </a>
-                    <button
-                      onClick={() => openEdit(doc)}
-                      style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#717680', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
-                      onMouseEnter={e => (e.currentTarget.style.color = '#1B3A5C')}
-                      onMouseLeave={e => (e.currentTarget.style.color = '#717680')}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      onClick={() => handleDelete(doc.id)}
-                      disabled={deletingId === doc.id}
-                      style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', padding: 0, opacity: deletingId === doc.id ? 0.5 : 1 }}
-                      onMouseEnter={e => (e.currentTarget.style.color = '#991B1B')}
-                      onMouseLeave={e => (e.currentTarget.style.color = '#DC2626')}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        )}
+                    </header>
+                    {sectionDocs.length === 0 ? (
+                      <div style={{ padding: '1.125rem', textAlign: 'center', color: '#9CA3AF', fontSize: '0.8125rem', fontStyle: 'italic' }}>
+                        {isOver ? `Release to move into ${cat}` : `Drop documents here to move them into ${cat}`}
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem', marginTop: '0.5rem' }}>
+                        {sectionDocs.map(doc => {
+                          const isDragging = draggingId === doc.id
+                          return (
+                            <div
+                              key={doc.id}
+                              draggable
+                              onDragStart={e => {
+                                e.dataTransfer.effectAllowed = 'move'
+                                e.dataTransfer.setData('text/plain', String(doc.id))
+                                setDraggingId(doc.id)
+                              }}
+                              onDragEnd={() => { setDraggingId(null); setDragOverCat(null) }}
+                              style={{
+                                background: isDragging ? '#F7F8F9' : '#fff',
+                                opacity: isDragging ? 0.5 : 1,
+                                borderRadius: '0.625rem',
+                                padding: '0.5625rem 0.75rem',
+                                border: '1px solid #E5E7EB',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.75rem',
+                                cursor: 'grab',
+                              }}
+                            >
+                              <span style={{ color: '#B0B4B9', flexShrink: 0, fontSize: '0.875rem', userSelect: 'none', letterSpacing: '-2px' }} aria-hidden>⋮⋮</span>
+                              <div style={{ width: '2rem', height: '2rem', borderRadius: '0.5rem', background: cs.bg, border: `1px solid ${cs.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={cs.icon} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                                  <polyline points="14 2 14 8 20 8" />
+                                </svg>
+                              </div>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1B3A5C', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.title}</p>
+                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap', marginTop: '1px' }}>
+                                  {doc.manufacturer && <span style={{ fontSize: '0.75rem', color: '#717680' }}>{doc.manufacturer}</span>}
+                                  <span style={{ fontSize: '0.75rem', color: '#B0B4B9' }}>{formatFileSize(doc.fileSize)}</span>
+                                </div>
+                              </div>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', flexShrink: 0 }}>
+                                <a href={doc.filePath} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#4E7FB5', textDecoration: 'none' }}>View</a>
+                                <button onClick={() => openEdit(doc)} style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#717680', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Edit</button>
+                                <button onClick={() => handleDelete(doc.id)} disabled={deletingId === doc.id} style={{ fontSize: '0.8125rem', fontWeight: 500, color: '#DC2626', background: 'none', border: 'none', cursor: 'pointer', padding: 0, opacity: deletingId === doc.id ? 0.5 : 1 }}>Delete</button>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </section>
+                )
+              })}
+            </div>
+          )
+        })()}
       </main>
 
       {/* Edit modal */}
