@@ -43,6 +43,11 @@ function formatFileSize(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
 }
 
+function extOfFilename(filename: string): string {
+  const m = filename.match(/\.[^.]+$/)
+  return m ? m[0].toLowerCase() : '.pdf'
+}
+
 function PDFIcon({ color = '#DC2626' }: { color?: string }) {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={1.75} strokeLinecap="round" strokeLinejoin="round">
@@ -77,7 +82,7 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
     try {
       const files = initialDocs
         .filter(d => selected.has(d.id))
-        .map(d => ({ url: d.filePath, name: `${d.title}.pdf` }))
+        .map(d => ({ url: d.filePath, name: `${d.title}${extOfFilename(d.filename)}` }))
       const stamp = new Date().toISOString().slice(0, 10)
       await downloadFilesAsZip(files, `sds-vault-${stamp}.zip`)
       setSelected(new Set())
@@ -273,7 +278,7 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
                           {/* Size + open indicator */}
                           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
                             <span style={{ fontSize: '0.75rem', color: '#B0B4B9' }}>{formatFileSize(doc.fileSize)}</span>
-                            <span style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '2px 8px', borderRadius: '9999px', background: '#FEE2E2', color: '#DC2626' }}>PDF</span>
+                            <span style={{ fontSize: '0.6875rem', fontWeight: 600, padding: '2px 8px', borderRadius: '9999px', background: '#FEE2E2', color: '#DC2626' }}>{extOfFilename(doc.filename).slice(1).toUpperCase()}</span>
                             <svg width="14" height="14" fill="none" stroke="#B0B4B9" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>

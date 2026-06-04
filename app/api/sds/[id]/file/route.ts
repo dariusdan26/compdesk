@@ -3,6 +3,18 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth-config'
 import { prisma } from '@/lib/db'
 
+const MIME_BY_EXT: Record<string, { type: string; inline: boolean }> = {
+  '.pdf':  { type: 'application/pdf', inline: true },
+  '.docx': { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', inline: false },
+  '.doc':  { type: 'application/msword', inline: false },
+  '.txt':  { type: 'text/plain; charset=utf-8', inline: true },
+}
+
+function extOf(name: string): string {
+  const m = name.match(/\.[^.]+$/)
+  return m ? m[0].toLowerCase() : ''
+}
+
 function sanitizeFilename(name: string) {
   return name.replace(/[\r\n"\\/]/g, '_').slice(0, 200)
 }
@@ -25,12 +37,15 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     return NextResponse.json({ error: 'Failed to fetch source file' }, { status: 502 })
   }
 
-  const filename = sanitizeFilename(`${doc.title}.pdf`)
+  const ext = extOf(doc.filename) || extOf(doc.filePath) || '.pdf'
+  const mime = MIME_BY_EXT[ext] ?? { type: 'application/octet-stream', inline: false }
+  const filename = sanitizeFilename(`${doc.title}${ext}`)
+  const disposition = mime.inline ? 'inline' : 'attachment'
 
   return new Response(upstream.body, {
     headers: {
-      'Content-Type': 'application/pdf',
-      'Content-Disposition': `inline; filename="${filename}"`,
+      'Content-Type': mime.type,
+      'Content-Disposition': `${disposition}; filename="${filename}"`,
       'Cache-Control': 'private, max-age=300',
     },
   })
