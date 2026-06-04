@@ -32,12 +32,20 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const doc = await prisma.sDSDocument.findUnique({ where: { id: docId } })
   if (!doc) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
+  const ext = extOf(doc.filename) || extOf(doc.filePath) || '.pdf'
+
+  // Word documents can't render inline in browsers — open in Microsoft's
+  // hosted Office viewer so users see the doc instead of an instant download.
+  if (ext === '.docx' || ext === '.doc') {
+    const viewerUrl = `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(doc.filePath)}`
+    return NextResponse.redirect(viewerUrl)
+  }
+
   const upstream = await fetch(doc.filePath)
   if (!upstream.ok || !upstream.body) {
     return NextResponse.json({ error: 'Failed to fetch source file' }, { status: 502 })
   }
 
-  const ext = extOf(doc.filename) || extOf(doc.filePath) || '.pdf'
   const mime = MIME_BY_EXT[ext] ?? { type: 'application/octet-stream', inline: false }
   const filename = sanitizeFilename(`${doc.title}${ext}`)
   const disposition = mime.inline ? 'inline' : 'attachment'
