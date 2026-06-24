@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { PageHeader } from '@/app/components/PageHeader'
+import { DocViewer } from '@/app/components/DocViewer'
 import { downloadFilesAsZip } from '@/app/components/downloadFilesAsZip'
 
 interface SDSDocument {
@@ -65,6 +66,7 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const [downloading, setDownloading] = useState(false)
   const [downloadError, setDownloadError] = useState<string | null>(null)
+  const [activeDoc, setActiveDoc] = useState<SDSDocument | null>(null)
 
   function toggleSelect(id: number) {
     setSelected(prev => {
@@ -244,13 +246,15 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
                           aria-label={`Select ${doc.title}`}
                           style={{ width: '1.125rem', height: '1.125rem', cursor: 'pointer', accentColor: '#1B3A5C', flexShrink: 0 }}
                         />
-                        <a
-                          href={`/api/sds/${doc.id}/file`}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        <button
+                          type="button"
+                          onClick={() => setActiveDoc(doc)}
+                          aria-label={`Open ${doc.title}`}
                           style={{
                             display: 'flex', alignItems: 'center', gap: '1rem',
-                            flex: 1, minWidth: 0, textDecoration: 'none',
+                            flex: 1, minWidth: 0, textAlign: 'left',
+                            background: 'transparent', border: 'none', padding: 0,
+                            cursor: 'pointer', font: 'inherit', color: 'inherit',
                           }}
                         >
                           {/* PDF icon badge */}
@@ -283,7 +287,7 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
                           </div>
-                        </a>
+                        </button>
                       </div>
                     )
                   })}
@@ -346,6 +350,14 @@ export default function SDSVault({ initialDocs }: { initialDocs: SDSDocument[] }
             )}
           </button>
         </div>
+      )}
+
+      {activeDoc && (
+        <DocViewer
+          doc={activeDoc}
+          fileUrl={`/api/sds/${activeDoc.id}/file`}
+          onClose={() => setActiveDoc(null)}
+        />
       )}
     </div>
   )
